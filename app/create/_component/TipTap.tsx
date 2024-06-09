@@ -9,12 +9,15 @@ import {
   Bold,
   Code,
   Heading2Icon,
+  Heading3Icon,
   Heading as HeadingIcon,
   Highlighter,
   Italic,
   Strikethrough,
 } from "lucide-react";
 import Highlight from "@tiptap/extension-highlight";
+import { cn } from "@/lib/utils";
+import { mergeAttributes } from "@tiptap/core";
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -24,10 +27,23 @@ const Tiptap = () => {
         placeholder: "Content goes here...",
       }),
       Highlight.configure({ multicolor: true }),
-      Heading.configure({
+      Heading.configure({ levels: [1, 2] }).extend({
         levels: [1, 2],
-        HTMLAttributes: {
-          class: "my-h1 my-h2",
+        renderHTML({ node, HTMLAttributes }) {
+          const level = this.options.levels.includes(node.attrs.level)
+            ? node.attrs.level
+            : this.options.levels[0];
+          const classes: { [key: number]: string } = {
+            1: "text-4xl",
+            2: "text-2xl",
+          };
+          return [
+            `h${level}`,
+            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+              class: `${classes[level]}`,
+            }),
+            0,
+          ];
         },
       }),
     ],
@@ -85,7 +101,10 @@ const Tiptap = () => {
               onClick={() =>
                 editor.chain().focus().toggleHeading({ level: 1 }).run()
               }
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none",
+                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+              )}
             >
               <HeadingIcon className="h-4 w-4" />
             </ToggleGroupItem>
@@ -95,7 +114,10 @@ const Tiptap = () => {
               onClick={() =>
                 editor.chain().focus().toggleHeading({ level: 2 }).run()
               }
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none",
+                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+              )}
             >
               <Heading2Icon className="h-4 w-4" />
             </ToggleGroupItem>

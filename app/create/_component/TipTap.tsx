@@ -17,7 +17,11 @@ import {
 } from "lucide-react";
 import Highlight from "@tiptap/extension-highlight";
 import { cn } from "@/lib/utils";
+import { common, createLowlight } from "lowlight";
 import { mergeAttributes } from "@tiptap/core";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import CodeBlock from "@tiptap/extension-code-block";
+import { BiCodeBlock } from "react-icons/bi";
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -46,6 +50,10 @@ const Tiptap = () => {
           ];
         },
       }),
+      CodeBlockLowlight.configure({
+        lowlight: createLowlight(common),
+        languageClassPrefix: "language-css",
+      }),
     ],
     editorProps: {
       attributes: {
@@ -61,13 +69,13 @@ const Tiptap = () => {
           <ToggleGroup
             type="multiple"
             size={"xs"}
-            className="flex gap-1 justify-start"
+            className="flex gap-1 justify-start dark:bg-slate-700 "
           >
             <ToggleGroupItem
               value="italic"
               onClick={() => editor.chain().focus().toggleItalic().run()}
               aria-label="Toggle italic"
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
             >
               <Italic className="h-4 w-4" />
             </ToggleGroupItem>
@@ -75,7 +83,7 @@ const Tiptap = () => {
               value="strike"
               aria-label="Toggle strike"
               onClick={() => editor.chain().focus().toggleStrike().run()}
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
             >
               <Strikethrough className="h-4 w-4" />
             </ToggleGroupItem>
@@ -83,15 +91,23 @@ const Tiptap = () => {
               value="code"
               aria-label="Toggle code"
               onClick={() => editor.chain().focus().toggleCode().run()}
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
             >
               <Code className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="codeblock"
+              aria-label="Toggle codeblock"
+              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+            >
+              <BiCodeBlock className="h-4 w-4" />
             </ToggleGroupItem>
             <ToggleGroupItem
               value="bold"
               aria-label="Toggle bold"
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className="dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none"
+              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
             >
               <Bold className="h-4 w-4" />
             </ToggleGroupItem>
@@ -102,7 +118,7 @@ const Tiptap = () => {
                 editor.chain().focus().toggleHeading({ level: 1 }).run()
               }
               className={cn(
-                "dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none",
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
                 editor.isActive("heading", { level: 2 }) ? "is-active" : ""
               )}
             >
@@ -115,7 +131,7 @@ const Tiptap = () => {
                 editor.chain().focus().toggleHeading({ level: 2 }).run()
               }
               className={cn(
-                "dark:bg-slate-700 dark:hover:bg-slate-700/70 dark:text-white rounded-none",
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
                 editor.isActive("heading", { level: 2 }) ? "is-active" : ""
               )}
             >
@@ -124,7 +140,7 @@ const Tiptap = () => {
           </ToggleGroup>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} spellCheck="false" />
     </>
   );
 };

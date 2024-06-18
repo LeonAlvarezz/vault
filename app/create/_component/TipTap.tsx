@@ -75,7 +75,10 @@ const Tiptap = () => {
               value="italic"
               onClick={() => editor.chain().focus().toggleItalic().run()}
               aria-label="Toggle italic"
-              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("italic") ? "is-active" : ""
+              )}
             >
               <Italic className="h-4 w-4" />
             </ToggleGroupItem>
@@ -83,7 +86,10 @@ const Tiptap = () => {
               value="strike"
               aria-label="Toggle strike"
               onClick={() => editor.chain().focus().toggleStrike().run()}
-              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("strike") ? "is-active" : ""
+              )}
             >
               <Strikethrough className="h-4 w-4" />
             </ToggleGroupItem>
@@ -91,7 +97,10 @@ const Tiptap = () => {
               value="code"
               aria-label="Toggle code"
               onClick={() => editor.chain().focus().toggleCode().run()}
-              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("code") ? "is-active" : ""
+              )}
             >
               <Code className="h-4 w-4" />
             </ToggleGroupItem>
@@ -99,7 +108,10 @@ const Tiptap = () => {
               value="codeblock"
               aria-label="Toggle codeblock"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("codeblock" ? "is-active" : "")
+              )}
             >
               <BiCodeBlock className="h-4 w-4" />
             </ToggleGroupItem>
@@ -107,7 +119,10 @@ const Tiptap = () => {
               value="bold"
               aria-label="Toggle bold"
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className="dark:hover:bg-slate-800/70 dark:text-white rounded-none"
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("bold") ? "is-active" : ""
+              )}
             >
               <Bold className="h-4 w-4" />
             </ToggleGroupItem>
@@ -119,7 +134,7 @@ const Tiptap = () => {
               }
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+                editor.isActive("heading", { level: 1 }) ? "is-active" : ""
               )}
             >
               <HeadingIcon className="h-4 w-4" />

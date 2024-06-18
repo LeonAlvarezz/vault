@@ -170,3 +170,7 @@
 .tiptap pre .hljs-strong {
   font-weight: 700;
 }
+
+.is-active {
+  background-color: rgb(30 41 59 / 0.7);
+}

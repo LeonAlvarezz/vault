@@ -9,10 +9,12 @@ import {
   Bold,
   Code,
   Heading2Icon,
-  Heading3Icon,
+  List,
+  ListOrdered,
   Heading as HeadingIcon,
   Highlighter,
   Italic,
+  Quote,
   Strikethrough,
 } from "lucide-react";
 import Highlight from "@tiptap/extension-highlight";
@@ -20,8 +22,13 @@ import { cn } from "@/lib/utils";
 import { common, createLowlight } from "lowlight";
 import { mergeAttributes } from "@tiptap/core";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import CodeBlock from "@tiptap/extension-code-block";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
+import Blockquote from "@tiptap/extension-blockquote";
+
 import { BiCodeBlock } from "react-icons/bi";
+import { sendNote } from "@/data/note";
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -29,6 +36,9 @@ const Tiptap = () => {
       StarterKit,
       Placeholder.configure({
         placeholder: "Content goes here...",
+      }),
+      BulletList.configure({
+        keepMarks: true,
       }),
       Highlight.configure({ multicolor: true }),
       Heading.configure({ levels: [1, 2] }).extend({
@@ -62,6 +72,15 @@ const Tiptap = () => {
     },
   });
 
+  const onSubmit = async (content: any) => {
+    const { data, error } = await sendNote(content);
+    if (error) {
+      console.log(error);
+    }
+    console.log("Success");
+    console.log(data);
+  };
+
   return (
     <>
       {editor && (
@@ -72,11 +91,22 @@ const Tiptap = () => {
             className="flex gap-1 justify-start dark:bg-slate-700 "
           >
             <ToggleGroupItem
+              value="bold"
+              aria-label="Toggle bold"
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              className={cn(
+                "dark:hover:bg-slate-800/70 p-1 dark:text-white rounded-none",
+                editor.isActive("bold") ? "is-active" : ""
+              )}
+            >
+              <Bold className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem
               value="italic"
               onClick={() => editor.chain().focus().toggleItalic().run()}
               aria-label="Toggle italic"
               className={cn(
-                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none ",
                 editor.isActive("italic") ? "is-active" : ""
               )}
             >
@@ -105,27 +135,28 @@ const Tiptap = () => {
               <Code className="h-4 w-4" />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="codeblock"
+              value="codeBlock"
               aria-label="Toggle codeblock"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("codeblock" ? "is-active" : "")
+                editor.isActive("codeBlock" ? "is-active" : "")
               )}
             >
               <BiCodeBlock className="h-4 w-4" />
             </ToggleGroupItem>
             <ToggleGroupItem
-              value="bold"
-              aria-label="Toggle bold"
-              onClick={() => editor.chain().focus().toggleBold().run()}
+              value=""
+              aria-label="Toggle blockquote"
+              onClick={() => editor.chain().focus().toggleBlockquote().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("bold") ? "is-active" : ""
+                editor.isActive("blockquote") ? "is-active" : ""
               )}
             >
-              <Bold className="h-4 w-4" />
+              <Quote className="h-4 w-4" />
             </ToggleGroupItem>
+            <div className="mx-1 w-[1px] h-6 bg-white/50"></div>
             <ToggleGroupItem
               value="h1"
               aria-label="Toggle h1"
@@ -152,10 +183,40 @@ const Tiptap = () => {
             >
               <Heading2Icon className="h-4 w-4" />
             </ToggleGroupItem>
+            <div className="mx-1 w-[1px] h-6 bg-white/50"></div>
+
+            <ToggleGroupItem
+              value="bulletList"
+              aria-label="BulletList"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("bulletList") ? "is-active" : ""
+              )}
+            >
+              <List className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="orderedList"
+              aria-label="OrderedList"
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              className={cn(
+                "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
+                editor.isActive("orderedList") ? "is-active" : ""
+              )}
+            >
+              <ListOrdered className="h-4 w-4" />
+            </ToggleGroupItem>
           </ToggleGroup>
         </BubbleMenu>
       )}
       <EditorContent editor={editor} spellCheck="false" />
+      <button
+        className="bg-white py-1 px-4 mt-10"
+        onClick={async () => onSubmit(editor?.getJSON().content)}
+      >
+        Submit
+      </button>
     </>
   );
 };

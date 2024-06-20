@@ -9,7 +9,7 @@ export default function Page() {
   };
 
   return (
-    <main className="w-[90%] mx-auto">
+    <main className="w-[80%] mx-auto">
       <form onSubmit={handleSubmit}>
         <Input
           className="dark:bg-slate-800 bg-slate-100 dark:text-white text-slate-900 focus:outline-none text-2xl h-24"

@@ -28,7 +28,7 @@ import ListItem from "@tiptap/extension-list-item";
 import Blockquote from "@tiptap/extension-blockquote";
 
 import { BiCodeBlock } from "react-icons/bi";
-import { sendNote } from "@/data/note";
+import { sendNote } from "@/data/client/note";
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -213,7 +213,7 @@ const Tiptap = () => {
       <EditorContent editor={editor} spellCheck="false" />
       <button
         className="bg-white py-1 px-4 mt-10"
-        onClick={async () => onSubmit(editor?.getJSON().content)}
+        onClick={async () => onSubmit(editor?.getJSON())}
       >
         Submit
       </button>

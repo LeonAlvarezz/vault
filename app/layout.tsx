@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.scss";
 import Providers from "@/providers/provider";
 import { cn } from "@/lib/utils";
-import Nav from "@/components/ui/Nav";
+import Nav from "@/components/ui/nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("bg-slate-100 dark:bg-slate-800", inter.className)}>
-        <Providers>
-          <Nav />
-          {children}
-        </Providers>
+      <body className={cn("", inter.className)}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

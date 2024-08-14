@@ -5,6 +5,15 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "www.kadencewp.com"
+            },
+            {
+                protocol: "https",
+                hostname: "www.github.com"
+            },
+
+            {
+                protocol: "https",
+                hostname: "images.unsplash.com"
             }
         ]
     }

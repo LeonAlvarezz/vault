@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { GoHomeFill } from "react-icons/go";
 import { MdExplore } from "react-icons/md";
 import { IoSearch, IoSettingsSharp } from "react-icons/io5";
@@ -10,11 +10,12 @@ import { IoLogOut } from "react-icons/io5";
 import SidebarItem from "./sidebar-item";
 import { cn } from "@/lib/utils";
 
-const ICON_SIZE = 20;
+export const ICON_SIZE = 20;
+export const ICON_COLOR = "#DDD";
 const SIDEBAR_ITEM = [
   {
     id: "home",
-    icon: <GoHomeFill color="white" size={ICON_SIZE} />,
+    icon: <GoHomeFill color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/dashboard",
   },
   {
@@ -22,12 +23,12 @@ const SIDEBAR_ITEM = [
   },
   {
     id: "explore",
-    icon: <MdExplore color="white" size={ICON_SIZE} />,
+    icon: <MdExplore color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/explore",
   },
   {
     id: "search",
-    icon: <IoSearch color="white" size={ICON_SIZE} />,
+    icon: <IoSearch color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/",
   },
   {
@@ -35,12 +36,12 @@ const SIDEBAR_ITEM = [
   },
   {
     id: "note",
-    icon: <FaStickyNote color="white" size={ICON_SIZE} />,
+    icon: <FaStickyNote color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/note",
   },
   {
     id: "saved-note",
-    icon: <FaBookBookmark color="white" size={ICON_SIZE} />,
+    icon: <FaBookBookmark color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/",
   },
   {
@@ -48,20 +49,20 @@ const SIDEBAR_ITEM = [
   },
   {
     id: "account",
-    icon: <FaUser color="white" size={ICON_SIZE} />,
+    icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/",
   },
   {
     id: "settings",
-    icon: <IoSettingsSharp color="white" size={ICON_SIZE} />,
+    icon: <IoSettingsSharp color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/",
   },
 ];
 
 export default function Sidebar() {
   return (
-    <aside className="sticky min-h-screen w-16 bg-neutral-900 border-r-[1px] border-neutral-800">
-      <div className="flex justify-between flex-col h-full">
+    <aside className="sticky top-0 bottom-0 h-screen w-16 bg-neutral-900 border-r-[1px] border-neutral-800 z-20">
+      <div className="flex justify-between flex-col min-h-screen">
         <div>
           <div className="flex items-center flex-col w-full my-6">
             <Avatar>
@@ -85,10 +86,10 @@ export default function Sidebar() {
           <Link href="/logout">
             <div
               className={cn(
-                "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-800 rounded-sm my-4"
+                "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
               )}
             >
-              <IoLogOut color="white" size={ICON_SIZE} />
+              <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
             </div>
           </Link>
         </div>

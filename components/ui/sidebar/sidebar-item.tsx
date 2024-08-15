@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { ReactNode } from "react";
-import { Separator } from "./separator";
+import { Separator } from "../separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +27,7 @@ export default function SidebarItem({
       <div
         className={cn(
           "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-800 rounded-sm my-4",
-          id && pathname.includes(id) && "bg-neutral-800"
+          id && pathname.includes(id) && "bg-neutral-700/50"
         )}
       >
         <div className="w-full flex justify-center ">{icon}</div>

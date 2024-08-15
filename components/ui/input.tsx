@@ -4,13 +4,13 @@ import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 
 const inputVariants = cva(
-  "flex h-10 w-full text-white rounded-md px-3 py-2 placeholder:text-neutral-500 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium  disabled:cursor-not-allowed disabled:opacity-50",
+  "flex h-10 w-full text-white rounded-sm px-3 py-2 placeholder:text-neutral-500 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium  disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline:
-          "border border-neutral-700 bg-background focus-visible:ring-1 focus-visible:ring-neutral-500 outline-0",
+          "border border-neutral-700 bg-transparent focus-visible:ring-1 focus-visible:ring-neutral-500 outline-0",
       },
       input_size: {
         default: "h-10 px-4 py-2 ",

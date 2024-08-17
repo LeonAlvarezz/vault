@@ -1,0 +1,104 @@
+import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
+import { Input } from "@/components/ui/input";
+import React from "react";
+import { IoSearch } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa";
+import NoteCard from "@/components/ui/note-card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const STATUS = [
+  {
+    value: "javascript",
+    label: "Javascript",
+  },
+  {
+    value: "react",
+    label: "React",
+  },
+  {
+    value: "vue",
+    label: "VueJS",
+  },
+];
+
+const TAG = [
+  {
+    value: "framework",
+    label: "Framework",
+  },
+  {
+    value: "Websocket",
+    label: "Websocket",
+  },
+  {
+    value: "tutorial",
+    label: "Tutorial",
+  },
+];
+
+const ORDER = [
+  {
+    value: "recent",
+    label: "Recent",
+  },
+  {
+    value: "most_popular",
+    label: "Most Popular",
+  },
+  {
+    value: "trending",
+    label: "Trending",
+  },
+  {
+    value: "most_liked",
+    label: "Most Liked",
+  },
+];
+
+export default function NotePage() {
+  return (
+    <>
+      <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
+      <div className="relative">
+        <Input
+          variant={"outline"}
+          placeholder="Search by title or keyword..."
+        />
+        <IoSearch
+          color="white"
+          size={20}
+          className="absolute top-1/2 -translate-y-1/2 right-4"
+        />
+      </div>
+      <div className="mt-4 flex justify-between">
+        <div className="flex gap-2">
+          <Combobox options={STATUS} label="Category" size="sm" />
+          <Combobox options={TAG} label="Tags" size="sm" />
+        </div>
+
+        <Select defaultValue="trending">
+          <SelectTrigger className="w-[150px]">
+            <SelectValue placeholder="Order" />
+          </SelectTrigger>
+          <SelectContent>
+            {ORDER.map((order) => (
+              <SelectItem value={order.value}>{order.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <section className="my-6 grid grid-cols-1 sm:px-0 px-6 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
+        {Array.from({ length: 30 }).map((_, index) => (
+          <NoteCard key={index} />
+        ))}
+      </section>
+    </>
+  );
+}

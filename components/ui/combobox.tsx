@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,9 +28,17 @@ type Options = {
 type ComboboxProps = {
   options: Options[];
   label?: string;
+  size?: "sm" | "md" | "lg";
+};
+
+const sizeClasses = {
+  sm: "w-[150px]",
+  md: "w-[200px]",
+  lg: "w-[400px]",
 };
 
 export function Combobox({
+  size = "md",
   options,
   label = "Select option...",
 }: ComboboxProps) {
@@ -44,7 +52,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between rounded-sm font-normal"
+          className={`${sizeClasses[size]} justify-between rounded-sm font-normal`}
         >
           {value
             ? options.find((option) => option.value === value)?.label
@@ -52,7 +60,7 @@ export function Combobox({
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className={`${sizeClasses[size]} p-0`}>
         <Command>
           <CommandInput placeholder="Search option..." />
           <CommandList>

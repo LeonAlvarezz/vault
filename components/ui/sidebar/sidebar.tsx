@@ -29,7 +29,7 @@ const SIDEBAR_ITEM = [
   {
     id: "search",
     icon: <IoSearch color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/",
+    link: "/search",
   },
   {
     seperator: true,
@@ -37,25 +37,25 @@ const SIDEBAR_ITEM = [
   {
     id: "note",
     icon: <FaStickyNote color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/note",
+    link: "/note?view=note",
   },
   {
     id: "saved-note",
     icon: <FaBookBookmark color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/",
+    link: "/saved-note",
   },
   {
     seperator: true,
   },
   {
-    id: "account",
+    id: "profile",
     icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/",
+    link: "/profile",
   },
   {
     id: "settings",
     icon: <IoSettingsSharp color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/",
+    link: "/settings",
   },
 ];
 

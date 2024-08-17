@@ -1,11 +1,12 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 type Props = {
+  children: React.ReactNode;
   color?: "red" | "violet" | "green" | "blue" | "violet" | "yellow" | "orange"; // Limit color options
   className?: string;
 };
 
-export default function Tag({ className, color = "blue" }: Props) {
+export default function Tag({ className, color = "blue", children }: Props) {
   const colorClasses = {
     red: "border-red-300 text-red-300",
     violet: "border-violet-300 text-violet-300",
@@ -19,12 +20,13 @@ export default function Tag({ className, color = "blue" }: Props) {
   return (
     <div
       className={cn(
-        `w-fit h-5 border rounded-full text-[10px] items-center flex justify-center px-4`,
+        `w-fit h-6 border rounded-full text-[10px] items-center flex justify-center px-4`,
         colorClasses[color], // Apply the color-specific classes
         className
       )}
     >
-      <p>React</p>
+      {children}
+      {/* <p>{label}</p> */}
     </div>
   );
 }

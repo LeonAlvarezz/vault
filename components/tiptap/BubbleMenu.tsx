@@ -34,7 +34,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleBold().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 p-1 dark:text-white rounded-none",
-                editor.isActive("bold") ? "is-active" : ""
+                editor.isActive("bold") && "is-active"
               )}
             >
               <Bold className="h-4 w-4" />
@@ -45,7 +45,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               aria-label="Toggle italic"
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none ",
-                editor.isActive("italic") ? "is-active" : ""
+                editor.isActive("italic") && "is-active"
               )}
             >
               <Italic className="h-4 w-4" />
@@ -56,7 +56,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleStrike().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("strike") ? "is-active" : ""
+                editor.isActive("strike") && "is-active"
               )}
             >
               <Strikethrough className="h-4 w-4" />
@@ -67,7 +67,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleCode().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("code") ? "is-active" : ""
+                editor.isActive("code") && "is-active"
               )}
             >
               <Code className="h-4 w-4" />
@@ -78,7 +78,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("codeBlock" ? "is-active" : "")
+                editor.isActive("codeBlock") && "is-active"
               )}
             >
               <BiCodeBlock className="h-4 w-4" />
@@ -89,7 +89,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("blockquote") ? "is-active" : ""
+                editor.isActive("blockquote") && "is-active"
               )}
             >
               <Quote className="h-4 w-4" />
@@ -103,7 +103,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               }
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("heading", { level: 1 }) ? "is-active" : ""
+                editor.isActive("heading", { level: 1 }) && "is-active"
               )}
             >
               <HeadingIcon className="h-4 w-4" />
@@ -116,7 +116,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               }
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+                editor.isActive("heading", { level: 2 }) && "is-active"
               )}
             >
               <Heading2Icon className="h-4 w-4" />
@@ -129,7 +129,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("bulletList") ? "is-active" : ""
+                editor.isActive("bulletList") && "is-active"
               )}
             >
               <List className="h-4 w-4" />
@@ -140,7 +140,7 @@ export default function TipTapBubbleMenu({ editor }: BubbleMenuProps) {
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
               className={cn(
                 "dark:hover:bg-slate-800/70 dark:text-white rounded-none",
-                editor.isActive("orderedList") ? "is-active" : ""
+                editor.isActive("orderedList") && "is-active"
               )}
             >
               <ListOrdered className="h-4 w-4" />

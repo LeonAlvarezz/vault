@@ -37,7 +37,7 @@ const SIDEBAR_ITEM = [
   {
     id: "note",
     icon: <FaStickyNote color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/note?view=note",
+    link: "/note",
   },
   {
     id: "saved-note",
@@ -50,7 +50,7 @@ const SIDEBAR_ITEM = [
   {
     id: "profile",
     icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/profile",
+    link: "/profile?view=note",
   },
   {
     id: "settings",

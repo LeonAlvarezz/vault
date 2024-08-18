@@ -6,6 +6,8 @@ import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import NoteCard from "@/components/ui/note-card";
 import FloatingButton from "@/components/ui/floating-button";
+import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
+import Link from "next/link";
 const STATUS = [
   {
     value: "all_note",
@@ -92,7 +94,11 @@ export default function NotePage() {
         ))}
       </section>
       {/* <Combobox /> */}
-      <FloatingButton className="fixed bottom-2 right-64 " />
+      <FloatingButton className="fixed bottom-4 p-4 right-64 cursor-pointer ">
+        <Link href="/create">
+          <FaPlus color={ICON_COLOR} size={ICON_SIZE} />
+        </Link>
+      </FloatingButton>
     </>
   );
 }

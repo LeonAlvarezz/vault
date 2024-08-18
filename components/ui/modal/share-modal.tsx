@@ -46,7 +46,7 @@ export default function ShareModal({ children }: ShareModalProps) {
             <Button
               variant={"icon"}
               size={"icon"}
-              className="bg-main flex-shrink-0 rounded-l-none hover:bg-main/70"
+              className="bg-main py-5 flex-shrink-0 rounded-l-none hover:bg-main/70"
             >
               <IoCopy />
             </Button>

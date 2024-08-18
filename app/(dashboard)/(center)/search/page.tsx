@@ -120,8 +120,11 @@ export default function SearchPage() {
           <h2 className="text-xl font-bold">Recent</h2>
         </div>
         <div className="flex flex-col gap-2">
-          {RECENT_SEARCH.map((result) => (
-            <div className="hover:bg-neutral-800 w-full py-1 px-2 rounded-sm cursor-pointer flex justify-between items-center">
+          {RECENT_SEARCH.map((result, index) => (
+            <div
+              key={index}
+              className="hover:bg-neutral-800 w-full py-1 px-2 rounded-sm cursor-pointer flex justify-between items-center"
+            >
               <p className="text-sm">{result.value}</p>
               <Button
                 variant={"icon"}
@@ -141,8 +144,11 @@ export default function SearchPage() {
           <h2 className="text-xl font-bold">Trending</h2>
         </div>
         <div className="flex flex-col gap-2">
-          {RECENT_SEARCH.map((result) => (
-            <div className="hover:bg-neutral-800 w-full py-1 px-2 rounded-sm cursor-pointer flex justify-between items-center">
+          {RECENT_SEARCH.map((result, index) => (
+            <div
+              key={index}
+              className="hover:bg-neutral-800 w-full py-1 px-2 rounded-sm cursor-pointer flex justify-between items-center"
+            >
               <p className="text-sm">{result.value}</p>
               <Button
                 variant={"icon"}

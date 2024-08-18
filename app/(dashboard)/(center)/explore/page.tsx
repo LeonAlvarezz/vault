@@ -88,8 +88,10 @@ export default function NotePage() {
             <SelectValue placeholder="Order" />
           </SelectTrigger>
           <SelectContent>
-            {ORDER.map((order) => (
-              <SelectItem value={order.value}>{order.label}</SelectItem>
+            {ORDER.map((order, index) => (
+              <SelectItem key={index} value={order.value}>
+                {order.label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

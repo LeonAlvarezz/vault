@@ -1,13 +1,16 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import AboutTab from "../_feature/about-tab";
 import NoteTab from "../_feature/note-tab";
 
 export default function TabView() {
   const params = useSearchParams();
+  const pathname = usePathname();
+  console.log("pathname:", pathname);
+
   const view = params.get("view");
   return (
     <>
@@ -17,7 +20,7 @@ export default function TabView() {
             "pb-2 border-b-2 border-neutral-800 px-4",
             view === "note" && "border-main"
           )}
-          href={"/profile?view=note"}
+          href={`${pathname}?view=note`}
         >
           Note
         </Link>
@@ -26,7 +29,7 @@ export default function TabView() {
             "pb-2 border-b-2 border-neutral-800 px-4",
             view === "about" && "border-main"
           )}
-          href={"/profile?view=about"}
+          href={`${pathname}?view=about`}
         >
           About
         </Link>

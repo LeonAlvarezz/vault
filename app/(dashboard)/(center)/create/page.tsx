@@ -1,13 +1,15 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import InputContent from "./_component/InputContent";
+import InputContent from "./_components/InputContent";
 import { BiCategory } from "react-icons/bi";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
-import { Combobox } from "@/components/ui/combobox";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { FaTag, FaTags } from "react-icons/fa";
 import FormatMenu from "@/components/ui/format-menu";
+import StatContainer from "@/components/ui/statistic/stat-container";
+import ShareModal from "@/components/ui/modal/share-modal";
+import { Button } from "@/components/ui/button";
+import { FaTags } from "react-icons/fa";
 
 export default function Page() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,7 +33,21 @@ export default function Page() {
 
   return (
     <>
-      <FormatMenu />
+      <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
+        <FormatMenu />
+        <div className="flex flex-col gap-2 mt-4">
+          <ShareModal>
+            <Button variant={"main"}>Share</Button>
+          </ShareModal>
+          <Button variant={"main"}>Publish</Button>
+        </div>
+        <div className="flex flex-col gap-2 mt-4">
+          <p>Statistic</p>
+          <StatContainer label="Views" count={2000} rate={10} />
+          <StatContainer label="Likes" count={100} />
+          <StatContainer label="Bookmarks" count={50} />
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <Input

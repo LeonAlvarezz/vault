@@ -19,10 +19,8 @@ import { FaShare } from "react-icons/fa";
 import ShareModal from "../modal/share-modal";
 
 export default function EditProfileDropdownMenu() {
-  const [position, setPosition] = React.useState("bottom");
-
   return (
-    <DropdownMenu on>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant={"icon"}
@@ -33,17 +31,11 @@ export default function EditProfileDropdownMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
-        {/* <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup> */}
         <DropdownMenuItem>
           <MdModeEdit className="mr-2 h-4 w-4" />
-          <Link href="/profile/edit">Edit Profile</Link>
+          <Link href="/profile/1/edit">Edit Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          {" "}
           <ShareModal>
             <div className="flex">
               <FaShare className="mr-2 h-4 w-4" />

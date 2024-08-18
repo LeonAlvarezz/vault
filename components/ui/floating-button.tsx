@@ -5,14 +5,17 @@ import { ICON_COLOR, ICON_SIZE } from "./sidebar/sidebar";
 import { cn } from "@/lib/utils";
 type Props = {
   className?: string;
+  children: React.ReactNode;
 };
-export default function FloatingButton({ className }: Props) {
+export default function FloatingButton({ className, children }: Props) {
   return (
-    <Link
-      href={"/create"}
-      className={cn(`p-4 rounded-full bg-main hover:bg-main/80`, className)}
+    <div
+      className={cn(
+        `fixed bottom-4 p-1 right-10 xl:right-96 rounded-full bg-main hover:bg-main/80`,
+        className
+      )}
     >
-      <FaPlus color={ICON_COLOR} size={ICON_SIZE} />
-    </Link>
+      {children}
+    </div>
   );
 }

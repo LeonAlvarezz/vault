@@ -17,6 +17,11 @@ export default function NoteCard() {
     router.push("/note/id");
   };
 
+  const handleProfileClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    router.push("/profile/1");
+  };
+
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     console.log("Button clicked!");
@@ -47,34 +52,35 @@ export default function NoteCard() {
               <SlOptionsVertical />
             </Button>
           </div>
-          <div className="flex gap-2 items-center">
-            <Avatar className="w-7 h-7">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="flex justify-between w-full">
+          <div className="flex justify-between w-full items-center">
+            <div onClick={handleProfileClick} className="flex gap-2">
+              <Avatar className="w-7 h-7">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              {/* <div className="flex justify-between w-full"> */}
               <div className="flex flex-col">
                 <p className="text-sm text-neutral-200">John Doe</p>
                 <p className="text-xs text-neutral-500">16 Jul 2024</p>
               </div>
-              <div className="flex gap-2 items-end">
-                <Button
-                  onClick={handleButtonClick}
-                  variant={"icon"}
-                  size={"icon"}
-                  className="group w-5 h-5 hover:text-red-500 self-end"
-                >
-                  <FaRegHeart className="group w-full h-full" />
-                </Button>
-                <Button
-                  onClick={handleButtonClick}
-                  variant={"icon"}
-                  size={"icon"}
-                  className="group w-5 h-5 hover:text-blue-500 self-end"
-                >
-                  <IoBookmarkOutline className="group w-full h-full" />
-                </Button>
-              </div>
+            </div>
+            <div className="flex gap-2 items-end">
+              <Button
+                onClick={handleButtonClick}
+                variant={"icon"}
+                size={"icon"}
+                className="group w-5 h-5 hover:text-red-500 self-end"
+              >
+                <FaRegHeart className="group w-full h-full" />
+              </Button>
+              <Button
+                onClick={handleButtonClick}
+                variant={"icon"}
+                size={"icon"}
+                className="group w-5 h-5 hover:text-blue-500 self-end"
+              >
+                <IoBookmarkOutline className="group w-full h-full" />
+              </Button>
             </div>
           </div>
         </div>

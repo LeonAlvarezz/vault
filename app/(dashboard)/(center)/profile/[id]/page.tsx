@@ -1,11 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ImageContainer from "@/components/ui/image-container";
-import Link from "next/link";
 import React from "react";
-import { SlOptionsVertical } from "react-icons/sl";
-import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
-import TabView from "./_component/tab-view";
+import TabView from "../_component/tab-view";
 
 export default function AccountPage() {
   return (
@@ -29,8 +26,9 @@ export default function AccountPage() {
                 Code
               </p>
             </div>
-
-            <EditProfileDropdownMenu />
+            <Button variant={"main"} size={"sm"}>
+              Contact
+            </Button>
           </div>
         </div>
       </section>

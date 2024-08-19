@@ -36,3 +36,7 @@ export function createClient() {
     }
   );
 }
+
+const supabase = createClient();
+
+export default supabase;

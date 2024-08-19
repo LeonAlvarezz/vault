@@ -5,6 +5,7 @@ export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
+  const url = request.nextUrl.clone();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,16 +32,32 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const protectedPaths = [
+    "/dashboard",
+    "/explore",
+    "/note",
+    "/settings",
+    "/profile",
+  ];
+  const isProtectedPath = protectedPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  if (!user && isProtectedPath) {
+    url.pathname = "/auth/login";
+    console.log("url.pathnam:", url.pathname);
+    return NextResponse.redirect(url);
+  }
 
   if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    url.pathname === "/profile" ||
+    (url.pathname.match(/^\/profile\/[^\/]+$/) &&
+      url.pathname !== "/profile/edit")
   ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+    if (!url.searchParams.has("view")) {
+      url.searchParams.set("view", "note");
+      return NextResponse.redirect(url);
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

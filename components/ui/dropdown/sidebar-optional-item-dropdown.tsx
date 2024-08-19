@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { IoLogOut } from "react-icons/io5";
 import { ICON_COLOR, ICON_SIZE } from "../sidebar/sidebar";
+import { signout } from "@/app/api/action";
 type Props = {
   items: SidebarMobileProps[];
 };
@@ -51,7 +52,25 @@ export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
           );
         })}
         <DropdownMenuItem>
-          <Link href="/logout">
+          <form className="w-full">
+            <Button
+              variant={"icon"}
+              size={"icon"}
+              formAction={signout}
+              className="w-full"
+            >
+              <div
+                className={cn(
+                  "grid grid-cols-3  place-items-start text-sm gap-2 capitalize p-2 w-full hover:bg-neutral-800 rounded-sm"
+                )}
+              >
+                <IoLogOut color="#FF8080" size={ICON_SIZE} />
+                <p className="col-span-2 text-[#FF8080] font-normal">Logout</p>
+              </div>
+            </Button>
+          </form>
+
+          {/* <Link href="/logout">
             <div
               className={cn(
                 "grid grid-cols-3 gap-2 capitalize p-2 w-full hover:bg-neutral-800 rounded-sm"
@@ -60,7 +79,7 @@ export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
               <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
               <p>Logout</p>
             </div>
-          </Link>
+          </Link> */}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

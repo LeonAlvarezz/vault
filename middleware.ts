@@ -3,21 +3,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateSession } from "./utils/supabase/middleware";
 
 export async function middleware(req: NextRequest) {
-  const url = req.nextUrl.clone();
+  return await updateSession(req);
+  // const url = req.nextUrl.clone();
 
-  if (
-    url.pathname === "/profile" ||
-    (url.pathname.match(/^\/profile\/[^\/]+$/) &&
-      url.pathname !== "/profile/edit")
-  ) {
-    if (!url.searchParams.has("view")) {
-      url.searchParams.set("view", "note");
-      return NextResponse.redirect(url);
-    }
-  }
-  await updateSession(req);
+  // if (
+  //   url.pathname === "/profile" ||
+  //   (url.pathname.match(/^\/profile\/[^\/]+$/) &&
+  //     url.pathname !== "/profile/edit")
+  // ) {
+  //   if (!url.searchParams.has("view")) {
+  //     url.searchParams.set("view", "note");
+  //     return NextResponse.redirect(url);
+  //   }
+  // }
 
-  return NextResponse.next();
+  // return NextResponse.next();
 }
 
 export const config = {

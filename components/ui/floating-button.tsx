@@ -11,7 +11,7 @@ export default function FloatingButton({ className, children }: Props) {
   return (
     <div
       className={cn(
-        `fixed bottom-4 p-1 right-10 xl:right-96 rounded-full bg-main hover:bg-main/80`,
+        `fixed bottom-16 sm:bottom-4 p-1 right-5 xl:right-72 rounded-full bg-main hover:bg-main/80`,
         className
       )}
     >

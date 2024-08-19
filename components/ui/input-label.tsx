@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Label } from "./label";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
@@ -10,9 +11,14 @@ import {
   SelectValue,
 } from "./select";
 import { IconType } from "react-icons/lib";
+import { Button } from "./button";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Toggle } from "./toggle";
 type Props = {
   label: string;
   placeholder?: string;
+  type?: string;
+  name?: string;
 };
 type SelectWithLabelProps = {
   label: string;
@@ -20,14 +26,52 @@ type SelectWithLabelProps = {
   placeholder?: string;
   options: SelectOption[];
 };
-export function InputWithLabel({ label, placeholder }: Props) {
+export function InputWithLabel({
+  label,
+  name,
+  type = "text",
+  placeholder,
+}: Props) {
   return (
     <div className="flex flex-col gap-3">
-      <Label>{label}</Label>
-      <Input variant={"outline"} placeholder={placeholder} />
+      <Label htmlFor={name}>{label}</Label>
+      <Input
+        type={type}
+        name={name}
+        variant={"outline"}
+        placeholder={placeholder}
+      />
     </div>
   );
 }
+
+// export function InputPasswordWithLabel({ label, name, placeholder }: Props) {
+//   const [type, setType] = useState("password");
+
+//   const togglePasswordVisibility = () => {
+//     setType((prevType) => (prevType === "password" ? "text" : "password"));
+//   };
+
+//   return (
+//     <div className="flex flex-col gap-3 relative">
+//       <Label htmlFor={name}>{label}</Label>
+//       <Input
+//         type={type}
+//         name={name}
+//         variant={"outline"}
+//         placeholder={placeholder}
+//       />
+//       <Button
+//         onClick={togglePasswordVisibility}
+//         variant={"icon"}
+//         size={"icon"}
+//         className="absolute bottom-0 right-0 hover:bg-neutral-700/50"
+//       >
+//         {type === "password" ? <FaEye /> : <FaEyeSlash />}
+//       </Button>
+//     </div>
+//   );
+// }
 
 type IconInputWithLabelProps = {
   label: string;

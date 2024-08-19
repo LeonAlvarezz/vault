@@ -42,8 +42,8 @@ export default function UserInformationSection() {
     }
   };
   return (
-    <section className="flex justify-between gap-4">
-      <div className="size-[150px] relative ">
+    <section className="flex flex-col sm:flex-row items-center sm:items-stretch justify-between gap-4">
+      <div className="size-[150px] relative flex-shrink-0 ">
         <Avatar className="size-full flex-shrink-0">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
@@ -59,7 +59,7 @@ export default function UserInformationSection() {
         <Input ref={uploadRef} className="hidden" type="file" />
       </div>
 
-      <div className="basis-2/5 flex flex-col justify-between">
+      <div className="basis-2/5 w-full flex flex-col gap-4 justify-between">
         <InputWithLabel placeholder="Enter username..." label="Username" />
         <SelectWithLabel
           placeholder="Occupation"
@@ -67,7 +67,7 @@ export default function UserInformationSection() {
           options={OCCUPATION}
         />
       </div>
-      <div className="basis-2/5">
+      <div className="basis-2/5 w-full">
         <TextAreaWithLabel
           placeholder="Enter something interesting about yourself..."
           label="Bios"

@@ -46,7 +46,7 @@ const TAG = [
 export default function NotePage() {
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4 ">Saved Note</h1>
+      <h1 className="text-2xl font-bold mb-4 ">Bookmark</h1>
       <div className="relative">
         <Input
           variant={"outline"}

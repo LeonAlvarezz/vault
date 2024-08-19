@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { GoHomeFill } from "react-icons/go";
 import { MdExplore } from "react-icons/md";
@@ -9,17 +8,19 @@ import { IoLogOut } from "react-icons/io5";
 
 import SidebarItem from "./sidebar-item";
 import { cn } from "@/lib/utils";
+import { signout } from "@/app/api/action";
+import { Button } from "../button";
 
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
-const SIDEBAR_ITEM = [
+export const SIDEBAR_ITEM = [
   {
-    id: "home",
+    id: "dashboard",
     icon: <GoHomeFill color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/dashboard",
   },
   {
-    seperator: true,
+    separator: true,
   },
   {
     id: "explore",
@@ -32,7 +33,7 @@ const SIDEBAR_ITEM = [
     link: "/search",
   },
   {
-    seperator: true,
+    separator: true,
   },
   {
     id: "note",
@@ -40,12 +41,12 @@ const SIDEBAR_ITEM = [
     link: "/note",
   },
   {
-    id: "saved-note",
+    id: "bookmark",
     icon: <FaBookBookmark color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/saved-note",
+    link: "/bookmark",
   },
   {
-    seperator: true,
+    separator: true,
   },
   {
     id: "profile",
@@ -77,21 +78,23 @@ export default function Sidebar() {
                 id={item.id}
                 icon={item.icon}
                 link={item.link}
-                separator={item.seperator}
+                separator={item.separator}
               />
             ))}
           </div>
         </div>
-        <div>
-          <Link href="/logout">
-            <div
-              className={cn(
-                "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
-              )}
-            >
-              <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
-            </div>
-          </Link>
+        <div className="w-full flex justify-center">
+          <form>
+            <Button variant={"icon"} size={"icon"} formAction={signout}>
+              <div
+                className={cn(
+                  "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
+                )}
+              >
+                <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
+              </div>
+            </Button>
+          </form>
         </div>
       </div>
     </aside>

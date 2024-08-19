@@ -1,4 +1,4 @@
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import React from "react";
 import TabView from "../profile/_component/tab-view";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -9,8 +9,14 @@ import { OverviewChart } from "./_components/overview-chart";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import EditNoteDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import { MdDelete, MdHistory } from "react-icons/md";
+import { createClient } from "@/utils/supabase/server";
 
-export default function page() {
+export default async function page() {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/auth/login");
+  }
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 ">Dashboard</h1>

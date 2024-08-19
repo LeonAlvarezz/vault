@@ -1,7 +1,8 @@
 // middleware.js
 import { NextRequest, NextResponse } from "next/server";
+import { updateSession } from "./utils/supabase/middleware";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
 
   if (
@@ -14,10 +15,15 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
+  await updateSession(req);
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/profile", "/profile/:path*"],
+  matcher: [
+    "/profile",
+    "/profile/:path*",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

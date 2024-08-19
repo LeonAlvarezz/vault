@@ -13,12 +13,12 @@ export default function EditAboutMeSection() {
     throw new Error("Function not implemented.");
   }
   return (
-    <section className="pb-20">
+    <section>
       <h2>About Me</h2>
       <p className="text-xs mt-2 text-neutral-500">
         Write about yourself to let other better know about you
       </p>
-      <div className="mt-5 h-full">
+      <div className="mt-10 h-full">
         <InputContent />
       </div>
       <div className="hidden xl:block fixed top-28 left-28 w-[200px]">

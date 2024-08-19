@@ -77,14 +77,14 @@ export default function NotePage() {
           className="absolute top-1/2 -translate-y-1/2 right-4"
         />
       </div>
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
         <div className="flex gap-2">
           <Combobox options={STATUS} label="Category" size="sm" />
           <Combobox options={TAG} label="Tags" size="sm" />
         </div>
 
         <Select defaultValue="trending">
-          <SelectTrigger className="w-[150px]">
+          <SelectTrigger className="w-full sm:w-[150px]">
             <SelectValue placeholder="Order" />
           </SelectTrigger>
           <SelectContent>
@@ -96,7 +96,7 @@ export default function NotePage() {
           </SelectContent>
         </Select>
       </div>
-      <section className="my-6 grid grid-cols-1 sm:px-0 px-6 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
+      <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
         {Array.from({ length: 30 }).map((_, index) => (
           <NoteCard key={index} />
         ))}

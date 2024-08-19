@@ -107,7 +107,7 @@ export default async function Render(props: Props) {
   ];
 
   return (
-    <div className="tiptap dark:text-white text-slate-800 flex flex-col gap-2 py-10">
+    <div className="tiptap dark:text-white text-slate-800 flex flex-col gap-2">
       {content.map((content, index) => (
         <div key={index}>{renderNote(content)}</div>
       ))}

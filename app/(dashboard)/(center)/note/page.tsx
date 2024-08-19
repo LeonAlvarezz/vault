@@ -84,7 +84,7 @@ export default function NotePage() {
         <Combobox options={TAG} label="Tags" />
       </div>
 
-      <section className="my-6 grid grid-cols-1 sm:px-0 px-6 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
+      <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
         {/* <NoteCard />
         <NoteCard />
         <NoteCard />

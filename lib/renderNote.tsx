@@ -29,16 +29,16 @@ export function renderNote(node: BlockNode) {
 
     case NOTE_CONTENT_TYPE.IMAGE:
       return (
-        <div className="w-auto" style={{ height: "500px" }}>
+        <>
           {node.content.map((textNode, index) => (
             <ImageContainer
               key={index}
               src={textNode.text}
               alt="Note content image"
-              className="h-full w-full"
+              className="h-[500px] w-full"
             />
           ))}
-        </div>
+        </>
       );
 
     default:

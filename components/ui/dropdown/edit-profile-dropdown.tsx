@@ -32,8 +32,10 @@ export default function EditProfileDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuItem>
-          <MdModeEdit className="mr-2 h-4 w-4" />
-          <Link href="/profile/1/edit">Edit Profile</Link>
+          <Link href="/profile/1/edit" className="flex items-center">
+            <MdModeEdit className="mr-2 h-4 w-4" />
+            <p className="whitespace-nowrap">Edit Profile</p>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <ShareModal>

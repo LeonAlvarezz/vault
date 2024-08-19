@@ -23,7 +23,7 @@ export default function EditNoteDropdownMenu() {
           <SlOptionsVertical />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-32" side="right">
+      <DropdownMenuContent className="w-32">
         <DropdownMenuItem className=" cursor-pointer group text-red-400 group-hover:text-red-500">
           <MdDelete className="mr-2 h-4 w-4  text-red-400" />
           <Button variant={"icon"} size={"icon"} className="text-red-400">

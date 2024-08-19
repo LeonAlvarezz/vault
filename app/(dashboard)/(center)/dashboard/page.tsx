@@ -15,7 +15,7 @@ export default function page() {
     <div>
       <h1 className="text-2xl font-bold mb-4 ">Dashboard</h1>
       <div className="flex flex-col gap-4">
-        <div className="flex w-full gap-4">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="w-full">
             <CardHeader>
               <div className="flex justify-between">

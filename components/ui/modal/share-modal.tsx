@@ -27,7 +27,7 @@ export default function ShareModal({ children }: ShareModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] py-10">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Share</DialogTitle>
           <DialogDescription>

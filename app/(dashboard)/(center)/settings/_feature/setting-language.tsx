@@ -27,10 +27,10 @@ export default function SettingLanguage() {
       <h1 className="text-2xl font-bold">Language</h1>
       <Separator className="bg-neutral-700 my-3" />{" "}
       <div className="flex gap-4 flex-col mt-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between gap-4 items-center">
           <div>
             <h3 className="text-sm">Language</h3>
-            <p className="text-xs text-neutral-600 leading-loose">
+            <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
               Change language display in the user interface
             </p>
           </div>

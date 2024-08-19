@@ -9,19 +9,19 @@ export default function SettingGeneral() {
       <h1 className="text-2xl font-bold">General</h1>
       <Separator className="bg-neutral-700 my-3" />{" "}
       <div className="flex gap-4 flex-col mt-8">
-        <div className="flex justify-between items-center">
+        <div className="flex gap-4 justify-between items-center">
           <div>
             <h3 className="text-sm">Command Search</h3>
-            <p className="text-xs text-neutral-600 leading-loose">
+            <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
               Enable vault advance search with keyboard shortcut
             </p>
           </div>
           <Switch />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex gap-4 justify-between items-center">
           <div>
             <h3 className="text-sm">Command Search Shortcut</h3>
-            <p className="text-xs text-neutral-600 leading-loose">
+            <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
               Customize the shortcut used to trigger Command Search.
             </p>
           </div>

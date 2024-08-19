@@ -12,8 +12,9 @@ export default function ImageContainer({ src, alt = "", className }: Props) {
       <Image
         src={src}
         alt={alt}
-        style={{ objectFit: "cover" }}
-        fill
+        width={0}
+        height={0}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
         sizes="(max-width: 1250px) 100vw, 1250px"
       />
     </div>

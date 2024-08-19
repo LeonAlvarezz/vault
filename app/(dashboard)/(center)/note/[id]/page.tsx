@@ -13,17 +13,19 @@ export default function NoteDetailPage() {
       <Tag color="blue" className="text-xs h-6">
         React
       </Tag>
-      <div className="flex justify-between mt-2">
-        <div className="flex gap-2">
-          <Avatar className="size-10">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm">John Doe</p>
-            <p className="text-xs text-neutral-400">16 Jul 2024</p>
+      <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 gap-y-2">
+        <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
+          <div className="flex gap-2">
+            <Avatar className="size-10">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm">John Doe</p>
+              <p className="text-xs text-neutral-400">16 Jul 2024</p>
+            </div>
           </div>
-          <Button variant={"main"} size={"sm"} className="ml-5">
+          <Button variant={"main"} size={"sm"} className="h-7">
             Contact
           </Button>
         </div>

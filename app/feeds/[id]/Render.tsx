@@ -1,26 +1,5 @@
-import { getNoteById } from "@/data/server/note";
-import { generateHTML } from "@tiptap/html";
-import StarterKit from "@tiptap/starter-kit";
-import Blockquote from "@tiptap/extension-blockquote";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Italic from "@tiptap/extension-italic";
-import Strikethrough from "@tiptap/extension-strike";
-import { Heading } from "@tiptap/extension-heading";
-import Code from "@tiptap/extension-code";
-import Bold from "@tiptap/extension-bold";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
-import { useMemo } from "react";
-import { common, createLowlight } from "lowlight";
-import { mergeAttributes } from "@tiptap/react";
-import ImageContainer from "@/components/ui/image-container";
 import { BlockNode, NOTE_CONTENT_TYPE } from "@/types/note.type";
 import { renderNote } from "@/lib/renderNote";
-import { render } from "react-dom";
 type Props = {
   data?: any[] | null;
 };

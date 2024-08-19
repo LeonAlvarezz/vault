@@ -50,7 +50,7 @@ const Tiptap = () => {
       }),
       CodeBlockLowlight.configure({
         lowlight: createLowlight(common),
-        languageClassPrefix: "language-css",
+        languageClassPrefix: "javascript",
       }),
     ],
     editorProps: {
@@ -61,24 +61,25 @@ const Tiptap = () => {
   });
 
   const onSubmit = async (content: any) => {
-    const { data, error } = await sendNote(content);
-    if (error) {
-      console.log(error);
-    }
-    console.log("Success");
-    console.log(data);
+    console.log(content);
+    // const { data, error } = await sendNote(content);
+    // if (error) {
+    //   console.log(error);
+    // }
+    // console.log("Success");
+    // console.log(data);
   };
 
   return (
     <>
       <TipTapBubbleMenu editor={editor} />
       <EditorContent editor={editor} spellCheck="false" />
-      {/* <button
-        className="bg-white py-1 px-4 mt-10"
+      <button
+        className="bg-main py-1 px-4 mt-10"
         onClick={async () => onSubmit(editor?.getJSON())}
       >
         Submit
-      </button> */}
+      </button>
     </>
   );
 };

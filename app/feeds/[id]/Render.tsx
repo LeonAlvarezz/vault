@@ -20,49 +20,11 @@ import { mergeAttributes } from "@tiptap/react";
 import ImageContainer from "@/components/ui/image-container";
 import { BlockNode, NOTE_CONTENT_TYPE } from "@/types/note.type";
 import { renderNote } from "@/lib/renderNote";
+import { render } from "react-dom";
 type Props = {
   data?: any[] | null;
 };
 export default async function Render(props: Props) {
-  // const output = useMemo(() => {
-  //   return generateHTML(props.data![0].content, [
-  //     Document,
-  //     Paragraph,
-  //     Text,
-  //     Code,
-  //     Bold,
-  //     Blockquote,
-  //     Strikethrough,
-  //     Italic,
-  //     Heading.configure({ levels: [1, 2] }).extend({
-  //       levels: [1, 2],
-  //       renderHTML({ node, HTMLAttributes }) {
-  //         const level = this.options.levels.includes(node.attrs.level)
-  //           ? node.attrs.level
-  //           : this.options.levels[0];
-  //         const classes: { [key: number]: string } = {
-  //           1: "text-4xl",
-  //           2: "text-2xl",
-  //         };
-  //         return [
-  //           `h${level}`,
-  //           mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-  //             class: `${classes[level]}`,
-  //           }),
-  //           0,
-  //         ];
-  //       },
-  //     }),
-  //     CodeBlockLowlight.configure({
-  //       lowlight: createLowlight(common),
-  //       languageClassPrefix: "language-css",
-  //     }),
-  //     BulletList,
-  //     ListItem,
-  //     OrderedList,
-  //   ]);
-  // }, [props.data]);
-
   const content: BlockNode[] = [
     {
       type: NOTE_CONTENT_TYPE.PARAGRAPH,
@@ -125,7 +87,21 @@ export default async function Render(props: Props) {
       content: [
         {
           type: NOTE_CONTENT_TYPE.TEXT,
-          text: `<!DOCTYPE html><html><head> <title>Change Text Example</title></head><body><p id="demo">This is a demonstration.</p><button onclick="changeText()">Click Me!</button><script>function changeText() { document.getElementById("demo").innerHTML = "Text has changed!";}</script></body></html>`,
+          text: `<!DOCTYPE html>
+          <html>
+            <head>
+              <title>Change Text Example</title>
+            </head>
+            <body>
+              <p id="demo">This is a demonstration.</p>
+              <button onclick="changeText()">Click Me!</button>
+              <script>
+                function changeText() {
+                  document.getElementById("demo").innerHTML = "Text has changed!";
+                }
+              </script>
+            </body>
+          </html>`,
         },
       ],
     },
@@ -139,16 +115,23 @@ export default async function Render(props: Props) {
         },
       ],
     },
+
+    {
+      type: NOTE_CONTENT_TYPE.IMAGE,
+      content: [
+        {
+          type: NOTE_CONTENT_TYPE.TEXT,
+          text: "https://images.unsplash.com/photo-1720048169970-9c651cf17ccd?q=80&w=2814&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+      ],
+    },
   ];
 
   return (
-    <div
-      // dangerouslySetInnerHTML={{ __html: output }}
-      className="tiptap dark:text-white text-slate-800 flex flex-col gap-2 py-10"
-    >
-      {content.map((content) => {
-        return renderNote(content);
-      })}
+    <div className="tiptap dark:text-white text-slate-800 flex flex-col gap-2 py-10">
+      {content.map((content, index) => (
+        <div key={index}>{renderNote(content)}</div>
+      ))}
     </div>
   );
 }

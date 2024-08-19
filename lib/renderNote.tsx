@@ -1,5 +1,7 @@
 import ImageContainer from "@/components/ui/image-container";
 import { BlockNode, NOTE_CONTENT_TYPE } from "@/types/note.type";
+import { common, createLowlight } from "lowlight";
+import hljs from "highlight.js"; // Import highlight.js styles in your global CSS
 
 export function renderNote(node: BlockNode) {
   switch (node.type) {
@@ -13,36 +15,27 @@ export function renderNote(node: BlockNode) {
       );
 
     case NOTE_CONTENT_TYPE.CODE:
+    case NOTE_CONTENT_TYPE.CODE_BLOCK: {
+      const language = node.attrs?.language || "plaintext";
+      const highlightedCode = hljs.highlight(node.content[0].text, {
+        language: language,
+      }).value;
       return (
-        <pre>
-          <code>
-            {node.content.map((textNode, index) => (
-              <span key={index}>{textNode.text}</span>
-            ))}
-          </code>
+        <pre className={`language-${language}`}>
+          <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
         </pre>
       );
-
-    case NOTE_CONTENT_TYPE.CODE_BLOCK:
-      return (
-        <pre className="tiptap text-wrap">
-          <code className="text-wrap">
-            {node.content.map((textNode, index) => (
-              <span key={index}>{textNode.text}</span>
-            ))}
-          </code>
-        </pre>
-      );
+    }
 
     case NOTE_CONTENT_TYPE.IMAGE:
       return (
-        <div className="image-container">
+        <div className="w-auto" style={{ height: "500px" }}>
           {node.content.map((textNode, index) => (
             <ImageContainer
               key={index}
               src={textNode.text}
               alt="Note content image"
-              className="h-[400px] w-full"
+              className="h-full w-full"
             />
           ))}
         </div>

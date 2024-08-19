@@ -9,7 +9,6 @@ import NoteTab from "../_feature/note-tab";
 export default function TabView() {
   const params = useSearchParams();
   const pathname = usePathname();
-  console.log("pathname:", pathname);
 
   const view = params.get("view");
   return (

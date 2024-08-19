@@ -7,8 +7,8 @@ export default async function page() {
   return (
     <div>
       <ul>
-        {notes.data?.map((data) => (
-          <Link href={`/feeds/${data.id}`}>
+        {notes.data?.map((data, index) => (
+          <Link key={index} href={`/feeds/${data.id}`}>
             <li
               className="text-blue-500 underline cursor-pointer"
               key={data.id}

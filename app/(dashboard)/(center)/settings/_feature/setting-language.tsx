@@ -39,8 +39,10 @@ export default function SettingLanguage() {
               <SelectValue placeholder="Language" />
             </SelectTrigger>
             <SelectContent>
-              {LANGUAGE.map((lang) => (
-                <SelectItem value={lang.value}>{lang.label}</SelectItem>
+              {LANGUAGE.map((lang, index) => (
+                <SelectItem key={index} value={lang.value}>
+                  {lang.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

@@ -5,6 +5,7 @@ export default function AccountTab() {
   return (
     <div className="mb-6">
       <p className="text-sm text-neutral-300">
+        {`
         I'm a software developer with a passion for building efficient and
         scalable web applications. With expertise in VueJS, NextJS, and Laravel,
         I enjoy crafting user-friendly interfaces and robust backend systems. My
@@ -15,9 +16,10 @@ export default function AccountTab() {
         include developing a versatile note-taking platform and optimizing
         backend performance using Golang. When I'm not coding, you can find me
         contributing to open-source projects or experimenting with new
-        frameworks to stay ahead in this fast-paced industry. I’m always eager
+        frameworks to stay ahead in this fast-paced industry. I'm always eager
         to collaborate with like-minded professionals and take on challenging
-        projects that push the boundaries of what’s possible in web development.
+        projects that push the boundaries of what's possible in web development.
+       `}
       </p>
       <ImageContainer
         className="w-full aspect-video mt-4"

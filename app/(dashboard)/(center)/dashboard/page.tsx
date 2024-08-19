@@ -73,7 +73,7 @@ export default function page() {
             </CardHeader>
             <CardContent>
               <div className="flex justify-between items-center w-full py-1 px-4 hover:bg-neutral-700/50 cursor-pointer rounded-sm">
-                <h2>What's React</h2>
+                <h2>{`What's React`}</h2>
                 <EditNoteDropdownMenu />
               </div>
             </CardContent>

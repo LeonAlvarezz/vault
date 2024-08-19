@@ -1,15 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import ImageContainer from "@/components/ui/image-container";
-import Link from "next/link";
-import React from "react";
-import { SlOptionsVertical } from "react-icons/sl";
+import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
 
 export default function AccountPage() {
   return (
-    <>
+    <div>
       <section>
         <ImageContainer
           src="/image/default-cover1.png"
@@ -34,7 +31,9 @@ export default function AccountPage() {
           </div>
         </div>
       </section>
-      <TabView />
-    </>
+      <Suspense>
+        <TabView />
+      </Suspense>
+    </div>
   );
 }

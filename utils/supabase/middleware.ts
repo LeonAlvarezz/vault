@@ -38,12 +38,13 @@ export async function updateSession(request: NextRequest) {
     "/note",
     "/settings",
     "/profile",
+    "/bookmark",
   ];
   const isProtectedPath = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );
 
-  if (!user && isProtectedPath) {
+  if (!user && isProtectedPath && !request.url.startsWith("/auth")) {
     url.pathname = "/auth/login";
     console.log("url.pathnam:", url.pathname);
     return NextResponse.redirect(url);

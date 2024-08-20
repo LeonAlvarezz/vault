@@ -13,6 +13,8 @@ export default async function page() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
+    console.log("data?.user:", data?.user);
+    console.log("error:", error);
     redirect("/auth/login");
   }
   return (

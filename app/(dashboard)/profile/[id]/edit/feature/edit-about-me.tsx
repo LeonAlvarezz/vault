@@ -1,5 +1,5 @@
 "use client";
-import InputContent from "@/app/(dashboard)/(center)/create/_components/InputContent";
+import InputContent from "@/app/(dashboard)/create/_components/InputContent";
 import React from "react";
 import FloatingButton from "@/components/ui/floating-button";
 import { FaCheck, FaPlus } from "react-icons/fa";

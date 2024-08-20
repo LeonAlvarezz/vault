@@ -40,6 +40,7 @@ export async function updateSession(request: NextRequest) {
     "/profile",
     "/bookmark",
   ];
+
   const isProtectedPath = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );

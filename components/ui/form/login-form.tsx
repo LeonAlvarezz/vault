@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useActionState } from "react";
 import { InputWithLabel } from "../input-label";
-import { Button } from "../button";
 import { login } from "@/app/api/action";
+import SubmitButton from "../button/submit-button";
 
-export default function LoginForm() {
+export default async function LoginForm() {
   return (
-    <form className="w-full flex flex-col gap-4">
+    <form action={login} className="w-full flex flex-col gap-4">
       <InputWithLabel
         type="email"
         name="email"
@@ -18,10 +18,7 @@ export default function LoginForm() {
         placeholder="Enter your password..."
         label="Password"
       />
-
-      <Button formAction={login} variant={"main"} className="mt-6 w-full">
-        Login
-      </Button>
+      <SubmitButton label="Login" />
     </form>
   );
 }

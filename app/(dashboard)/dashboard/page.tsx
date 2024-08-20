@@ -1,14 +1,12 @@
 import { redirect, usePathname } from "next/navigation";
 import React from "react";
-import TabView from "../profile/_component/tab-view";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FaEye } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { FaBookBookmark } from "react-icons/fa6";
 import { OverviewChart } from "./_components/overview-chart";
-import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import EditNoteDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
-import { MdDelete, MdHistory } from "react-icons/md";
+import { MdHistory } from "react-icons/md";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function page() {

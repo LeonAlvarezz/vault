@@ -4,20 +4,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../dropdown-menu";
 import { Button } from "../button";
 import { SlOptionsVertical } from "react-icons/sl";
-import Link from "next/link";
-import { MdModeEdit } from "react-icons/md";
-import { IoShareSocial } from "react-icons/io5";
+import { MdPublish, MdModeEdit } from "react-icons/md";
 import ShareModal from "../modal/share-modal";
+import { IoShareSocial } from "react-icons/io5";
 
-export default function EditProfileDropdownMenu() {
+export default function CreateNoteDropdownMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,10 +26,13 @@ export default function EditProfileDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuItem>
-          <Link href="/profile/1/edit" className="flex items-center">
-            <MdModeEdit className="mr-2 h-4 w-4" />
-            <p className="whitespace-nowrap">Edit Profile</p>
-          </Link>
+          <Button
+            variant={"icon"}
+            className="p-0 flex items-center h-fit font-normal text-neutral-300"
+          >
+            <MdPublish className="mr-2 h-4 w-4" />
+            <p className="whitespace-nowrap">Publish</p>
+          </Button>
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <ShareModal>

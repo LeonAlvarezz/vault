@@ -94,11 +94,11 @@ export default function NotePage() {
         ))}
       </section>
       {/* <Combobox /> */}
-      <FloatingButton className="p-3">
-        <Link href="/create">
+      <Link href="/create">
+        <FloatingButton className="p-3">
           <FaPlus color={ICON_COLOR} size={ICON_SIZE} />
-        </Link>
-      </FloatingButton>
+        </FloatingButton>
+      </Link>
     </>
   );
 }

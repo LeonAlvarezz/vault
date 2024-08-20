@@ -10,6 +10,7 @@ import StatContainer from "@/components/ui/statistic/stat-container";
 import ShareModal from "@/components/ui/modal/share-modal";
 import { Button } from "@/components/ui/button";
 import { FaTags } from "react-icons/fa";
+import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdown";
 
 export default function Page() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,6 +34,9 @@ export default function Page() {
 
   return (
     <>
+      <div className=" xl:hidden flex gap-2 justify-end">
+        <CreateNoteDropdownMenu />
+      </div>
       <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
         <FormatMenu />
         <div className="flex flex-col gap-2 mt-4">

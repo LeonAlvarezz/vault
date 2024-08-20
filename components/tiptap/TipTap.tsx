@@ -74,12 +74,12 @@ const Tiptap = () => {
     <>
       <TipTapBubbleMenu editor={editor} />
       <EditorContent editor={editor} spellCheck="false" />
-      <button
+      {/* <button
         className="bg-main py-1 px-4 mt-10"
         onClick={async () => onSubmit(editor?.getJSON())}
       >
         Submit
-      </button>
+      </button> */}
     </>
   );
 };

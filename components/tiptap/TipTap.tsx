@@ -6,7 +6,6 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 
 import Highlight from "@tiptap/extension-highlight";
-import { cn } from "@/lib/utils";
 import { common, createLowlight } from "lowlight";
 import { mergeAttributes } from "@tiptap/core";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";

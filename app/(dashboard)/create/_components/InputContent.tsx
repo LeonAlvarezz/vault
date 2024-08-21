@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/ui/textarea";
+"use client";
 import React from "react";
 import TipTap from "../../../../components/tiptap/TipTap";
 

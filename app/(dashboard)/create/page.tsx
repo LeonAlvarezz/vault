@@ -11,6 +11,7 @@ import ShareModal from "@/components/ui/modal/share-modal";
 import { Button } from "@/components/ui/button";
 import { FaTags } from "react-icons/fa";
 import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdown";
+import useDetectKeyboardOpen from "use-detect-keyboard-open";
 
 export default function Page() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +32,8 @@ export default function Page() {
     },
   ];
   const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([]);
+  const isKeyboardOpen = useDetectKeyboardOpen();
+  console.log("isKeyboardOpen:", isKeyboardOpen);
 
   return (
     <>
@@ -54,6 +57,8 @@ export default function Page() {
       </div>
 
       <form onSubmit={handleSubmit}>
+        <h2>{`soft keyboard is ${isKeyboardOpen ? "open" : "close"}`}</h2>
+
         <Input
           className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl h-24 px-0"
           placeholder="Title"

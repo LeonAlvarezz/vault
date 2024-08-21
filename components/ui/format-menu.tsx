@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FaBold, FaCode, FaItalic, FaLink, FaList } from "react-icons/fa";
 import { RiCodeBlock } from "react-icons/ri";

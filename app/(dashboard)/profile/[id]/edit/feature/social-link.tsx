@@ -8,7 +8,7 @@ export default function SocialLinkSection() {
     <section className="flex gap-10 flex-col sm:flex-row justify-between items-center">
       <div className="basis-2/5">
         <h2>Contact Link</h2>
-        <p className="textl-xs mt-2 text-neutral-500">
+        <p className="text-xs mt-2 text-neutral-500">
           Enable other user who visited the profile to contact you through the
           social media link
         </p>

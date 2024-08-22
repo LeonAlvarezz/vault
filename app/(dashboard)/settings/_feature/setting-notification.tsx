@@ -10,18 +10,18 @@ export default function SettingNotification() {
       <div className="flex gap-4 flex-col mt-8">
         <div className="flex gap-4 justify-between items-center">
           <div>
-            <h3 className="text-sm">Command Search</h3>
+            <h3 className="text-sm">Mobile Push Notification</h3>
             <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
-              Enable vault advance search with keyboard shortcut
+              Receive push notifications through your mobile
             </p>
           </div>
           <Switch />
         </div>
         <div className="flex gap-4 justify-between items-center">
           <div>
-            <h3 className="text-sm">Command Search</h3>
+            <h3 className="text-sm">Desktop Push Notification </h3>
             <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
-              Enable vault advance search with keyboard shortcut
+              Receive push notifications through your desktop
             </p>
           </div>
           <Switch />

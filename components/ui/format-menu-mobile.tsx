@@ -15,12 +15,6 @@ import { TbBlockquote } from "react-icons/tb";
 import { MdFormatListBulleted } from "react-icons/md";
 import { Button } from "./button";
 import { Editor, mergeAttributes, useEditor } from "@tiptap/react";
-import BulletList from "@tiptap/extension-bullet-list";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import Placeholder from "@tiptap/extension-placeholder";
-import StarterKit from "@tiptap/starter-kit";
-import { createLowlight, common } from "lowlight";
-import Heading from "@tiptap/extension-heading";
 import { cn } from "@/lib/utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 type Props = {

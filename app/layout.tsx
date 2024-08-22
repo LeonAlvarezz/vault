@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 
 // const inter = Inter({ subsets: ["latin"] });
-const test = font({ weight: ["400"], subsets: ["latin"] });
+const test = font({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vault",

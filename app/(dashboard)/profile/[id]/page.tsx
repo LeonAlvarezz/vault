@@ -17,7 +17,7 @@ export default function AccountPage() {
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col sm:flex-row gap-y-4 text-center sm:text-start justify-between w-full">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
             <div>
               <h1 className="text-lg">John Doe</h1>
               <p className="text-sm text-neutral-400">Software Developer</p>

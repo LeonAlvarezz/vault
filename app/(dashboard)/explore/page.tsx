@@ -78,7 +78,7 @@ export default function NotePage() {
         />
       </div>
       <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
-        <div className="flex gap-2  bg-red-500/10">
+        <div className="flex gap-2">
           <Combobox
             options={STATUS}
             label="Category"

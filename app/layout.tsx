@@ -7,7 +7,7 @@ import Providers from "@/providers/provider";
 import { cn } from "@/lib/utils";
 
 // const inter = Inter({ subsets: ["latin"] });
-const test = font({ weight: ["500"], subsets: ["latin"] });
+const test = font({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",

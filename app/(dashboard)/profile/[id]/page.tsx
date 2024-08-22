@@ -12,12 +12,12 @@ export default function AccountPage() {
           src="/image/default-cover1.png"
           className="h-[150px] w-full overflow-hidden"
         />
-        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-6 px-2 mb-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative sm:bottom-6 bottom-10 px-2 sm:mb-6 mb-3">
           <Avatar className="size-28">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
+          <div className="flex flex-col sm:flex-row gap-y-4 text-center sm:text-start justify-between w-full">
             <div>
               <h1 className="text-lg">John Doe</h1>
               <p className="text-sm text-neutral-400">Software Developer</p>

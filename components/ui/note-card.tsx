@@ -42,7 +42,7 @@ export default function NoteCard() {
         </Tag>
         <div className="flex-grow flex flex-col gap-2 mt-1">
           <div className="flex justify-between">
-            <h2 className="text-md font-semibold">Good design to know</h2>
+            <h2 className="text-md font-semibold">What is React</h2>
             <Button
               onClick={handleButtonClick}
               variant={"icon"}

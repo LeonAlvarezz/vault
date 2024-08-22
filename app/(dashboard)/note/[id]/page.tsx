@@ -2,6 +2,7 @@ import Render from "@/app/feeds/[id]/Render";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Tag from "@/components/ui/tag";
+import Link from "next/link";
 import React from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
@@ -15,16 +16,18 @@ export default function NoteDetailPage() {
       </Tag>
       <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 gap-y-2">
         <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
-          <div className="flex gap-2">
-            <Avatar className="size-10">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm">John Doe</p>
-              <p className="text-xs text-neutral-400">16 Jul 2024</p>
+          <Link href={"/profile/id"}>
+            <div className="flex gap-2">
+              <Avatar className="size-10">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm">John Doe</p>
+                <p className="text-xs text-neutral-400">16 Jul 2024</p>
+              </div>
             </div>
-          </div>
+          </Link>
           <Button variant={"main"} size={"sm"} className="h-7">
             Contact
           </Button>

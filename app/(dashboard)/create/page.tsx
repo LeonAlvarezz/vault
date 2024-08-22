@@ -115,10 +115,7 @@ export default function Page() {
 
   return (
     <>
-      {inputActive && (
-        // <div className="absolute bottom-0 w-full  " st≥÷yle={{ height: `100%` }}>
-        <FormatMenuMobile editor={editor} />
-      )}
+      {inputActive && <FormatMenuMobile editor={editor} />}
       <div className="xl:hidden flex gap-2 justify-end">
         <CreateNoteDropdownMenu />
       </div>

@@ -13,7 +13,6 @@ export default function SubmitButton({ label, className }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   return (
     <Button
-      type="submit"
       variant={"main"}
       className={cn("mt-6 w-full flex gap-2", className)}
     >

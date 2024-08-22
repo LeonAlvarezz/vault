@@ -4,6 +4,7 @@ import "./globals.css";
 import "./main.scss";
 import Providers from "@/providers/provider";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 // const inter = Inter({ subsets: ["latin"] });
 const test = font({ weight: ["400"], subsets: ["latin"] });
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("", test.className)}>
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

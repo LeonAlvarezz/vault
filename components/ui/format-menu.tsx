@@ -90,14 +90,14 @@ export default function FormatMenu({ editor }: Props) {
       <ToggleGroup
         type="multiple"
         variant={"outline"}
-        className="justify-between "
+        className="justify-between"
       >
         <ToggleGroupItem
           value="bold"
           aria-label="Toggle bold"
           className={cn(
             "h-10 w-10 p-0",
-            editor.isActive("bold") && "is-active"
+            editor.isActive("bold") && "is-active "
           )}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >

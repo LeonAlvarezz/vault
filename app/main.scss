@@ -21,7 +21,7 @@
     background-color: hsl(0 0% 12%);
     border-radius: 0.25em;
     box-decoration-break: clone;
-    color: #ff3d3d;
+    color: hsl(var(--second));
     font-size: 0.9rem;
     padding: 0.25em;
   }
@@ -130,5 +130,5 @@
 }
 
 .is-active {
-  background-color: rgb(30 41 59 / 0.7);
+  background-color: rgb(64 64 64 / 0.5);
 }

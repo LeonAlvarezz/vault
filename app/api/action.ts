@@ -1,54 +1,75 @@
 "use server";
 
-import { InsertUserPayload } from "@/types/profiles.type";
+import {
+  InsertUserPayload,
+  LoginSchema,
+  SignupSchema,
+} from "@/types/profiles.type";
 import { createClient } from "@/utils/supabase/server";
+import { formatZodIssue } from "@/utils/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function login(formData: FormData) {
+export async function login(formData: unknown) {
   const supabase = createClient();
-
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
-
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  if (error) {
-    redirect("/error");
+  const result = LoginSchema.safeParse(formData);
+  if (!result.success) {
+    let errorMessage = "";
+    result.error.issues.forEach((issue) => {
+      errorMessage = result.error.issues
+        .map((issue) => `${issue.path[0]}: ${issue.message}`)
+        .join(", ");
+    });
+    return {
+      error: errorMessage,
+    };
   }
 
-  revalidatePath("/", "layout");
-  redirect("/dashboard");
+  const { error } = await supabase.auth.signInWithPassword({
+    email: result.data.email,
+    password: result.data.password,
+  });
+
+  if (!error) {
+    revalidatePath("/", "layout");
+    redirect("/dashboard");
+  } else {
+    return {
+      error: error.message,
+    };
+  }
 }
-
-export async function signup(formData: FormData) {
+export async function signup(formData: unknown) {
   const supabase = createClient();
+  const result = SignupSchema.safeParse(formData);
 
-  const payload: InsertUserPayload = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    username: formData.get("username") as string,
-  };
+  if (!result.success) {
+    let errorMessage = "";
+    result.error.issues.forEach((issue) => {
+      errorMessage += formatZodIssue(issue);
+    });
+    return {
+      error: errorMessage,
+    };
+  }
 
-  const { data, error } = await supabase.auth.signUp(payload);
+  const { email, password, username } = result.data;
+  const { data, error } = await supabase.auth.signUp({ email, password });
+
+  if (error) {
+    return {
+      error: error.message,
+    };
+  }
 
   const userId = data.user?.id;
   if (userId) {
     const { error: profileError } = await supabase
       .from("profiles")
-      .insert([
-        { user_id: userId, username: payload.username, email: payload.email },
-      ]);
-
+      .insert([{ user_id: userId, username, email }]);
     if (profileError) {
-      redirect("/error");
+      return { error: profileError.message };
     }
-  }
-
-  if (error) {
-    redirect("/error");
   }
 
   revalidatePath("/", "layout");

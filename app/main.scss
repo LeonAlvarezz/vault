@@ -113,11 +113,11 @@
     }
   }
   blockquote {
-    border-left: 3px solid #000000;
-    background-color: #2b394e;
+    border-left: 5px solid hsl(var(--main));
+    background-color: hsl(var(--popover));
     margin: 1.5rem 0;
     padding-left: 1rem;
-    padding-block: 0.5rem;
+    padding-block: 1rem;
   }
 
   p.is-editor-empty:first-child::before {

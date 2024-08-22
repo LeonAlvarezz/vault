@@ -7,7 +7,7 @@ export default function LayoutPage({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="mx-auto w-[80%] sm:w-[50%] min-h-screen">
+    <main className="mx-auto w-[80%] sm:w-[50%] min-h-svh sm:min-h-screen">
       <Suspense fallback={<Loading />}>{children}</Suspense>
     </main>
   );

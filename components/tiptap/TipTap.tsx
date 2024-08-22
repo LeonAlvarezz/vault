@@ -1,64 +1,17 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import { Heading } from "@tiptap/extension-heading";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
+import { EditorContent } from "@tiptap/react";
 
-import Highlight from "@tiptap/extension-highlight";
-import { common, createLowlight } from "lowlight";
-import { mergeAttributes } from "@tiptap/core";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
-import Blockquote from "@tiptap/extension-blockquote";
+import { Editor } from "@tiptap/core";
 
 import { sendNote } from "@/data/client/note";
-import TipTapBubbleMenu from "./BubbleMenu";
-
-const Tiptap = () => {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Content goes here...",
-      }),
-      BulletList.configure({
-        keepMarks: true,
-      }),
-      Highlight.configure({ multicolor: true }),
-      Heading.configure({ levels: [1, 2] }).extend({
-        levels: [1, 2],
-        renderHTML({ node, HTMLAttributes }) {
-          const level = this.options.levels.includes(node.attrs.level)
-            ? node.attrs.level
-            : this.options.levels[0];
-          const classes: { [key: number]: string } = {
-            1: "text-4xl",
-            2: "text-2xl",
-          };
-          return [
-            `h${level}`,
-            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              class: `${classes[level]}`,
-            }),
-            0,
-          ];
-        },
-      }),
-      CodeBlockLowlight.configure({
-        lowlight: createLowlight(common),
-        languageClassPrefix: "javascript",
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class: "focus:outline-none dark:text-white",
-      },
-    },
-  });
-
+import { Dispatch, RefObject, SetStateAction } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+type Props = {
+  editor: Editor | null;
+  inputRef: RefObject<HTMLDivElement>;
+};
+const Tiptap = ({ editor, inputRef }: Props) => {
   const onSubmit = async (content: any) => {
     console.log(content);
     // const { data, error } = await sendNote(content);
@@ -68,17 +21,17 @@ const Tiptap = () => {
     // console.log("Success");
     // console.log(data);
   };
+  if (!editor) {
+    return (
+      <div className="w-full justify-center flex h-[300px]  items-center">
+        <AiOutlineLoading3Quarters className="animate-spin" size={20} />
+      </div>
+    );
+  }
 
   return (
     <>
-      <TipTapBubbleMenu editor={editor} />
-      <EditorContent editor={editor} spellCheck="false" />
-      {/* <button
-        className="bg-main py-1 px-4 mt-10"
-        onClick={async () => onSubmit(editor?.getJSON())}
-      >
-        Submit
-      </button> */}
+      <EditorContent ref={inputRef} editor={editor} spellCheck="false" />
     </>
   );
 };

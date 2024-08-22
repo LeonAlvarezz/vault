@@ -8,7 +8,7 @@ import React from "react";
 
 export default function LoginPage() {
   return (
-    <div className="w-full mx-auto lg:w-[70%] xl:w-[50%] flex flex-col min-h-screen justify-center items-center">
+    <div className="w-full mx-auto lg:w-[70%] xl:w-[50%] flex flex-col min-h-svh sm:min-h-screen justify-center items-center">
       <div className="text-center leading-loose">
         <h1 className="text-balance text-2xl font-bold">Welcome Aboard</h1>
       </div>

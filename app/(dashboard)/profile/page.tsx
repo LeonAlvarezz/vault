@@ -12,7 +12,7 @@ export default function AccountPage() {
           src="/image/default-cover1.png"
           className="overflow-hidden h-[150px] w-full"
         />
-        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-6 px-2 mb-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
           <Avatar className="size-28">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>

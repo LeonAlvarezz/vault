@@ -29,6 +29,7 @@ type ComboboxProps = {
   options: Options[];
   label?: string;
   size?: "sm" | "md" | "lg";
+  className?: string;
 };
 
 const sizeClasses = {
@@ -40,6 +41,7 @@ const sizeClasses = {
 export function Combobox({
   size = "md",
   options,
+  className,
   label = "Select option...",
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
@@ -52,7 +54,10 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`${sizeClasses[size]} justify-between rounded-sm font-normal`}
+          className={cn(
+            `${sizeClasses[size]} justify-between rounded-sm font-normal`,
+            className
+          )}
         >
           {value
             ? options.find((option) => option.value === value)?.label

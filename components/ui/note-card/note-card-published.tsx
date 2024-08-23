@@ -26,7 +26,7 @@ export default function NoteCardPublished({ handleCardClick }: NoteCardProps) {
   return (
     <div
       onClick={handleCardClick}
-      className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid"
+      className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid  hover:border border-neutral-700  hover:scale-[1.02] transition-transform"
     >
       <ImageContainer
         className="h-[200px] overflow-hidden rounded-sm "

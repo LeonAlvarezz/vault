@@ -37,7 +37,7 @@ export default function NoteCard({ published = false }: NoteCardProps) {
   return (
     <div
       onClick={handleCardClick}
-      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid"
+      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] hover:border border-neutral-700  transition-all"
     >
       <div className="flex justify-between items-center mb-4">
         <Tag color="orange" className="h-6">

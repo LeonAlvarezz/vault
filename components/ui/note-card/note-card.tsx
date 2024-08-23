@@ -1,4 +1,3 @@
-"use client";
 import React, { MouseEvent } from "react";
 import ImageContainer from "../image-container";
 import { FaRegHeart } from "react-icons/fa";
@@ -10,47 +9,33 @@ import Tag from "../tag";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useRouter } from "next/navigation";
 import NoteCardPublished from "./note-card-published";
+import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 type NoteCardProps = {
   published?: boolean;
 };
 export default function NoteCard({ published = false }: NoteCardProps) {
-  const router = useRouter();
-
-  const handleCardClick = () => {
-    router.push("/note/id");
-  };
-
-  const handleProfileClick = (event: MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    router.push("/profile/1");
-  };
-
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    console.log("Button clicked!");
-  };
-
   if (published) {
-    return <NoteCardPublished handleCardClick={handleCardClick} />;
+    return <NoteCardPublished />;
   }
 
   return (
-    <div
-      onClick={handleCardClick}
+    <Link
+      href={"/note/id"}
+      // onClick={handleCardClick}
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] hover:border border-neutral-700  transition-all"
     >
       <div className="flex justify-between items-center mb-4">
         <Tag color="orange" className="h-6">
           <p>React</p>
         </Tag>
-        <Button
-          onClick={handleButtonClick}
+        <EditNoteDropdownMenu />
+        {/* <Button
           variant={"icon"}
           // size={"icon"}
           className="rounded-full p-2 size-8 relative left-2 flex-shrink-0 hover:bg-neutral-700/50 focus-visible:ring-offset-0"
         >
           <SlOptionsVertical />
-        </Button>
+        </Button> */}
       </div>
       <div className="flex justify-between items-center ">
         <div>
@@ -70,13 +55,13 @@ export default function NoteCard({ published = false }: NoteCardProps) {
         </div>
         {/* <Button
             onClick={handleButtonClick}
-            variant={"icon"}
+          variant={"icon"}
             size={"icon"}
             className="group w-5 h-5 hover:text-blue-500 self-end z-50"
           >
             <SlOptionsVertical />
           </Button> */}
       </div>
-    </div>
+    </Link>
   );
 }

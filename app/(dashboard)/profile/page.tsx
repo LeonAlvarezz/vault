@@ -3,8 +3,10 @@ import ImageContainer from "@/components/ui/image-container";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
-
-export default function AccountPage() {
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+export default async function Page({ searchParams }: Props) {
   return (
     <>
       <section>
@@ -31,9 +33,9 @@ export default function AccountPage() {
           </div>
         </div>
       </section>
-      <Suspense>
-        <TabView />
-      </Suspense>
+      {/* <Suspense> */}
+      <TabView searchParams={searchParams} />
+      {/* </Suspense> */}
     </>
   );
 }

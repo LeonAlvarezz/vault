@@ -1,16 +1,15 @@
-"use client";
+// "use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import AboutTab from "../_feature/about-tab";
 import NoteTab from "../_feature/note-tab";
-
-export default function TabView() {
-  const params = useSearchParams();
-  const pathname = usePathname();
-
-  const view = params.get("view");
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+export default function TabView({ searchParams }: Props) {
+  const view = searchParams?.view;
   return (
     <>
       <div className="flex w-full">
@@ -19,7 +18,7 @@ export default function TabView() {
             "pb-2 border-b-2 border-neutral-800 px-4",
             view === "note" && "border-main"
           )}
-          href={`${pathname}?view=note`}
+          href={`?view=note`}
         >
           Note
         </Link>
@@ -28,7 +27,7 @@ export default function TabView() {
             "pb-2 border-b-2 border-neutral-800 px-4",
             view === "about" && "border-main"
           )}
-          href={`${pathname}?view=about`}
+          href={`?view=about`}
         >
           About
         </Link>

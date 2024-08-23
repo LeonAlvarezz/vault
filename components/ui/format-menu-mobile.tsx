@@ -29,7 +29,7 @@ export default function FormatMenuMobile({ editor }: Props) {
     );
   }
   return (
-    <div className=" bottom-1 z-10 fixed left-1/2 -translate-x-1/2 overflow-x-auto w-full flex  gap-4 bg-neutral-800 pt-1 pb-4 px-4 rounded-sm">
+    <div className=" bottom-1 z-10 fixed left-1/2 -translate-x-1/2 overflow-x-auto w-full sm:hidden flex gap-4 bg-neutral-800 pt-1 pb-4 px-4 rounded-sm">
       <ToggleGroup variant={"outline"} type="multiple">
         <ToggleGroupItem
           value="bold"

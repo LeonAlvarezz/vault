@@ -4,8 +4,10 @@ import ImageContainer from "@/components/ui/image-container";
 import React from "react";
 import TabView from "../_component/tab-view";
 import ContactButton from "@/components/ui/button/contact-button";
-
-export default function AccountPage() {
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+export default function AccountPage({ searchParams }: Props) {
   return (
     <>
       <section>
@@ -31,7 +33,7 @@ export default function AccountPage() {
           </div>
         </div>
       </section>
-      <TabView />
+      <TabView searchParams={searchParams} />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { Button } from "../button";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdOutlineWebAsset } from "react-icons/md";
 import Link from "next/link";
-type LayoutOptions = "default" | "alternative";
+type LayoutOptions = "default" | "alternative" | "mobile";
 const layoutClasses: Record<
   LayoutOptions,
   { github: string; linkedin: string; website: string }
@@ -12,12 +12,17 @@ const layoutClasses: Record<
   default: {
     github: "translate(50%, 120%)",
     linkedin: "translate(220%, -50%)",
-    website: "translate(220%, 110%)",
+    website: "translate(175%, 90%)",
   },
   alternative: {
     github: "translate(50%, -220%)",
     linkedin: "translate(220%, -50%)",
-    website: "translate(220%, -220%)",
+    website: "translate(170%, -190%)",
+  },
+  mobile: {
+    github: "translate(-160%, -220%)",
+    linkedin: "translate(-320%, -50%)",
+    website: "translate(-275%, -190%)",
   },
   // Add more layouts here if needed
 };
@@ -73,7 +78,7 @@ export default function ContactButton({ layout = "default" }: Props) {
           transform: isOpen ? layoutClasses[layout].website : "",
         }}
       >
-        <MdOutlineWebAsset size={20} />
+        <MdOutlineWebAsset size={24} />
       </Link>
     </div>
   );

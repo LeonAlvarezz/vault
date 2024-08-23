@@ -29,7 +29,12 @@ export default function NoteDetailPage() {
               </div>
             </div>
           </Link>
-          <ContactButton layout="alternative" />
+          <div className="block sm:hidden">
+            <ContactButton layout="mobile" />
+          </div>
+          <div className="hidden sm:block">
+            <ContactButton layout="alternative" />
+          </div>
         </div>
         <div className="flex gap-2 items-end">
           <Button

@@ -1,4 +1,4 @@
-import NoteCard from "@/components/ui/note-card";
+import NoteCard from "@/components/ui/note-card/note-card";
 import {
   Select,
   SelectContent,

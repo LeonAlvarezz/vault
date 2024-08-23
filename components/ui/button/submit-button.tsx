@@ -18,7 +18,6 @@ export default function SubmitButton({ label, className }: SubmitButtonProps) {
     >
       {label}
       {pending && <AiOutlineLoading3Quarters className="animate-spin" />}
-      {/* Login */}
     </Button>
   );
 }

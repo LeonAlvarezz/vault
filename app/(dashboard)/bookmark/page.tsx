@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
-import NoteCard from "@/components/ui/note-card";
+import NoteCard from "@/components/ui/note-card/note-card";
 import {
   Select,
   SelectContent,
@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SearchInput from "@/components/ui/search-input";
 
 const STATUS = [
   {
@@ -47,18 +48,7 @@ export default function NotePage() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Bookmark</h1>
-      <div className="relative">
-        <Input
-          variant={"outline"}
-          placeholder="Search by title or keyword..."
-        />
-        <IoSearch
-          color="white"
-          size={20}
-          className="absolute top-1/2 -translate-y-1/2 right-4"
-        />
-      </div>
-
+      <SearchInput />
       <div className="flex gap-2 mt-4">
         <Combobox options={STATUS} label="Category" size="sm" />
         <Combobox options={TAG} label="Tags" size="sm" />

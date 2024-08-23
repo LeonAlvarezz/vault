@@ -20,7 +20,7 @@ export default function Tag({ className, color = "blue", children }: Props) {
   return (
     <div
       className={cn(
-        `w-fit h-6 border rounded-full text-[10px] items-center flex justify-center px-4`,
+        `w-fit h-6 border rounded-full text-[12px] items-center flex justify-center px-4`,
         colorClasses[color], // Apply the color-specific classes
         className
       )}

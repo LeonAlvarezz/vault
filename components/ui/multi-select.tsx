@@ -260,20 +260,6 @@ export const MultiSelect = React.forwardRef<
                     </Badge>
                   )}
                 </div>
-                {/* <div className="flex items-center justify-between">
-                  <IoClose
-                    className="h-4 mx-2 cursor-pointer text-muted-foreground"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleClear();
-                    }}
-                  />
-                  <Separator
-                    orientation="vertical"
-                    className="flex min-h-6 h-full"
-                  />
-                  <ChevronDown className="h-4 mx-2 cursor-pointer text-muted-foreground" />
-                </div> */}
               </div>
             ) : (
               <div className="flex items-center justify-between w-full mx-auto">
@@ -354,29 +340,22 @@ export const MultiSelect = React.forwardRef<
                   );
                 })}
               </CommandGroup>
-              <CommandSeparator />
               <CommandGroup>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-center flex-col items-center">
                   {selectedValues.length > 0 && (
                     <>
+                      <Separator
+                        // orientation=""
+                        className="w-full block"
+                      />
                       <CommandItem
                         onSelect={handleClear}
-                        className="flex-1 justify-center cursor-pointer"
+                        className="w-full flex justify-center mt-1"
                       >
                         Clear
                       </CommandItem>
-                      <Separator
-                        orientation="vertical"
-                        className="flex min-h-6 h-full"
-                      />
                     </>
                   )}
-                  <CommandItem
-                    onSelect={() => setIsPopoverOpen(false)}
-                    className="flex-1 justify-center cursor-pointer max-w-full"
-                  >
-                    Close
-                  </CommandItem>
                 </div>
               </CommandGroup>
             </CommandList>

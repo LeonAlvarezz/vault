@@ -12,6 +12,9 @@
   transform: scale(1.1);
 }
 
+body {
+  -webkit-column-break-inside: avoid;
+}
 .tiptap {
   > * + * {
     margin-top: 0.75em;

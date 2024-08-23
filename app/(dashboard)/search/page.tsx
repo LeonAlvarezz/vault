@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SearchInput from "@/components/ui/search-input";
 
 const STATUS = [
   {
@@ -84,36 +85,7 @@ export default function SearchPage() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Search</h1>
-      <div className="relative">
-        <Input
-          variant={"outline"}
-          placeholder="Search by title or keyword..."
-        />
-        <IoSearch
-          color="white"
-          size={20}
-          className="absolute top-1/2 -translate-y-1/2 right-4"
-        />
-      </div>
-
-      {/* <div className="mt-4 flex justify-between">
-        <div className="flex gap-2">
-          <Combobox options={STATUS} label="Category" size="sm" />
-          <Combobox options={TAG} label="Tags" size="sm" />
-        </div>
-
-        <Select>
-          <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Order" />
-          </SelectTrigger>
-          <SelectContent>
-            {ORDER.map((order) => (
-              <SelectItem value={order.value}>{order.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div> */}
-
+      <SearchInput />
       <section className="mt-6">
         <div className="flex mb-4 items-center gap-2">
           <GiBackwardTime size={20} />

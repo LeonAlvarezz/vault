@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
 import React from "react";
-import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
-import NoteCard from "@/components/ui/note-card";
+import NoteCard from "@/components/ui/note-card/note-card";
 import FloatingButton from "@/components/ui/floating-button";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
 import Link from "next/link";
+import SearchInput from "@/components/ui/search-input";
 const STATUS = [
   {
     value: "all_note",
@@ -40,17 +39,7 @@ const TAG = [
 export default function NotePage() {
   return (
     <>
-      <div className="relative">
-        <Input
-          variant={"outline"}
-          placeholder="Search by title or keyword..."
-        />
-        <IoSearch
-          color="white"
-          size={20}
-          className="absolute top-1/2 -translate-y-1/2 right-4"
-        />
-      </div>
+      <SearchInput />
       <div className="flex mt-4 justify-between">
         <div className="flex gap-4 overflow-x-auto no-scrollbar">
           <Button
@@ -84,16 +73,21 @@ export default function NotePage() {
         <Combobox options={TAG} label="Tags" />
       </div>
 
-      <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
-        {/* <NoteCard />
+      {/* <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2 ">
+        <div className="grid gap-2">
+          <NoteCard />
+          <NoteCard />
+          <NoteCard published />
+        </div>
+      </section> */}
+      <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+        <NoteCard />
+        <NoteCard published />
+        <NoteCard published />
+        <NoteCard published />
         <NoteCard />
         <NoteCard />
-        <NoteCard /> */}
-        {Array.from({ length: 30 }).map((_, index) => (
-          <NoteCard key={index} />
-        ))}
       </section>
-      {/* <Combobox /> */}
       <Link href="/create">
         <FloatingButton className="p-3">
           <FaPlus color={ICON_COLOR} size={ICON_SIZE} />

@@ -1,6 +1,7 @@
 import Render from "@/app/feeds/[id]/Render";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import ContactButton from "@/components/ui/button/contact-button";
 import Tag from "@/components/ui/tag";
 import Link from "next/link";
 import React from "react";
@@ -28,9 +29,7 @@ export default function NoteDetailPage() {
               </div>
             </div>
           </Link>
-          <Button variant={"main"} size={"sm"} className="h-7">
-            Contact
-          </Button>
+          <ContactButton layout="alternative" />
         </div>
         <div className="flex gap-2 items-end">
           <Button

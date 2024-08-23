@@ -132,3 +132,46 @@
 .is-active {
   background-color: rgb(64 64 64 / 0.5);
 }
+
+.contact-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: rotate(-25deg);
+  transform-origin: 0% 0%;
+  transition: transform 0.3s ease-out;
+  z-index: 10;
+}
+.contact-button-main .contact-button:nth-child(4) {
+  transition-delay: 0.1s;
+}
+
+.contact-button-main .contact-button:nth-child(2).visible {
+  transform: translate(50%, 120%); /* github */
+}
+
+.contact-button-main .contact-button:nth-child(3).visible {
+  transform: translate(220%, -50%); /* Linkedin */
+}
+
+.contact-button-main .contact-button:nth-child(4).visible {
+  transform: translate(220%, 110%); /* website */
+}
+
+/* Go back animation */
+.contact-button-main .contact-button.visible {
+  transition-delay: 0s;
+}
+
+.contact-button-main .contact-button.visible:nth-child(2) {
+  transition-delay: 0.05s;
+}
+
+.contact-button-main .contact-button.visible:nth-child(3) {
+  transition-delay: 0.1s;
+}
+
+.contact-button-main .contact-button.visible:nth-child(4) {
+  transition-delay: 0s;
+}

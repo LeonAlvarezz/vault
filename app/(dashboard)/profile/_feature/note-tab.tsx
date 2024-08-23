@@ -42,9 +42,9 @@ export default function NoteTab() {
           ))}
         </SelectContent>
       </Select>
-      <div className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
+      <div className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
         {Array.from({ length: 10 }).map((_, index: number) => (
-          <NoteCard key={index} />
+          <NoteCard key={index} published={index % 3 ? true : false} />
         ))}
       </div>
     </>

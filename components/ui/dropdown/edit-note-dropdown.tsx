@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +10,22 @@ import { Button } from "../button";
 import { SlOptionsVertical } from "react-icons/sl";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
+import { useToast } from "../use-toast";
 
 export default function EditNoteDropdownMenu() {
+  const { toast } = useToast();
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    toast({
+      title: "Note Deleted",
+      variant: "success",
+    });
+    setOpen(false);
+  };
+  const [open, setOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant={"icon"}
@@ -26,7 +38,12 @@ export default function EditNoteDropdownMenu() {
       <DropdownMenuContent className="w-32">
         <DropdownMenuItem className=" cursor-pointer group text-red-400 group-hover:text-red-500">
           <MdDelete className="mr-2 h-4 w-4  text-red-400" />
-          <Button variant={"icon"} size={"icon"} className="text-red-400">
+          <Button
+            onClick={(e) => handleDelete(e)}
+            variant={"icon"}
+            size={"icon"}
+            className="text-red-400"
+          >
             Delete
           </Button>
         </DropdownMenuItem>

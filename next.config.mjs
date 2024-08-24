@@ -20,7 +20,12 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "kinsta.com"
-            }
+            },
+            {
+                protocol: "https",
+                hostname: "miro.medium.com"
+            },
+
 
         ]
     }

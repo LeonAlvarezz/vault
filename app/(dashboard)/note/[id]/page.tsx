@@ -1,4 +1,4 @@
-import Render from "@/app/feeds/[id]/Render";
+import Render from "@/components/ui/Render";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ContactButton from "@/components/ui/button/contact-button";
@@ -8,14 +8,25 @@ import React from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-export default function NoteDetailPage() {
+import { getNoteById } from "@/data/server/note";
+import BackButton from "@/components/ui/button/back-button";
+type Props = {
+  params: { id: string };
+};
+
+export default async function NoteDetailPage({ params }: Props) {
+  const { data } = await getNoteById(+params.id);
+  if (!data) {
+    return <div>No Note Available</div>;
+  }
   return (
     <section className="flex gap-2 flex-col">
-      <h1 className="text-2xl">What is React</h1>
+      <BackButton />
+      <h1 className="text-2xl">{data.title}</h1>
       <Tag color="blue" className="text-xs h-6">
         React
       </Tag>
-      <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 gap-y-2">
+      <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col my-2 gap-y-2">
         <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
           <Link href={"/profile/id"}>
             <div className="flex gap-2">
@@ -53,7 +64,7 @@ export default function NoteDetailPage() {
           </Button>
         </div>
       </div>
-      <Render />
+      <Render note={data} />
     </section>
   );
 }

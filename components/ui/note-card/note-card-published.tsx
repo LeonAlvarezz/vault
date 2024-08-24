@@ -15,7 +15,7 @@ import NoteCardFooter from "./note-card-footer";
 export default function NoteCardPublished() {
   return (
     <Link
-      href={"/note/id"}
+      href={"/note/1"}
       className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid  hover:border border-neutral-700  hover:scale-[1.02] transition-transform"
     >
       <ImageContainer

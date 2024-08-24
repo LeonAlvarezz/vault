@@ -11,7 +11,7 @@ export type BlockNode = CodeBlockNode | ParagraphNode | CodeNode | ImageNode;
 type CodeBlockNode = {
   type: NOTE_CONTENT_TYPE.CODE_BLOCK;
   attrs: {
-    language: string | null;
+    language?: string;
   };
   content: TextNode[];
 };
@@ -19,7 +19,7 @@ type CodeBlockNode = {
 type CodeNode = {
   type: NOTE_CONTENT_TYPE.CODE;
   attrs: {
-    language: string | null;
+    language?: string;
   };
   content: TextNode[];
 };
@@ -49,7 +49,10 @@ type TextNode = {
   text: string;
 };
 
-type NoteContent = {
-  type: NOTE_CONTENT_TYPE;
-  content: BlockNode[];
+export type Note = {
+  id: number;
+  created_at: string;
+  title: string;
+  profile_id: number;
+  content: { type: "doc"; content: BlockNode[] };
 };

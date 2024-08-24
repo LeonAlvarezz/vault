@@ -20,7 +20,7 @@ export default function NoteCard({ published = false }: NoteCardProps) {
 
   return (
     <Link
-      href={"/note/id"}
+      href={"/note/1"}
       // onClick={handleCardClick}
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] hover:border border-neutral-700  transition-all"
     >

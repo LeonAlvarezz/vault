@@ -1,5 +1,5 @@
 import { getNoteById } from "@/data/server/note";
-import Render from "./Render";
+import Render from "../../../components/ui/Render";
 type Props = {
   params: { id: string };
 };

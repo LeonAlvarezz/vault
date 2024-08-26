@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { InputWithLabel } from "@/components/ui/input-label";
-import { signup } from "@/app/api/action";
+import { signup } from "@/data/server/actions";
 import SubmitButton from "../button/submit-button";
 import { useToast } from "../use-toast";
 export default function SignupForm() {

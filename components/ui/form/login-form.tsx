@@ -1,7 +1,7 @@
 "use client";
 import React, { useActionState } from "react";
 import { InputWithLabel } from "../input-label";
-import { login } from "@/app/api/action";
+import { login } from "@/data/server/actions";
 import SubmitButton from "../button/submit-button";
 import { toast, useToast } from "../use-toast";
 import { z } from "zod";

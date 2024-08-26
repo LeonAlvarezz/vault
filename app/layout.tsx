@@ -30,7 +30,6 @@ export default function RootLayout({
       <body className={cn("", test.className)}>
         <Providers>{children}</Providers>
         <Toaster />
-        <CommandSearch />
       </body>
     </html>
   );

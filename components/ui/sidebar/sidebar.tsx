@@ -8,7 +8,7 @@ import { IoLogOut } from "react-icons/io5";
 
 import SidebarItem from "./sidebar-item";
 import { cn } from "@/lib/utils";
-import { signout } from "@/app/api/action";
+import { signout } from "@/data/server/actions";
 import { Button } from "../button";
 
 export const ICON_SIZE = 20;

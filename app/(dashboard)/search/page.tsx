@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SearchInput from "@/components/ui/search-input";
+import SearchInput from "@/components/ui/search/search-input";
 
 const STATUS = [
   {

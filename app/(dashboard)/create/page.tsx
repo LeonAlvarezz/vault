@@ -49,6 +49,7 @@ export default function Page() {
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { width, height, keyboardOpen, keyboardHeight } = useViewport();
 
   const handleFocus = () => {
     setInputActive(true);
@@ -78,7 +79,6 @@ export default function Page() {
             ? node.attrs.level
             : this.options.levels[0];
           const classes: { [key: number]: string } = {
-            1: "text-4xl",
             2: "text-2xl",
           };
           return [
@@ -97,7 +97,7 @@ export default function Page() {
     ],
     editorProps: {
       attributes: {
-        class: "focus:outline-none dark:text-white",
+        class: "focus:outline-none",
       },
     },
   });
@@ -115,7 +115,17 @@ export default function Page() {
 
   return (
     <>
-      {inputActive && <FormatMenuMobile editor={editor} />}
+      {inputActive && (
+        <div
+          className="p;fixed w-screen left-0 transition-all"
+          style={{
+            bottom: `${keyboardHeight}px`,
+            height: `${height * 0.1}px`, // Adjust as needed
+          }}
+        >
+          <FormatMenuMobile editor={editor} />
+        </div>
+      )}
       <div className="xl:hidden flex gap-2 justify-end">
         <CreateNoteDropdownMenu />
       </div>
@@ -136,6 +146,7 @@ export default function Page() {
       </div>
 
       <form onSubmit={handleSubmit}>
+        <p>Height: {height}</p>
         <Input
           className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl h-24 px-0"
           placeholder="Title"

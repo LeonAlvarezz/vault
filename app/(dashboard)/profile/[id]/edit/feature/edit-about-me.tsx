@@ -70,7 +70,7 @@ export default function EditAboutMeSection() {
     ],
     editorProps: {
       attributes: {
-        class: "focus:outline-none dark:text-white",
+        class: "focus:outline-none",
       },
     },
   });

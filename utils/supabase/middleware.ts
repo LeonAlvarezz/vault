@@ -1,4 +1,4 @@
-import { createServerClient } from "@supabase/ssr";
+import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "../env";
 
@@ -13,14 +13,14 @@ export async function updateSession(request: NextRequest) {
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
-          const cookie = request.cookies.get(name);
-          return cookie ? cookie.value : undefined;
+        get(name: string) {
+          return request.cookies.get(name)?.value;
         },
-        set(name, value, options) {
-          request.cookies.set(name, value);
-          supabaseResponse = NextResponse.next({ request });
+        set(name: string, value: string, options: CookieOptions) {
           supabaseResponse.cookies.set(name, value, options);
+        },
+        remove(name: string, options: CookieOptions) {
+          supabaseResponse.cookies.set(name, "", options);
         },
       },
     }

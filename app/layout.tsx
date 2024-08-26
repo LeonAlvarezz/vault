@@ -25,8 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
-      <body className={cn("", test.className)}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="dark"
+      data-theme="dark "
+    >
+      <body
+        className={cn(
+          "dark:bg-app_background bg-app_background",
+          test.className
+        )}
+      >
         <Providers>{children}</Providers>
         <Toaster />
         {/* <CommandSearch /> */}

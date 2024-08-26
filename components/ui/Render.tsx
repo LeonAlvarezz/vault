@@ -7,7 +7,7 @@ type Props = {
 };
 export default async function Render({ data, note }: Props) {
   return (
-    <div className="tiptap dark:text-white text-slate-800 flex flex-col gap-2">
+    <div className="tiptap text-slate-800 flex flex-col gap-2">
       {note.content.content.map((block, blockIndex) => (
         <div key={blockIndex}>{renderNote(block as BlockNode)}</div>
       ))}

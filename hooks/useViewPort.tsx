@@ -1,44 +1,50 @@
 import { useState, useEffect } from "react";
 
+interface Viewport {
+  width: number;
+  height: number;
+  keyboardOpen: boolean;
+  keyboardHeight: number;
+}
+
 export default function useViewport() {
-  const [viewport, setViewport] = useState({
+  const [viewport, setViewport] = useState<Viewport>({
     width: 0,
     height: 0,
     keyboardOpen: false,
+    keyboardHeight: 0,
   });
 
   useEffect(() => {
-    // Check if running on the client side
-    if (typeof window !== "undefined") {
-      const initialViewportHeight = window.innerHeight;
-
-      // Set initial dimensions
-      setViewport({
-        width: window.innerWidth,
-        height: window.innerHeight,
-        keyboardOpen: false,
-      });
-
+    if (typeof window !== "undefined" && window.visualViewport) {
       const handleResize = () => {
         if (window.visualViewport) {
+          const currentWidth = window.visualViewport.width;
           const currentHeight = window.visualViewport.height;
-          const isKeyboardOpen = initialViewportHeight > currentHeight + 100;
+          const keyboardHeight = window.innerHeight - currentHeight;
+          const isKeyboardOpen = keyboardHeight > 100; // Adjust this threshold as needed
+
           setViewport({
-            width: window.innerWidth,
+            width: currentWidth,
             height: currentHeight,
             keyboardOpen: isKeyboardOpen,
+            keyboardHeight: isKeyboardOpen ? keyboardHeight : 0,
           });
         }
       };
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", handleResize);
-      }
-      // Cleanup event listener on unmount
-      return () =>
+      // Set initial dimensions
+      handleResize();
+
+      window.visualViewport.addEventListener("resize", handleResize);
+      window.visualViewport.addEventListener("scroll", handleResize);
+
+      // Cleanup event listeners on unmount
+      return () => {
         window.visualViewport?.removeEventListener("resize", handleResize);
+        window.visualViewport?.removeEventListener("scroll", handleResize);
+      };
     }
   }, []);
 
   return viewport;
 }
-4;

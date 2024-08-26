@@ -5,6 +5,7 @@ import "./main.scss";
 import Providers from "@/providers/provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import CommandSearch from "@/components/ui/search/command-search";
 
 // const inter = Inter({ subsets: ["latin"] });
 const test = font({ subsets: ["latin"] });
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = {
   interactiveWidget: "resizes-content",
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body className={cn("", test.className)}>
         <Providers>{children}</Providers>
         <Toaster />
+        <CommandSearch />
       </body>
     </html>
   );

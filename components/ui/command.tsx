@@ -7,6 +7,9 @@ import { Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "./button";
+import { RiGlobalLine } from "react-icons/ri";
+import { Toggle } from "./toggle";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -40,8 +43,8 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+>(({ className, children, ...props }, ref) => (
+  <div className="flex items-center px-3 w-[94%]" cmdk-input-wrapper="">
     <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
@@ -51,6 +54,7 @@ const CommandInput = React.forwardRef<
       )}
       {...props}
     />
+    {children}
   </div>
 ));
 

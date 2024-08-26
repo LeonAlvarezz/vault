@@ -62,7 +62,7 @@ export const SIDEBAR_ITEM = [
 
 export default function Sidebar() {
   return (
-    <aside className="hidden sm:block sticky top-0 bottom-0 h-screen w-16 bg-neutral-900 border-r-[1px] border-neutral-800 z-20">
+    <aside className="hidden sm:block sticky top-0 bottom-0 h-screen w-16 bg-neutral-900 border-r-[1px] border-neutral-800 z-50">
       <div className="flex justify-between flex-col min-h-svh sm:min-h-screen">
         <div>
           <div className="flex items-center flex-col w-full my-6">

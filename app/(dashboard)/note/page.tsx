@@ -6,7 +6,7 @@ import NoteCard from "@/components/ui/note-card/note-card";
 import FloatingButton from "@/components/ui/floating-button";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
 import Link from "next/link";
-import SearchInput from "@/components/ui/search-input";
+import SearchInput from "@/components/ui/search/search-input";
 const STATUS = [
   {
     value: "all_note",

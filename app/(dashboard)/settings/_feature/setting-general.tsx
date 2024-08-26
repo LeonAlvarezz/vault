@@ -26,7 +26,7 @@ export default function SettingGeneral() {
             </p>
           </div>
           <Button variant="outline" className="font-normal text-xs" size={"sm"}>
-            Ctrl + Shift + F
+            <span className="text-xs">⌘</span>K
           </Button>
         </div>
       </div>

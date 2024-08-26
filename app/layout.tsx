@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = {
   interactiveWidget: "resizes-content",
-  userScalable: false,
 };
 
 export default function RootLayout({
@@ -26,11 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body className={cn("", test.className)}>
         <Providers>{children}</Providers>
         <Toaster />
-        <CommandSearch />
+        {/* <CommandSearch /> */}
       </body>
     </html>
   );

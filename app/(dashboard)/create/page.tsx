@@ -40,6 +40,7 @@ const TAG = [
     label: "Tutorial",
   },
 ];
+
 export default function Page() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,7 +49,6 @@ export default function Page() {
   const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([]);
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
   const { width, height, keyboardOpen, keyboardHeight } = useViewport();
 
   const handleFocus = () => {
@@ -103,24 +103,16 @@ export default function Page() {
   });
 
   // Scroll to the bottom when inputActive is true
-  useEffect(() => {
-    if (inputActive) {
-      bottomRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        inline: "end",
-      });
-    }
-  }, [inputActive]);
 
   return (
     <>
       {inputActive && (
         <div
-          className="p;fixed w-screen left-0 transition-all"
+          className="fixed w-screen left-0 bg-red-500 transition-all"
           style={{
+            zIndex: 999,
             bottom: `${keyboardHeight}px`,
-            height: `${height * 0.1}px`, // Adjust as needed
+            height: `${height * 0.3}px`, // Adjust as needed
           }}
         >
           <FormatMenuMobile editor={editor} />

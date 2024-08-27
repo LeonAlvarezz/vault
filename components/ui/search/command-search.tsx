@@ -11,7 +11,7 @@ import {
 import { Button } from "../button";
 import { RiGlobalLine } from "react-icons/ri";
 import { Toggle } from "../toggle";
-import { useGesture } from "@use-gesture/react";
+import { useGesture, usePinch } from "@use-gesture/react";
 
 export default function CommandSearch() {
   const [open, setOpen] = useState(false);
@@ -37,30 +37,42 @@ export default function CommandSearch() {
   //     },
   //   },
   //   {
-  //     target: window,
+  //     target: gestureRef,
   //     eventOptions: { passive: false },
   //   }
   // );
-  useGesture(
-    {
-      onPinch: ({ da: [d], origin: [ox, oy], event, first, active }) => {
-        console.log("Pinch detected", { d, first, active });
-        if (first && active) {
-          const threshold = 200;
-          if (d > threshold) {
-            event.preventDefault();
-            setOpen(true);
-          }
-        }
-      },
+  // useGesture(
+  //   {
+  //     onPinch: ({ da: [d], origin: [ox, oy], event, first, active }) => {
+  //       console.log("Pinch detected", { d, first, active });
+  //       if (first && active) {
+  //         const threshold = 200;
+  //         if (d > threshold) {
+  //           event.preventDefault();
+  //           setOpen(true);
+  //         }
+  //       }
+  //     },
+  //   },
+  //   {
+  //     target: gestureRef,
+  //     eventOptions: { passive: false },
+  //   }
+  // );
+
+  usePinch(
+    ({ direction: [d], event, cancel }) => {
+      console.log("d:", d);
+      if (d < 0) {
+        setOpen(true);
+        cancel();
+      }
     },
-    {
-      target: window,
-      eventOptions: { passive: false },
-    }
+    { target: typeof window !== "undefined" ? window : undefined }
   );
 
   return (
+    // <div {...bind()}>
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="Type a command or search...">
         <Toggle
@@ -79,5 +91,6 @@ export default function CommandSearch() {
         </CommandGroup>
       </CommandList>
     </CommandDialog>
+    // </div>
   );
 }

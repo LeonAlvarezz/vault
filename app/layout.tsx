@@ -39,7 +39,7 @@ export default function RootLayout({
       >
         <Providers>{children}</Providers>
         <Toaster />
-        {/* <CommandSearch /> */}
+        <CommandSearch />
       </body>
     </html>
   );

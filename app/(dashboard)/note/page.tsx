@@ -88,11 +88,6 @@ export default function NotePage() {
         <NoteCard />
         <NoteCard />
       </section>
-      <Link href="/create">
-        <FloatingButton className="p-3">
-          <FaPlus color={ICON_COLOR} size={ICON_SIZE} />
-        </FloatingButton>
-      </Link>
     </>
   );
 }

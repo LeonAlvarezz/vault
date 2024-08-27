@@ -108,7 +108,7 @@ export default function Page() {
     <>
       {inputActive && (
         <div
-          className="fixed w-screen left-0 bg-red-500 transition-all"
+          className="fixed w-screen left-0 transition-all"
           style={{
             zIndex: 999,
             bottom: `${keyboardHeight}px`,

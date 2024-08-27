@@ -1,7 +1,14 @@
-import Sidebar from "@/components/ui/sidebar/sidebar";
+import Sidebar, {
+  ICON_COLOR,
+  ICON_SIZE,
+} from "@/components/ui/sidebar/sidebar";
 import SidebarMobile from "@/components/ui/sidebar/sidebar-mobile";
 import React, { Suspense } from "react";
 import Loading from "../loading";
+import FloatingButton from "@/components/ui/floating-button";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa";
+import Tutorial from "@/components/ui/tutorial/tutorial";
 
 export default function RootLayout({
   children,
@@ -15,6 +22,12 @@ export default function RootLayout({
       <main className="w-[90%] sm:w-[80%] xl:w-[50%] pt-10 pb-20 mx-auto z-10 relative">
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </main>
+      <Link href="/create">
+        <FloatingButton className="p-3">
+          <FaPlus color={ICON_COLOR} size={ICON_SIZE} />
+        </FloatingButton>
+      </Link>
+      <Tutorial />
     </div>
   );
 }

@@ -7,7 +7,7 @@ type TutorialStepProps = {
 };
 export default function TutorialStep1({ nextStep }: TutorialStepProps) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-between">
       {isMobile ? (
         <>
           <MdPinch size={50} />
@@ -15,14 +15,15 @@ export default function TutorialStep1({ nextStep }: TutorialStepProps) {
         </>
       ) : (
         <>
-          <div className="flex">
-            <MdKeyboardCommandKey size={24} /> + K
+          <div className="flex justify-center items-center">
+            <MdKeyboardCommandKey size={16} /> + K
           </div>
-          <div>
-            Press{" "}
+          <div className="flex justify-center items-center">
+            Press{"  "}
             <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-popover px-1.5 font-mono text-[10px] font-medium opacity-100">
-              <span className="text-sm">⌘</span>K
-            </kbd>{" "}
+              <span className="text-[10px]">⌘</span>K
+            </kbd>
+            {"  "}
             to open search
           </div>
         </>

@@ -4,11 +4,11 @@ import Sidebar, {
 } from "@/components/ui/sidebar/sidebar";
 import SidebarMobile from "@/components/ui/sidebar/sidebar-mobile";
 import React, { Suspense } from "react";
-import Loading from "../loading";
 import FloatingButton from "@/components/ui/floating-button";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import Tutorial from "@/components/ui/tutorial/tutorial";
+import Loading from "@/app/loading";
 
 export default function RootLayout({
   children,

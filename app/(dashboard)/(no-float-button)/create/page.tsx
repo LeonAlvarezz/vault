@@ -53,11 +53,13 @@ export default function Page() {
 
   const handleFocus = () => {
     setInputActive(true);
-    inputRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "end",
-    });
+    if (inputRef.current) {
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "end",
+      });
+    }
   };
   // Editor Config
   const editor = useEditor({
@@ -138,7 +140,6 @@ export default function Page() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <p>Height: {height}</p>
         <Input
           className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl h-24 px-0"
           placeholder="Title"

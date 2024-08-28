@@ -31,14 +31,13 @@ export default function Tutorial() {
     }
   };
 
-  const currentTutorial = tutorialSteps[currentStep];
   const CurrentStepComponent = tutorialSteps[currentStep].component;
 
   return (
     <>
       {open && (
-        <div className="h-svh w-svw sm:w-screen sm:h-screen fixed bg-neutral-800/70 top-0 left-0 z-[100]">
-          <div className="flex justify-center items-center w-full h-full flex-col relative">
+        <div className="fixed bg-neutral-800/70 top-0 left-0 z-[100]">
+          <div className="flex justify-center items-center min-h-dvh sm:w-screen sm:h-screen w-svw flex-col relative">
             <CurrentStepComponent nextStep={nextStep} />
           </div>
         </div>

@@ -7,14 +7,8 @@ import { FaBookBookmark } from "react-icons/fa6";
 import { OverviewChart } from "./_components/overview-chart";
 import EditNoteDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import { MdHistory } from "react-icons/md";
-import { createClient } from "@/utils/supabase/server";
 
 export default async function page() {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/auth/login");
-  }
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 ">Dashboard</h1>

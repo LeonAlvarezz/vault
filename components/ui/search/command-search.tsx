@@ -62,11 +62,8 @@ export default function CommandSearch() {
 
   usePinch(
     ({ direction: [d], event, cancel }) => {
-      console.log("d:", d);
-      if (d < 0) {
-        setOpen(true);
-        cancel();
-      }
+      setOpen(true);
+      cancel();
     },
     { target: typeof window !== "undefined" ? window : undefined }
   );

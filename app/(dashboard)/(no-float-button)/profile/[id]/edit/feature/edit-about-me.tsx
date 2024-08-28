@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FloatingButton from "@/components/ui/floating-button";
 import { FaCheck, FaPlus } from "react-icons/fa";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
@@ -14,6 +14,11 @@ import StarterKit from "@tiptap/starter-kit";
 import { createLowlight, common } from "lowlight";
 import Heading from "@tiptap/extension-heading";
 import FormatMenuMobile from "@/components/ui/format-menu-mobile";
+import useViewport from "@/hooks/useViewPort";
+import TiptapEditor, {
+  TiptapEditorRef,
+} from "@/components/tiptap/TipTapEditor";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function EditAboutMeSection() {
   function handleSubmit(event: React.MouseEvent<HTMLButtonElement>): void {
@@ -22,7 +27,8 @@ export default function EditAboutMeSection() {
   }
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<TiptapEditorRef>(null);
+  const { width, height, keyboardOpen, keyboardHeight } = useViewport();
 
   const handleFocus = () => {
     setInputActive(true);
@@ -32,48 +38,15 @@ export default function EditAboutMeSection() {
       inline: "end",
     });
   };
-  // Editor Config
-  const editor = useEditor({
-    onBlur: () => setInputActive(false),
-    onFocus: handleFocus,
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Content goes here...",
-      }),
-      BulletList.configure({
-        keepMarks: true,
-      }),
-      Heading.configure({ levels: [1, 2] }).extend({
-        levels: [1, 2],
-        renderHTML({ node, HTMLAttributes }) {
-          const level = this.options.levels.includes(node.attrs.level)
-            ? node.attrs.level
-            : this.options.levels[0];
-          const classes: { [key: number]: string } = {
-            1: "text-4xl",
-            2: "text-2xl",
-          };
-          return [
-            `h${level}`,
-            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              class: `${classes[level]}`,
-            }),
-            0,
-          ];
-        },
-      }),
-      CodeBlockLowlight.configure({
-        lowlight: createLowlight(common),
-        languageClassPrefix: "javascript",
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class: "focus:outline-none",
-      },
-    },
-  });
+
+  const handleUpdate = () => {
+    if (inputActive && inputRef.current) {
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  };
 
   return (
     <section>
@@ -81,12 +54,36 @@ export default function EditAboutMeSection() {
       <p className="text-xs mt-2 text-neutral-500">
         Write about yourself to let other better know about you
       </p>
-      {inputActive && <FormatMenuMobile editor={editor} />}
-      <div className="mt-10 h-full pb-20">
-        <TipTap editor={editor} inputRef={inputRef} />
+      {inputActive && (
+        <div
+          className="fixed w-screen left-0 transition-all"
+          style={{
+            zIndex: 999,
+            bottom: `${keyboardHeight}px`,
+            height: `${height * 0.1}px`,
+          }}
+        >
+          {editorRef.current && (
+            <FormatMenuMobile editor={editorRef.current?.editor} />
+          )}
+        </div>
+      )}
+      <div className="pb-24 mt-10" ref={inputRef}>
+        <TiptapEditor
+          ref={editorRef}
+          onFocus={handleFocus}
+          onBlur={() => setInputActive(false)}
+          onUpdate={handleUpdate}
+        />
       </div>
       <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
-        <FormatMenu editor={editor} />
+        {!editorRef.current ? (
+          <div className="w-full justify-center h-full flex items-center ">
+            <AiOutlineLoading3Quarters className="animate-spin" size={20} />
+          </div>
+        ) : (
+          <FormatMenu editor={editorRef.current.editor} />
+        )}
       </div>
 
       <FloatingButton className="bg-green-900  hover:bg-green-900/80 ">

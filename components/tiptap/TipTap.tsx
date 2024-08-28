@@ -31,7 +31,11 @@ const Tiptap = ({ editor, inputRef }: Props) => {
 
   return (
     <>
-      <EditorContent ref={inputRef} editor={editor} spellCheck="false" />
+      <EditorContent
+        // ref={inputRef}
+        editor={editor}
+        spellCheck="false"
+      />
     </>
   );
 };

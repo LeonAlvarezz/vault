@@ -1,31 +1,21 @@
 "use client";
+import React, { useRef, useState } from "react";
+import FormatMenu from "@/components/ui/format-menu";
+import FormatMenuMobile from "@/components/ui/format-menu-mobile";
+import useViewport from "@/hooks/useViewPort";
+import TiptapEditor, {
+  TiptapEditorRef,
+} from "@/components/tiptap/TipTapEditor";
+import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdown";
+import ShareModal from "@/components/ui/modal/share-modal";
+import { Button } from "@/components/ui/button";
+import StatContainer from "@/components/ui/statistic/stat-container";
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useRef, useState } from "react";
 import { BiCategory } from "react-icons/bi";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
 import { MultiSelect } from "@/components/ui/multi-select";
-import FormatMenu from "@/components/ui/format-menu";
-import StatContainer from "@/components/ui/statistic/stat-container";
-import ShareModal from "@/components/ui/modal/share-modal";
-import { Button } from "@/components/ui/button";
 import { FaTags } from "react-icons/fa";
-import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdown";
-import useViewport from "@/hooks/useViewPort";
-import TipTap from "@/components/tiptap/TipTap";
-import FormatMenuMobile from "@/components/ui/format-menu-mobile";
-import { useEditor, EditorContent } from "@tiptap/react";
-import { Heading } from "@tiptap/extension-heading";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-
-import Highlight from "@tiptap/extension-highlight";
-import { common, createLowlight } from "lowlight";
-import { mergeAttributes } from "@tiptap/core";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
-import Blockquote from "@tiptap/extension-blockquote";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 const TAG = [
   {
     value: "framework",
@@ -40,15 +30,11 @@ const TAG = [
     label: "Tutorial",
   },
 ];
-
 export default function Page() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([]);
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<TiptapEditorRef>(null);
+  const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([]);
   const { width, height, keyboardOpen, keyboardHeight } = useViewport();
 
   const handleFocus = () => {
@@ -56,55 +42,20 @@ export default function Page() {
     if (inputRef.current) {
       inputRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "end",
         inline: "end",
       });
     }
   };
-  // Editor Config
-  const editor = useEditor({
-    onBlur: () => setInputActive(false),
-    onFocus: handleFocus,
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Content goes here...",
-      }),
-      BulletList.configure({
-        keepMarks: true,
-      }),
-      Highlight.configure({ multicolor: true }),
-      Heading.configure({ levels: [1, 2] }).extend({
-        levels: [1, 2],
-        renderHTML({ node, HTMLAttributes }) {
-          const level = this.options.levels.includes(node.attrs.level)
-            ? node.attrs.level
-            : this.options.levels[0];
-          const classes: { [key: number]: string } = {
-            2: "text-2xl",
-          };
-          return [
-            `h${level}`,
-            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              class: `${classes[level]}`,
-            }),
-            0,
-          ];
-        },
-      }),
-      CodeBlockLowlight.configure({
-        lowlight: createLowlight(common),
-        languageClassPrefix: "javascript",
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class: "focus:outline-none",
-      },
-    },
-  });
 
-  // Scroll to the bottom when inputActive is true
+  const handleUpdate = () => {
+    if (inputActive && inputRef.current) {
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  };
 
   return (
     <>
@@ -114,17 +65,26 @@ export default function Page() {
           style={{
             zIndex: 999,
             bottom: `${keyboardHeight}px`,
-            height: `${height * 0.3}px`, // Adjust as needed
+            height: `${height * 0.1}px`,
           }}
         >
-          <FormatMenuMobile editor={editor} />
+          {editorRef.current && (
+            <FormatMenuMobile editor={editorRef.current?.editor} />
+          )}
         </div>
       )}
       <div className="xl:hidden flex gap-2 justify-end">
         <CreateNoteDropdownMenu />
       </div>
-      <div className="hidden xl:block fixed top-28 left-28  w-[200px]">
-        <FormatMenu editor={editor} />
+
+      <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
+        {!editorRef.current ? (
+          <div className="w-full justify-center h-full flex items-center ">
+            <AiOutlineLoading3Quarters className="animate-spin" size={20} />
+          </div>
+        ) : (
+          <FormatMenu editor={editorRef.current.editor} />
+        )}
         <div className="flex flex-col gap-2 mt-4">
           <ShareModal>
             <Button variant={"main"}>Share</Button>
@@ -138,8 +98,7 @@ export default function Page() {
           <StatContainer label="Bookmarks" count={50} />
         </div>
       </div>
-
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <Input
           className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl h-24 px-0"
           placeholder="Title"
@@ -180,8 +139,13 @@ export default function Page() {
             />
           </div>
         </div>
-        <div className="pb-10">
-          <TipTap editor={editor} inputRef={inputRef} />
+        <div className="pb-24" ref={inputRef}>
+          <TiptapEditor
+            ref={editorRef}
+            onFocus={handleFocus}
+            onBlur={() => setInputActive(false)}
+            onUpdate={handleUpdate}
+          />
         </div>
       </form>
     </>

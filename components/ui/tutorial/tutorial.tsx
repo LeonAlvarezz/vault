@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdPinch } from "react-icons/md";
 import { Button } from "../button";
 import TutorialStep1 from "./step-1";
@@ -16,14 +16,22 @@ const tutorialSteps = [
 
 export default function Tutorial() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const nextStep = () => {
     if (currentStep < tutorialSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       setOpen(false);
+      localStorage.setItem("hasSeenTutorial", "true"); // Mark tutorial as seen
     }
   };
+
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
+    if (!hasSeenTutorial) {
+      setOpen(true); // Show tutorial if not seen
+    }
+  }, []);
 
   const prevStep = () => {
     if (currentStep > 0) {

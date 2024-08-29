@@ -10,6 +10,8 @@ import SidebarItem from "./sidebar-item";
 import { cn } from "@/lib/utils";
 import { signout } from "@/app/api/action";
 import { Button } from "../button";
+import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent } from "../tooltip";
 
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
@@ -84,17 +86,26 @@ export default function Sidebar() {
           </div>
         </div>
         <div className="w-full flex justify-center">
-          <form>
-            <Button variant={"icon"} size={"icon"} formAction={signout}>
-              <div
-                className={cn(
-                  "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
-                )}
-              >
-                <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
-              </div>
-            </Button>
-          </form>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <form>
+                  <Button variant={"icon"} size={"icon"} formAction={signout}>
+                    <div
+                      className={cn(
+                        "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
+                      )}
+                    >
+                      <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
+                    </div>
+                  </Button>
+                </form>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="capitalize text-[#FF8080]">Logout</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </aside>

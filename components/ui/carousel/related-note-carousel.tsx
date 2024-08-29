@@ -23,10 +23,10 @@ export default function RelatedNoteCarousel() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="absolute h-full w-[100px] from-neutral-900/80 top-0 left-0 bg-gradient-to-r pointer-events-none"></div>
-        <div className="absolute h-full w-[100px] from-neutral-900/80 top-0 right-0 bg-gradient-to-l pointer-events-none"></div>
-        <CarouselNext />
-        <CarouselPrevious />
+        <div className="absolute h-full w-[100px] from-neutral-900/60 top-0 left-0 bg-gradient-to-r"></div>
+        <div className="absolute h-full w-[100px] from-neutral-900/60 top-0 right-0 bg-gradient-to-l"></div>
+        <CarouselNext className="sm:flex absolute right-2" />
+        <CarouselPrevious className="sm:flex absolute left-2" />
       </Carousel>
     </section>
   );

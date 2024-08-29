@@ -21,7 +21,7 @@ export default async function NoteDetailPage({ params }: Props) {
     return <div>No Note Available</div>;
   }
   return (
-    <>
+    <div className="pb-10">
       <section className="flex gap-2 flex-col">
         <BackButton />
         <h1 className="text-2xl">{data.title}</h1>
@@ -69,6 +69,6 @@ export default async function NoteDetailPage({ params }: Props) {
         <Render note={data} />
       </section>
       <RelatedNoteCarousel />
-    </>
+    </div>
   );
 }

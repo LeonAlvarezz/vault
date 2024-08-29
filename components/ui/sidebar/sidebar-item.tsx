@@ -4,6 +4,12 @@ import React, { ReactNode } from "react";
 import { Separator } from "../separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../tooltip";
 
 type SidebarProps = {
   id?: string;
@@ -23,15 +29,24 @@ export default function SidebarItem({
     return <Separator className="bg-neutral-700 my-3" />;
   }
   return (
-    <Link href={link || "/"}>
-      <div
-        className={cn(
-          "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-800 rounded-sm my-4",
-          id && pathname === `/${id}` && "bg-neutral-700/50"
-        )}
-      >
-        <div className="w-full flex justify-center ">{icon}</div>
-      </div>
-    </Link>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger className="flex justify-center w-full my-4">
+          <Link href={link || "/"}>
+            <div
+              className={cn(
+                "p-2 m-auto w-fit rounded-sm hover:bg-neutral-800 ",
+                id && pathname === `/${id}` && "bg-neutral-700/50"
+              )}
+            >
+              <div className="w-full flex justify-center ">{icon}</div>
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p className="capitalize">{id}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

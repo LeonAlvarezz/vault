@@ -39,10 +39,12 @@ export default function RootLayout({
           font.className
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <SpeedInsights />
+        </Providers>
         <Toaster />
         <CommandSearch />
-        <SpeedInsights />
       </body>
     </html>
   );

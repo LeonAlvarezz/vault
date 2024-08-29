@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SearchInput from "@/components/ui/search/search-input";
+import OrderSelect from "@/components/ui/select/order-select";
 
 const STATUS = [
   {
@@ -84,18 +85,7 @@ export default function NotePage() {
           />
         </div>
 
-        <Select defaultValue="trending">
-          <SelectTrigger className="w-full sm:w-[150px]">
-            <SelectValue placeholder="Order" />
-          </SelectTrigger>
-          <SelectContent>
-            {ORDER.map((order, index) => (
-              <SelectItem key={index} value={order.value}>
-                {order.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <OrderSelect options={ORDER} />
       </div>
       <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
         {Array.from({ length: 30 }).map((_, index) => (

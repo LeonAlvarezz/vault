@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter as font } from "next/font/google";
+import { Inter as _font } from "next/font/google";
 import "./globals.css";
 import "./main.scss";
 import Providers from "@/providers/provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import CommandSearch from "@/components/ui/search/command-search";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // const inter = Inter({ subsets: ["latin"] });
-const test = font({ subsets: ["latin"] });
+const font = _font({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vault",
@@ -35,7 +36,7 @@ export default function RootLayout({
       <body
         className={cn(
           "dark:bg-app_background bg-app_background",
-          test.className
+          font.className
         )}
       >
         <Providers>{children}</Providers>

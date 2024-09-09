@@ -1,5 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   FaBold,
   FaCode,
@@ -35,10 +41,13 @@ import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/stores/editor";
 import Loading from "@/app/loading";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import LinkModal from "./modal/link-modal";
 type Props = {
   editor: Editor | null;
+  setLink: Dispatch<SetStateAction<string>>;
+  link: string;
 };
-export default function FormatMenu({ editor }: Props) {
+export default function FormatMenu({ editor, setLink, link }: Props) {
   const [headingLevel, setHeadingLevel] = useState<string>("heading1");
   useEffect(() => {
     if (editor) {
@@ -186,13 +195,12 @@ export default function FormatMenu({ editor }: Props) {
             <FaListOl size={16} />
           </ToggleGroupItem>
         </ToggleGroup>
-        <Button
-          variant={"outline"}
-          aria-label="Toggle link"
-          className="p-3 h-10"
-        >
-          <FaLink size={14} />
-        </Button>
+
+        {/* <LinkModal editor={editor}>
+          <Button variant={"outline"} className="p-3 h-10">
+            <FaLink size={14} />
+          </Button>
+        </LinkModal> */}
       </div>
     </div>
   );

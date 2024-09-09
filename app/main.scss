@@ -20,6 +20,12 @@ body {
     margin-top: 0.75em;
   }
 
+  a {
+    color: hsl(var(--second));
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   code {
     background-color: hsl(0 0% 12%);
     border-radius: 0.25em;

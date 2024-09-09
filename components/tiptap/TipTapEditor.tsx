@@ -13,10 +13,9 @@ import { common, createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import BulletList from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
+import Link from "@tiptap/extension-link";
 import { mergeAttributes } from "@tiptap/core";
-import Loading from "@/app/loading";
 import { isMobile } from "react-device-detect";
-import { FaSpinner } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export interface TiptapEditorRef {
@@ -32,7 +31,7 @@ interface TiptapEditorProps {
 const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
   (props, ref) => {
     const { onUpdate, onFocus, onBlur } = props;
-    const editorRef = useRef<HTMLDivElement>(null);
+    const editorRef = useRef(null);
 
     const editor = useEditor({
       extensions: [
@@ -51,6 +50,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
               ? node.attrs.level
               : this.options.levels[0];
             const classes: { [key: number]: string } = {
+              1: "text-3xl",
               2: "text-2xl",
             };
             return [
@@ -65,6 +65,12 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         CodeBlockLowlight.configure({
           lowlight: createLowlight(common),
           languageClassPrefix: "javascript",
+        }),
+        Link.configure({
+          openOnClick: true,
+          linkOnPaste: true,
+          autolink: true,
+          defaultProtocol: "https",
         }),
       ],
       editorProps: {
@@ -110,7 +116,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     return (
       <div ref={editorRef}>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} className="text-sm" />
       </div>
     );
   }

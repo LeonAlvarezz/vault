@@ -19,6 +19,7 @@ import TiptapEditor, {
   TiptapEditorRef,
 } from "@/components/tiptap/TipTapEditor";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import LinkModal from "@/components/ui/modal/link-modal";
 
 export default function EditAboutMeSection() {
   function handleSubmit(event: React.MouseEvent<HTMLButtonElement>): void {
@@ -29,6 +30,7 @@ export default function EditAboutMeSection() {
   const inputRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<TiptapEditorRef>(null);
   const { width, height, keyboardOpen, keyboardHeight } = useViewport();
+  const [open, setOpen] = useState(false);
 
   const handleFocus = () => {
     setInputActive(true);
@@ -64,7 +66,10 @@ export default function EditAboutMeSection() {
           }}
         >
           {editorRef.current && (
-            <FormatMenuMobile editor={editorRef.current?.editor} />
+            <FormatMenuMobile
+              editor={editorRef.current?.editor}
+              setOpen={setOpen}
+            />
           )}
         </div>
       )}
@@ -76,7 +81,7 @@ export default function EditAboutMeSection() {
           onUpdate={handleUpdate}
         />
       </div>
-      <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
+      {/* <div className="hidden xl:block fixed top-28 left-28 w-[200px]">
         {!editorRef.current ? (
           <div className="w-full justify-center h-full flex items-center ">
             <AiOutlineLoading3Quarters className="animate-spin" size={20} />
@@ -84,13 +89,21 @@ export default function EditAboutMeSection() {
         ) : (
           <FormatMenu editor={editorRef.current.editor} />
         )}
-      </div>
+      </div> */}
 
       <FloatingButton className="bg-green-900  hover:bg-green-900/80 ">
         <Button onClick={handleSubmit} variant={"icon"} size={"icon"}>
           <FaCheck color="#6EFF6B" size={ICON_SIZE} />
         </Button>
       </FloatingButton>
+
+      {editorRef.current && editorRef.current.editor && (
+        <LinkModal
+          editor={editorRef.current.editor}
+          open={open}
+          setOpen={setOpen}
+        />
+      )}
     </section>
   );
 }

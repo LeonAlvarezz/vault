@@ -19,6 +19,8 @@ type Props = {
   placeholder?: string;
   type?: string;
   name?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 type SelectWithLabelProps = {
   label: string;
@@ -31,6 +33,8 @@ export function InputWithLabel({
   name,
   type = "text",
   placeholder,
+  onChange,
+  value,
 }: Props) {
   return (
     <div className="flex flex-col gap-3">
@@ -40,6 +44,8 @@ export function InputWithLabel({
         name={name}
         variant={"outline"}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );

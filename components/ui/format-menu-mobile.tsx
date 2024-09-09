@@ -1,4 +1,10 @@
-import React, { SetStateAction } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { RiCodeBlock } from "react-icons/ri";
 import {
@@ -8,19 +14,124 @@ import {
   FaLink,
   FaList,
   FaListOl,
+  FaUpload,
 } from "react-icons/fa";
 import { LuHeading1, LuHeading2 } from "react-icons/lu";
 
 import { TbBlockquote } from "react-icons/tb";
 import { MdFormatListBulleted } from "react-icons/md";
 import { Button } from "./button";
-import { Editor, mergeAttributes, useEditor } from "@tiptap/react";
+import {
+  Editor,
+  mergeAttributes,
+  useCurrentEditor,
+  useEditor,
+} from "@tiptap/react";
 import { cn } from "@/lib/utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import LinkModal from "./modal/link-modal";
+import UploadButton from "./button/upload-button";
 type Props = {
   editor: Editor | null;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
-export default function FormatMenuMobile({ editor }: Props) {
+
+type CommandKeys =
+  | "toggleBold"
+  | "toggleItalic"
+  | "toggleCode"
+  | "toggleCodeBlock"
+  | "toggleHeading"
+  | "toggleBlockquote"
+  | "toggleBulletList"
+  | "toggleOrderedList";
+
+type FormatOption = {
+  value: string;
+  icon: React.ComponentType<{ size: number }>;
+  command: CommandKeys;
+  args?: Record<string, any>;
+};
+
+const formatOptions: FormatOption[] = [
+  { value: "bold", icon: FaBold, command: "toggleBold" },
+  { value: "italic", icon: FaItalic, command: "toggleItalic" },
+  { value: "code", icon: FaCode, command: "toggleCode" },
+  { value: "codeBlock", icon: RiCodeBlock, command: "toggleCodeBlock" },
+  {
+    value: "heading1",
+    icon: LuHeading1,
+    command: "toggleHeading",
+    args: { level: 1 },
+  },
+  {
+    value: "heading2",
+    icon: LuHeading2,
+    command: "toggleHeading",
+    args: { level: 2 },
+  },
+  { value: "blockquote", icon: TbBlockquote, command: "toggleBlockquote" },
+  {
+    value: "bulletList",
+    icon: MdFormatListBulleted,
+    command: "toggleBulletList",
+  },
+  { value: "orderedList", icon: FaListOl, command: "toggleOrderedList" },
+];
+export default function FormatMenuMobile({ editor, setOpen }: Props) {
+  const [image, setImage] = useState<File | null>(null);
+  const [activeFormats, setActiveFormats] = useState<Record<string, boolean>>(
+    {}
+  );
+
+  useEffect(() => {
+    console.log(image); // This will log the selected image
+  }, [image]);
+
+  const updateActiveFormats = useCallback(() => {
+    if (editor) {
+      const newActiveFormats = formatOptions.reduce((acc, option) => {
+        if (option.value.startsWith("heading")) {
+          acc[option.value] = editor.isActive("heading", {
+            level: option.args?.level,
+          });
+        } else if (option.args) {
+          acc[option.value] = editor.isActive(option.value, option.args);
+        } else {
+          acc[option.value] = editor.isActive(option.value);
+        }
+        return acc;
+      }, {} as Record<string, boolean>);
+
+      setActiveFormats(newActiveFormats);
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.on("update", updateActiveFormats);
+      updateActiveFormats(); // Initial update
+      return () => {
+        editor.off("update", updateActiveFormats);
+      };
+    }
+  }, [editor, updateActiveFormats]);
+
+  const handleFormatToggle = useCallback(
+    (option: FormatOption) => {
+      if (editor) {
+        const command = option.command as CommandKeys;
+        if (option.args) {
+          (editor.chain().focus() as any)[command](option.args).run();
+        } else {
+          (editor.chain().focus() as any)[command]().run();
+        }
+        updateActiveFormats();
+      }
+    },
+    [editor, updateActiveFormats]
+  );
+
   if (!editor) {
     return (
       <div className="w-full justify-center flex">
@@ -28,127 +139,40 @@ export default function FormatMenuMobile({ editor }: Props) {
       </div>
     );
   }
+
   return (
-    <div className="bottom-1 absolute left-1/2 -translate-x-1/2 overflow-x-auto w-full sm:w-fit sm:hidden flex gap-4 bg-popover pt-1 pb-4 px-4 rounded-sm">
-      <ToggleGroup variant={"outline"} type="multiple">
-        <ToggleGroupItem
-          value="bold"
-          aria-label="Toggle bold"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn("h-9 w-9 p-0", editor.isActive("bold") && "is-active")}
-          onClick={() => editor.chain().focus().toggleBold().run()}
-        >
-          <FaBold size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="italic"
-          aria-label="Toggle italic"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("italic") && "is-active"
-          )}
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-        >
-          <FaItalic size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="code"
-          aria-label="Toggle code"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn("h-9 w-9 p-0", editor.isActive("code") && "is-active")}
-          onClick={() => editor.chain().focus().toggleCode().run()}
-        >
-          <FaCode size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="codeBlock"
-          aria-label="Toggle codeBlock"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("codeBlock") && "is-active"
-          )}
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        >
-          <RiCodeBlock />
-        </ToggleGroupItem>
-      </ToggleGroup>
-      <ToggleGroup variant={"outline"} type="multiple">
-        <ToggleGroupItem
-          value="bold"
-          aria-label="Toggle heading1"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("heading", { level: 1 }) && "is-active"
-          )}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-        >
-          <LuHeading1 size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="italic"
-          aria-label="Toggle heading2"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("heading", { level: 2 }) && "is-active"
-          )}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-        >
-          <LuHeading2 size={16} />
-        </ToggleGroupItem>
-      </ToggleGroup>
-      <ToggleGroup variant={"outline"} type="multiple">
-        <ToggleGroupItem
-          value="blockquote"
-          aria-label="Toggle blockquote"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("blockquote") && "is-active"
-          )}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        >
-          <TbBlockquote size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="bulletList"
-          aria-label="Toggle bulletList"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("bulletList") && "is-active"
-          )}
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-        >
-          <MdFormatListBulleted size={16} />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="orderedList"
-          aria-label="Toggle orderedList"
-          onMouseDown={(e) => e.preventDefault()}
-          className={cn(
-            "h-9 w-9 p-0",
-            editor.isActive("orderedList") && "is-active"
-          )}
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        >
-          <FaListOl size={16} />
-        </ToggleGroupItem>
+    <div className="bottom-1 absolute left-1/2 -translate-x-1/2 overflow-x-auto w-full sm:w-fit flex gap-4 bg-popover pt-2 pb-3 px-4 rounded-sm">
+      <ToggleGroup variant="outline" type="multiple">
+        {formatOptions.map((option) => (
+          <ToggleGroupItem
+            key={option.value}
+            value={option.value}
+            aria-label={`Toggle ${option.value}`}
+            onMouseDown={(e) => e.preventDefault()}
+            className={cn(activeFormats[option.value] ? "is-active" : "")}
+            onClick={() => handleFormatToggle(option)}
+          >
+            <option.icon size={16} />
+          </ToggleGroupItem>
+        ))}
       </ToggleGroup>
       <Button
-        variant={"outline"}
-        onMouseDown={(e) => e.preventDefault()}
-        className="p-3 h-9"
+        variant="outline"
+        className="p-3 h-10 context-menu"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setOpen(true);
+        }}
       >
         <FaLink size={14} />
       </Button>
+      <UploadButton
+        className="hover:border-neutral-500 border transition-all border-neutral-700 flex justify-center items-center"
+        setImage={setImage}
+      >
+        <FaUpload />
+      </UploadButton>
+      {/* <LinkModal editor={editor} setInputActive={setInputActive} /> */}
     </div>
   );
 }

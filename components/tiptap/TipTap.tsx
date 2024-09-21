@@ -4,8 +4,7 @@ import { EditorContent } from "@tiptap/react";
 
 import { Editor } from "@tiptap/core";
 
-import { sendNote } from "@/data/client/note";
-import { Dispatch, RefObject, SetStateAction } from "react";
+import { RefObject } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 type Props = {
   editor: Editor | null;

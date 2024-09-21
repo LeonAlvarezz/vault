@@ -66,14 +66,16 @@ export async function signup(formData: unknown) {
   if (userId) {
     const { error: profileError } = await supabase
       .from("profiles")
-      .insert([{ user_id: userId, username, email }]);
+      .insert([{ auth_id: userId, username, email }]);
     if (profileError) {
       return { error: profileError.message };
     }
   }
 
-  revalidatePath("/", "layout");
-  redirect("/auth/login");
+  if (!error) {
+    revalidatePath("/", "layout");
+    redirect("/auth/login");
+  }
 }
 
 export async function signout() {
@@ -86,4 +88,8 @@ export async function signout() {
 
   revalidatePath("/", "layout");
   redirect("/auth/login");
+}
+
+export async function revalidatePathClient(path: string) {
+  revalidatePath(path);
 }

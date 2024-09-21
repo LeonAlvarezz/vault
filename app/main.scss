@@ -20,6 +20,14 @@ body {
     margin-top: 0.75em;
   }
 
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
   a {
     color: hsl(var(--second));
     cursor: pointer;
@@ -36,7 +44,7 @@ body {
   }
 
   pre {
-    background: hsl(0 0% 12%);
+    background: hsl(0, 0%, 12%);
     border-radius: 0.5rem;
     color: #fff;
     font-family: "JetBrainsMono", monospace;
@@ -104,7 +112,7 @@ body {
   ul {
     list-style-type: disc;
     padding: 0 0.6rem;
-    margin: 0.5rem 1rem 1.25rem 0.4rem;
+    margin: 0.3rem 0.5rem 0.5rem 0.4rem;
 
     li p {
       margin-top: 0.25em;
@@ -114,7 +122,7 @@ body {
   ol {
     list-style-type: decimal;
     padding: 0 0.6rem;
-    margin: 0.5rem 1rem 1.25rem 0.4rem;
+    margin: 0.3rem 0.5rem 0.5rem 0.4rem;
 
     li p {
       margin-top: 0.25em;
@@ -135,6 +143,10 @@ body {
     float: left;
     height: 0;
     pointer-events: none;
+  }
+  img {
+    width: fit-content;
+    height: fit-content;
   }
 }
 
@@ -183,4 +195,14 @@ body {
 
 .contact-button-main .contact-button.visible:nth-child(4) {
   transition-delay: 0s;
+}
+
+.button-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.button-inactive {
+  opacity: 0;
+  transform: translateY(20px);
 }

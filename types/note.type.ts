@@ -1,13 +1,38 @@
+import { Json } from "@/database.types";
+import { JSONContent } from "@tiptap/react";
+
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
   TEXT = "text",
-  CODE = "code",
-  CODE_BLOCK = "code_block",
-  HEADING_1 = "heading_1",
+  CODE_BLOCK = "codeBlock",
+  HEADING = "heading",
   IMAGE = "image",
+  BULLET_LIST = "bulletList",
+  ORDERED_LIST = "orderedList",
+  BLOCKQUOTE = "blockquote",
+
+  LIST_ITEM = "listItem",
 }
 
-export type BlockNode = CodeBlockNode | ParagraphNode | CodeNode | ImageNode;
+export enum TEXT_MARK_TYPE {
+  CODE = "code",
+  CODE_BLOCK = "code_block",
+  BOLD = "bold",
+  ITALIC = "italic",
+  LINK = "link",
+}
+
+export type BlockNode =
+  | CodeBlockNode
+  | ParagraphNode
+  | ImageNode
+  | HeadingNode
+  | BulletListNode
+  | OrderedListNode
+  | ListItemNode
+  | BlockQuoteNode
+  | TextNode;
+
 type CodeBlockNode = {
   type: NOTE_CONTENT_TYPE.CODE_BLOCK;
   attrs: {
@@ -16,12 +41,29 @@ type CodeBlockNode = {
   content: TextNode[];
 };
 
-type CodeNode = {
-  type: NOTE_CONTENT_TYPE.CODE;
-  attrs: {
-    language?: string;
-  };
+type HeadingNode = {
+  type: NOTE_CONTENT_TYPE.HEADING;
+  attrs: { level: number };
   content: TextNode[];
+};
+type BulletListNode = {
+  type: NOTE_CONTENT_TYPE.BULLET_LIST;
+  content: ListItemNode[];
+};
+
+type OrderedListNode = {
+  type: NOTE_CONTENT_TYPE.ORDERED_LIST;
+  attrs: { start: number };
+  content: ListItemNode[];
+};
+
+type ListItemNode = {
+  type: NOTE_CONTENT_TYPE.LIST_ITEM;
+  content: ParagraphNode[];
+};
+type BlockQuoteNode = {
+  type: NOTE_CONTENT_TYPE.BLOCKQUOTE;
+  content: ParagraphNode[];
 };
 
 type ParagraphNode = {
@@ -31,28 +73,46 @@ type ParagraphNode = {
 
 type ImageNode = {
   type: NOTE_CONTENT_TYPE.IMAGE;
-  content: TextNode[];
+  attrs: ImageAttribute;
 };
 
-//   type BulletListNode = {
-//     type: 'bulletList';
-//     content: ListItemNode[];
-//   };
-
-//   type ListItemNode = {
-//     type: 'listItem';
-//     content: ParagraphNode[];
-//   };
-
-type TextNode = {
+export type TextNode = {
   type: NOTE_CONTENT_TYPE.TEXT;
   text: string;
+  marks?: TextMark[];
+};
+
+export type TextMark = {
+  type: TEXT_MARK_TYPE;
+  attrs?: LinkAttribute;
+};
+
+type LinkAttribute = {
+  href: string;
+  target: string;
+};
+
+type ImageAttribute = {
+  alt: string;
+  src: string;
+  title: string | null;
 };
 
 export type Note = {
-  id: number;
+  bookmark: number | null;
+  content: BlockNode[];
   created_at: string;
+  deleted_at: string | null;
+  id: string;
+  like: number | null;
+  published_at: string | null;
+  title: string | null;
+  updated_at: string | null;
+  view: number | null;
+};
+
+export type SaveNotePayload = {
+  id: string;
   title: string;
-  profile_id: number;
-  content: { type: "doc"; content: BlockNode[] };
+  content: JSONContent;
 };

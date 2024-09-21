@@ -1,4 +1,4 @@
-import Render from "@/components/ui/Render";
+import RenderWithTiptap from "@/components/tiptap/RenderWithTiptap";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ContactButton from "@/components/ui/button/contact-button";
@@ -11,12 +11,14 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { getNoteById } from "@/data/server/note";
 import BackButton from "@/components/ui/button/back-button";
 import RelatedNoteCarousel from "@/components/ui/carousel/related-note-carousel";
+import Render from "@/components/tiptap/Render";
+import RenderHTML from "@/components/tiptap/RenderHTML";
 type Props = {
   params: { id: string };
 };
 
 export default async function NoteDetailPage({ params }: Props) {
-  const { data } = await getNoteById(+params.id);
+  const { data } = await getNoteById(params.id);
   if (!data) {
     return <div>No Note Available</div>;
   }
@@ -66,9 +68,11 @@ export default async function NoteDetailPage({ params }: Props) {
             </Button>
           </div>
         </div>
+        {/* <RenderWithTiptap note={data} /> */}
         <Render note={data} />
+        {/* <RenderHTML note={data} /> */}
       </section>
-      <RelatedNoteCarousel />
+      {/* <RelatedNoteCarousel /> */}
     </div>
   );
 }

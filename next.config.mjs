@@ -25,8 +25,10 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "miro.medium.com"
             },
-
-
+            {
+                protocol: "https",
+                hostname: "wymuicbyisnovfjqtfjc.supabase.co"  
+          }      
         ]
     }
 };

@@ -10,17 +10,20 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { useRouter } from "next/navigation";
 import NoteCardPublished from "./note-card-published";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
+import { BlockNode, Note } from "@/types/note.type";
+import { renderNote, renderNoteDescription } from "@/lib/renderNote";
 type NoteCardProps = {
+  note?: Note;
   published?: boolean;
 };
-export default function NoteCard({ published = false }: NoteCardProps) {
+export default function NoteCard({ published = false, note }: NoteCardProps) {
   if (published) {
     return <NoteCardPublished />;
   }
 
   return (
     <Link
-      href={"/note/1"}
+      href={`/create/${note?.id}`}
       // onClick={handleCardClick}
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] hover:border border-neutral-700  transition-all"
     >
@@ -38,18 +41,10 @@ export default function NoteCard({ published = false }: NoteCardProps) {
         </Button> */}
       </div>
       <div className="flex justify-between items-center ">
-        <div>
-          <h2 className="text-md font-semibold">
-            How to publish note on Vault
-          </h2>
-          <p className="w-full line-clamp-4 mt-2 text-xs text-neutral-500">
-            As we delve into 2024, the landscape of web development continues to
-            evolve at a rapid pace. React, one of the most popular JavaScript
-            libraries for building user interfaces, has maintained its position
-            at the forefront of frontend development. With its component-based
-            architecture and virtual DOM, React offers
-          </p>
-          <p className="mt-4 text-xs text-neutral-300 text-right">
+        <div className="w-full">
+          <h2 className="text-md font-semibold">{note?.title || "Untitled"}</h2>
+          {renderNoteDescription(note?.content[0] as BlockNode)}
+          <p className="mt-4 text-xs text-neutral-300 text-right w-full ">
             16 Jul 2024
           </p>
         </div>

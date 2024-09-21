@@ -15,7 +15,7 @@ export default function SignupForm() {
     const response = await signup(data);
     if (response?.error) {
       toast({
-        title: "Login Error!",
+        title: "Signup Error!",
         description: response.error,
         variant: "destructive",
         duration: 1500,

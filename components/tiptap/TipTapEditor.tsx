@@ -10,13 +10,17 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Highlight from "@tiptap/extension-highlight";
 import { common, createLowlight } from "lowlight";
+
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import BulletList from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
+import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import { mergeAttributes } from "@tiptap/core";
 import { isMobile } from "react-device-detect";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Button } from "../ui/button";
+import { CustomImageExtension } from "./TipTapImage";
 
 export interface TiptapEditorRef {
   editor: ReturnType<typeof useEditor> | null;
@@ -42,6 +46,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         BulletList.configure({
           keepMarks: true,
         }),
+        CustomImageExtension,
         Highlight.configure({ multicolor: true }),
         Heading.configure({ levels: [1, 2] }).extend({
           levels: [1, 2],
@@ -64,7 +69,8 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         }),
         CodeBlockLowlight.configure({
           lowlight: createLowlight(common),
-          languageClassPrefix: "javascript",
+          defaultLanguage: "ts",
+          languageClassPrefix: "ts",
         }),
         Link.configure({
           openOnClick: true,
@@ -87,24 +93,24 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
       editor,
     }));
 
-    useEffect(() => {
-      if (editor && isMobile) {
-        const handleBeforeInput = (event: InputEvent) => {
-          if (event.inputType === "deleteContentBackward") {
-            const { from, to } = editor.state.selection;
-            if (from === to && from > 0) {
-              editor.commands.setTextSelection(from - 1);
-            }
-          }
-        };
+    // useEffect(() => {
+    //   if (editor && isMobile) {
+    //     const handleBeforeInput = (event: InputEvent) => {
+    //       if (event.inputType === "deleteContentBackward") {
+    //         const { from, to } = editor.state.selection;
+    //         if (from === to && from > 0) {
+    //           editor.commands.setTextSelection(from - 1);
+    //         }
+    //       }
+    //     };
 
-        editor.view.dom.addEventListener("beforeinput", handleBeforeInput);
+    //     editor.view.dom.addEventListener("beforeinput", handleBeforeInput);
 
-        return () => {
-          editor.view.dom.removeEventListener("beforeinput", handleBeforeInput);
-        };
-      }
-    }, [editor]);
+    //     return () => {
+    //       editor.view.dom.removeEventListener("beforeinput", handleBeforeInput);
+    //     };
+    //   }
+    // }, [editor]);
 
     if (!editor) {
       return (
@@ -116,7 +122,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     return (
       <div ref={editorRef}>
-        <EditorContent editor={editor} className="text-sm" />
+        <EditorContent editor={editor} className="text-sm" spellCheck={false} />
       </div>
     );
   }

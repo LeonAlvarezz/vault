@@ -46,6 +46,7 @@ export default function LinkModal({ editor, setOpen, open }: Props) {
     setUrl("");
     setText("");
     setOpen(false);
+    editor.commands.unsetMark("link");
     setShouldShowMenu(false);
   };
 

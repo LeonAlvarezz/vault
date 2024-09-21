@@ -91,11 +91,11 @@ export default function EditAboutMeSection() {
         )}
       </div> */}
 
-      <FloatingButton className="bg-green-900  hover:bg-green-900/80 ">
+      {/* <FloatingButton className="bg-green-900  hover:bg-green-900/80 ">
         <Button onClick={handleSubmit} variant={"icon"} size={"icon"}>
           <FaCheck color="#6EFF6B" size={ICON_SIZE} />
         </Button>
-      </FloatingButton>
+      </FloatingButton> */}
 
       {editorRef.current && editorRef.current.editor && (
         <LinkModal

@@ -1,21 +1,27 @@
-import { Note } from "@/types/note.type";
 import { createClient } from "@/utils/supabase/server";
-import { PostgrestError } from "@supabase/supabase-js";
 
-export async function getNoteById(
-  id: number
-): Promise<{ data: Note | null; error: PostgrestError | null }> {
+export async function getNoteById(id: string) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("notes")
-    .select("*")
+    .select("*, content: content->content")
     .eq("id", id)
     .single();
   return { data, error };
 }
 
-export async function getAllNotes() {
+export async function getAllNotesByProfileId() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("notes").select("*");
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { data, error } = await supabase
+    .from("notes")
+    .select("*, content: content->content")
+    .eq("profile_id", user!.id);
   return { data, error };
 }

@@ -19,7 +19,7 @@ export default function RelatedNoteCarousel() {
               key={index}
               className="pl-2 md:basis-1/2 2xl:basis-1/3"
             >
-              <NoteCard published />
+              {/* <NoteCard published /> */}
             </CarouselItem>
           ))}
         </CarouselContent>

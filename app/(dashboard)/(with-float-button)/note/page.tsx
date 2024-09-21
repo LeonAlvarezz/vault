@@ -7,6 +7,9 @@ import FloatingButton from "@/components/ui/floating-button";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
 import Link from "next/link";
 import SearchInput from "@/components/ui/search/search-input";
+import { getAllNotesByProfileId } from "@/data/server/note";
+export const revalidate = 10;
+
 const STATUS = [
   {
     value: "all_note",
@@ -36,7 +39,8 @@ const TAG = [
     label: "Tutorial",
   },
 ];
-export default function NotePage() {
+export default async function NotePage() {
+  const { data: notes } = await getAllNotesByProfileId();
   return (
     <>
       <SearchInput />
@@ -81,12 +85,19 @@ export default function NotePage() {
         </div>
       </section> */}
       <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
-        <NoteCard />
+        {notes?.map((note, index) =>
+          note.published_at ? (
+            <NoteCard key={index} note={note} published />
+          ) : (
+            <NoteCard key={index} note={note} />
+          )
+        )}
+        {/* <NoteCard />
         <NoteCard published />
         <NoteCard published />
         <NoteCard published />
         <NoteCard />
-        <NoteCard />
+        <NoteCard /> */}
       </section>
     </>
   );

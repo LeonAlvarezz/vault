@@ -31,6 +31,8 @@ import { cn } from "@/lib/utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import LinkModal from "./modal/link-modal";
 import UploadButton from "./button/upload-button";
+import { uploadImage } from "@/data/client/image";
+import { useToast } from "./use-toast";
 type Props = {
   editor: Editor | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -83,9 +85,24 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
   const [activeFormats, setActiveFormats] = useState<Record<string, boolean>>(
     {}
   );
+  const { toast } = useToast();
+
+  const handleUploadImage = async () => {
+    if (!image) return;
+    const { publicUrl, error } = await uploadImage(image);
+    if (error) {
+      toast({
+        title: "Error Upload Image",
+        description: error.message,
+      });
+    }
+    console.log("publicUrl:", publicUrl);
+    editor?.chain().setImage({ src: publicUrl! }).run();
+  };
 
   useEffect(() => {
-    console.log(image); // This will log the selected image
+    if (!image) return;
+    handleUploadImage();
   }, [image]);
 
   const updateActiveFormats = useCallback(() => {

@@ -6,12 +6,11 @@ export async function uploadImage(image: File) {
     .from("note-images")
     .upload(`image/${image.name}`, image, {
       cacheControl: "3600",
-      upsert: false,
+      upsert: true,
     });
 
   if (error) {
     return {
-      data: null,
       error: error,
     };
   }

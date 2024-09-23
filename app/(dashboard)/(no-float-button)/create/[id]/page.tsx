@@ -67,25 +67,18 @@ export default function Page() {
   const { toast } = useToast();
   const params = useParams<{ id: string }>();
 
-  const handleFocus = () => {
+  const onFocus = () => {
     setInputActive(true);
-    if (inputRef.current) {
-      inputRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        inline: "end",
-      });
-    }
+    // if (inputRef.current) {
+    //   inputRef.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "end",
+    //     inline: "end",
+    //   });
+    // }
   };
 
-  const handleUpdate = () => {
-    if (inputActive && inputRef.current) {
-      inputRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
-    }
-  };
+  const handleUpdate = () => {};
   //Load Note
   useEffect(() => {
     const handleGetNoteContent = async () => {
@@ -274,7 +267,7 @@ export default function Page() {
         <div className="pb-20" ref={inputRef}>
           <TiptapEditor
             ref={editorRef}
-            onFocus={handleFocus}
+            onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}
             onUpdate={handleUpdate}
           />

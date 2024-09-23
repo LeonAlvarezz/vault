@@ -4,6 +4,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  useState,
 } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -21,6 +22,7 @@ import { isMobile } from "react-device-detect";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { CustomImageExtension } from "./TipTapImage";
+import { uploadImage } from "@/data/client/image";
 
 export interface TiptapEditorRef {
   editor: ReturnType<typeof useEditor> | null;
@@ -28,14 +30,15 @@ export interface TiptapEditorRef {
 
 interface TiptapEditorProps {
   onUpdate?: () => void;
-  onFocus?: () => void;
+  onFocus: () => void;
   onBlur?: () => void;
 }
 
 const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
   (props, ref) => {
     const { onUpdate, onFocus, onBlur } = props;
-    const editorRef = useRef(null);
+    const editorRef = useRef<HTMLDivElement>(null);
+    const [hasScrolledUp, setHasScrolledUp] = useState(false);
 
     const editor = useEditor({
       extensions: [
@@ -46,7 +49,10 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         BulletList.configure({
           keepMarks: true,
         }),
-        CustomImageExtension,
+        // Image.configure({
+        //   inline: true,
+        // }),
+        CustomImageExtension(uploadImage),
         Highlight.configure({ multicolor: true }),
         Heading.configure({ levels: [1, 2] }).extend({
           levels: [1, 2],
@@ -122,7 +128,12 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     return (
       <div ref={editorRef}>
-        <EditorContent editor={editor} className="text-sm" spellCheck={false} />
+        <EditorContent
+          // onClick={scrollDown}
+          editor={editor}
+          className="text-sm"
+          spellCheck={false}
+        />
       </div>
     );
   }

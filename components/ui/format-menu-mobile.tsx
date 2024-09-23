@@ -33,6 +33,7 @@ import LinkModal from "./modal/link-modal";
 import UploadButton from "./button/upload-button";
 import { uploadImage } from "@/data/client/image";
 import { useToast } from "./use-toast";
+import { blobToBase64 } from "@/lib/dropImagePlugin";
 type Props = {
   editor: Editor | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -87,23 +88,44 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
   );
   const { toast } = useToast();
 
-  const handleUploadImage = async () => {
-    if (!image) return;
-    const { publicUrl, error } = await uploadImage(image);
-    if (error) {
-      toast({
-        title: "Error Upload Image",
-        description: error.message,
-      });
-    }
-    console.log("publicUrl:", publicUrl);
-    editor?.chain().setImage({ src: publicUrl! }).run();
-  };
-
   useEffect(() => {
     if (!image) return;
+
+    const handleUploadImage = async () => {
+      if (!image) return;
+
+      const dataUrl = await blobToBase64(image);
+
+      const transaction = editor!.state.tr;
+      editor!
+        .chain()
+        .setImage({
+          src: dataUrl,
+          alt: image.name,
+        })
+        .run();
+
+      const pos = transaction.selection.anchor;
+
+      if (dataUrl) {
+        const { error } = await uploadImage(image);
+
+        if (error) {
+          editor!
+            .chain()
+            .deleteRange({ from: pos, to: pos + 1 })
+            .run();
+
+          toast({
+            title: "Error Upload Image",
+            description: error.message,
+          });
+        }
+      }
+    };
+
     handleUploadImage();
-  }, [image]);
+  }, [image, editor, toast]);
 
   const updateActiveFormats = useCallback(() => {
     if (editor) {

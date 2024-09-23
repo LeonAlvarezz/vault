@@ -28,7 +28,6 @@ export default function UploadButton({
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("target", event.target.files);
     if (event.target.files && event.target.files.length > 0) {
       setImage(event.target.files[0]);
     }

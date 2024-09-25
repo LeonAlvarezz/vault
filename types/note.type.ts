@@ -117,4 +117,5 @@ export type SaveNotePayload = {
   title: string;
   category_id: string;
   content: JSONContent;
+  tags: string[];
 };

@@ -23,7 +23,7 @@ import Tag from "../tag";
 type Options = {
   value: string;
   label: string;
-  color: string;
+  color?: string;
 };
 
 type ComboboxProps = {

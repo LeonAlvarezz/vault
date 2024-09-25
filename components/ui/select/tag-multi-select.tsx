@@ -148,6 +148,7 @@ export const TagMultiSelect = React.forwardRef<
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const [empty, setEmpty] = React.useState(false);
     const { toast } = useToast();
 
     React.useEffect(() => {
@@ -161,17 +162,34 @@ export const TagMultiSelect = React.forwardRef<
     ) => {
       if (event.key === "Enter") {
         setIsPopoverOpen(true);
-        if (selectedValues.length <= 0) {
-          // console.log(event.currentTarget.value);
-          console.log(event.currentTarget);
-          // const { error } = await createTags({ name: event.currentTarget.value });
-          // if (error) {
-          //   toast({
-          //     title: "Error Creating Tag",
-          //     description: error.message,
-          //     variant: "destructive",
-          //   });
-          // }
+        if (empty) {
+          const { error } = await createTags({
+            name: event.currentTarget.value,
+          });
+
+          if (error) {
+            if (error.code === "23505") {
+              toast({
+                title: "Error Creating Tag",
+                description: "Cannot create tag with the same name",
+                variant: "destructive",
+              });
+            } else {
+              toast({
+                title: "Error Creating Tag",
+                description: error.message || "An unknown error occurred",
+                variant: "destructive",
+              });
+            }
+          } else {
+            // Tag created successfully\
+            toast({
+              title: "Tag Created",
+              description: "The tag was created successfully",
+              variant: "success",
+            });
+            event.currentTarget.value = "";
+          }
         }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
@@ -291,7 +309,24 @@ export const TagMultiSelect = React.forwardRef<
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
-          <Command>
+          <Command
+            filter={(value, search) => {
+              // Get matching options
+              const hasMatch = options.some((option) =>
+                option.value.toLowerCase().includes(search.toLowerCase())
+              );
+
+              // If no match, set empty to true
+              if (!hasMatch) {
+                setEmpty(true);
+              } else {
+                setEmpty(false);
+              }
+
+              // Returning 1 to keep the default behavior of rendering matching items
+              return hasMatch ? 1 : 0;
+            }}
+          >
             <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}

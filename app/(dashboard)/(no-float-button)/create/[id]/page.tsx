@@ -32,45 +32,19 @@ import { getAllCategories } from "@/data/client/category";
 import { Category } from "@/types/category.type";
 import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
 import { Separator } from "@/components/ui/separator";
+import { getTags } from "@/data/client/tag";
 type SelectOption = {
   value: string;
   label: string;
-  color: string;
+  color?: string;
 };
-const TAG = [
-  {
-    value: "framework",
-    label: "Framework",
-  },
-  {
-    value: "Websocket",
-    label: "Websocket",
-  },
-  {
-    value: "tutorial",
-    label: "Tutorial",
-  },
-];
-const CATEGORY = [
-  {
-    value: "react",
-    label: "React",
-  },
-  {
-    value: "Vue",
-    label: "Vue",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-];
 export default function Page() {
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<TiptapEditorRef>(null);
 
   const [categories, setCategories] = useState<SelectOption[]>([]);
+  const [tags, setTags] = useState<SelectOption[]>([]);
   // const [selectedCategory, setSelectedCategory] = useState<string>();
 
   const [link, setLink] = useState("");
@@ -116,7 +90,12 @@ export default function Page() {
       }
       setValue("title", data?.title || "");
       setValue("category", String(data?.category_id));
-      // setValue("tags", );
+      setValue(
+        "tags",
+        data?.tags?.map((tag) => {
+          return String(tag.tags?.id);
+        }) || []
+      );
 
       if (editorRef.current && editorRef.current.editor) {
         editorRef.current.editor.commands.setContent(data?.content as Content);
@@ -137,52 +116,67 @@ export default function Page() {
       }));
       setCategories(formattedCategories);
     };
-    Promise.all([handleGetNoteContent(), handleGetCategory()]);
+    const handleGetTags = async () => {
+      const { data, error } = await getTags();
+      if (error) {
+        toast({
+          title: "Error Fetching Tags",
+          description: error?.message,
+        });
+      }
+      const formattedTags = data!.map((tag) => ({
+        value: String(tag.id),
+        label: tag.name!,
+      }));
+      setTags(formattedTags);
+    };
+    Promise.all([handleGetNoteContent(), handleGetCategory(), handleGetTags()]);
   }, []);
 
   const handleSaveNote = async (data: any) => {
     setSaveLoading(true);
     try {
       console.log("data: ", data);
-      // const finalTitle = data.title || "Untitled";
-      // // console.log("data:", data);
+      const finalTitle = data.title || "Untitled";
+      // console.log("data:", data);
 
-      // if (editorRef.current && editorRef.current.editor) {
-      //   const editorContent = editorRef.current.editor.getJSON();
-      //   const contentString = JSON.stringify(editorContent);
+      if (editorRef.current && editorRef.current.editor) {
+        const editorContent = editorRef.current.editor.getJSON();
+        const contentString = JSON.stringify(editorContent);
 
-      //   if (editorRef.current.editor.isEmpty) {
-      //     toast({
-      //       title: "Note not saved",
-      //       description: "Cannot save an empty note.",
-      //       variant: "default",
-      //     });
-      //     return;
-      //   }
+        if (editorRef.current.editor.isEmpty) {
+          toast({
+            title: "Note not saved",
+            description: "Cannot save an empty note.",
+            variant: "default",
+          });
+          return;
+        }
 
-      //   if (contentString !== lastSavedContentRef.current) {
-      //     const { error } = await saveNote({
-      //       id: params.id,
-      //       title: finalTitle,
-      //       content: editorContent,
-      //       category_id: data.category,
-      //     });
+        if (contentString !== lastSavedContentRef.current) {
+          const { error } = await saveNote({
+            id: params.id,
+            title: finalTitle,
+            content: editorContent,
+            category_id: data.category,
+            tags: data.tags,
+          });
 
-      //     if (error) {
-      //       toast({
-      //         title: "Error Saving Note",
-      //         description: error.message,
-      //         variant: "destructive",
-      //       });
-      //     } else {
-      //       toast({
-      //         title: "Note Saved",
-      //         description: "Your note has been successfully saved.",
-      //         variant: "default",
-      //       });
-      //     }
-      //   }
-      // }
+          if (error) {
+            toast({
+              title: "Error Saving Note",
+              description: error.message,
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Note Saved",
+              description: "Your note has been successfully saved.",
+              variant: "default",
+            });
+          }
+        }
+      }
     } catch (error: unknown) {
       toast({
         title: "Error Saving Note",
@@ -310,7 +304,7 @@ export default function Page() {
               <p className="text-sm">Tag</p>
             </div>
             <TagMultiSelect
-              options={TAG}
+              options={tags}
               placeholder="Click to select tags"
               onValueChange={(value) => setValue("tags", value)}
               defaultValue={selectedTags}

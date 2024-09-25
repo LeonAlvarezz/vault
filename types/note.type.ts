@@ -109,10 +109,12 @@ export type Note = {
   title: string | null;
   updated_at: string | null;
   view: number | null;
+  category_id: number | null;
 };
 
 export type SaveNotePayload = {
   id: string;
   title: string;
+  category_id: string;
   content: JSONContent;
 };

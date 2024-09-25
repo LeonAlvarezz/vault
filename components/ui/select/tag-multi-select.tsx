@@ -30,7 +30,9 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import Tag from "./tag";
+import Tag from "../tag";
+import { createTags } from "@/data/client/tag";
+import { useToast } from "../use-toast";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -122,7 +124,7 @@ interface MultiSelectProps
   className?: string;
 }
 
-export const MultiSelect = React.forwardRef<
+export const TagMultiSelect = React.forwardRef<
   HTMLButtonElement,
   MultiSelectProps
 >(
@@ -146,6 +148,7 @@ export const MultiSelect = React.forwardRef<
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const { toast } = useToast();
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -153,11 +156,23 @@ export const MultiSelect = React.forwardRef<
       }
     }, [defaultValue, selectedValues]);
 
-    const handleInputKeyDown = (
+    const handleInputKeyDown = async (
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
       if (event.key === "Enter") {
         setIsPopoverOpen(true);
+        if (selectedValues.length <= 0) {
+          // console.log(event.currentTarget.value);
+          console.log(event.currentTarget);
+          // const { error } = await createTags({ name: event.currentTarget.value });
+          // if (error) {
+          //   toast({
+          //     title: "Error Creating Tag",
+          //     description: error.message,
+          //     variant: "destructive",
+          //   });
+          // }
+        }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
@@ -282,7 +297,11 @@ export const MultiSelect = React.forwardRef<
               onKeyDown={handleInputKeyDown}
             />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>
+                <p className="text-xs text-neutral-400 pr-4 pl-2">
+                  Type and enter to create new tag +
+                </p>
+              </CommandEmpty>
               <CommandGroup>
                 <CommandItem
                   key="all"
@@ -317,26 +336,6 @@ export const MultiSelect = React.forwardRef<
                       />
                       {option.label}
                     </CommandItem>
-                    // <CommandItem
-                    //   key={option.value}
-                    //   onSelect={() => toggleOption(option.value)}
-                    //   className="cursor-pointer"
-                    // >
-                    //   <div
-                    //     className={cn(
-                    //       "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                    //       isSelected
-                    //         ? "bg-primary text-primary-foreground"
-                    //         : "opacity-50 [&_svg]:invisible"
-                    //     )}
-                    //   >
-                    //     <CheckIcon className="h-4 w-4" />
-                    //   </div>
-                    //   {option.icon && (
-                    //     <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    //   )}
-                    //   <span>{option.label}</span>
-                    // </CommandItem>
                   );
                 })}
               </CommandGroup>
@@ -357,6 +356,11 @@ export const MultiSelect = React.forwardRef<
                     </>
                   )}
                 </div>
+                <div className="pb-2 flex justify-center items-center">
+                  <p className="text-xs text-neutral-400 pr-4 pl-2">
+                    Type and enter to create new tag +
+                  </p>
+                </div>
               </CommandGroup>
             </CommandList>
           </Command>
@@ -375,4 +379,4 @@ export const MultiSelect = React.forwardRef<
   }
 );
 
-MultiSelect.displayName = "MultiSelect";
+TagMultiSelect.displayName = "TagMultiSelect";

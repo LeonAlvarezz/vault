@@ -1,5 +1,5 @@
 import { BlockNode, SaveNotePayload } from "@/types/note.type";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = createClient();
@@ -8,6 +8,7 @@ export async function saveNote(payload: SaveNotePayload) {
     .update({
       title: payload.title,
       content: payload.content as BlockNode[],
+      category_id: +payload.category_id,
     })
     .eq("id", payload.id)
     .select();

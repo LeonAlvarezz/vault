@@ -1,7 +1,7 @@
 "use server";
 
 import { InsertUserPayload } from "@/types/profiles.type";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 const insertUser = async (id: string, payload: InsertUserPayload) => {
   const supabase = createClient();

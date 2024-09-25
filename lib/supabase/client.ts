@@ -1,5 +1,4 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { env } from "../env";
 import { Database } from "@/database.types";
 
 export function createClient() {

@@ -10,7 +10,7 @@ import { FaPlus } from "react-icons/fa";
 import Tutorial from "@/components/ui/tutorial/tutorial";
 import Loading from "@/app/loading";
 import QuickSnipModal from "@/components/ui/modal/quick-snip-modal";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function RootLayout({
   children,

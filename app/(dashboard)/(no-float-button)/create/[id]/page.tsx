@@ -9,12 +9,10 @@ import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdow
 import { Button } from "@/components/ui/button";
 import StatContainer from "@/components/ui/statistic/stat-container";
 import { Input } from "@/components/ui/input";
-import { BiCategory, BiSolidCategory } from "react-icons/bi";
+import { BiSolidCategory } from "react-icons/bi";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
-import { MultiSelect } from "@/components/ui/multi-select";
 import { FaTags } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { isMobile } from "react-device-detect";
 import EditNoteDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import LinkModal from "@/components/ui/modal/link-modal";
 import { cn } from "@/lib/utils";
@@ -28,9 +26,17 @@ import {
   type FieldValues,
 } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { randomInt, randomUUID } from "crypto";
 import { Content } from "@tiptap/react";
-
+import { TagMultiSelect } from "@/components/ui/select/tag-multi-select";
+import { getAllCategories } from "@/data/client/category";
+import { Category } from "@/types/category.type";
+import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
+import { Separator } from "@/components/ui/separator";
+type SelectOption = {
+  value: string;
+  label: string;
+  color: string;
+};
 const TAG = [
   {
     value: "framework",
@@ -45,11 +51,28 @@ const TAG = [
     label: "Tutorial",
   },
 ];
+const CATEGORY = [
+  {
+    value: "react",
+    label: "React",
+  },
+  {
+    value: "Vue",
+    label: "Vue",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+];
 export default function Page() {
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<TiptapEditorRef>(null);
-  const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([]);
+
+  const [categories, setCategories] = useState<SelectOption[]>([]);
+  // const [selectedCategory, setSelectedCategory] = useState<string>();
+
   const [link, setLink] = useState("");
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
@@ -60,12 +83,14 @@ export default function Page() {
     defaultValues: {
       title: "",
       content: {},
-      category: [],
-      tags: [],
+      category: "",
+      tags: [""],
     },
   });
   const { toast } = useToast();
   const params = useParams<{ id: string }>();
+  const selectedCategory = watch("category") || "";
+  const selectedTags = watch("tags");
 
   const onFocus = () => {
     setInputActive(true);
@@ -83,54 +108,81 @@ export default function Page() {
   useEffect(() => {
     const handleGetNoteContent = async () => {
       const { data, error } = await getNoteContent(params.id);
+      if (error) {
+        toast({
+          title: "Error Fetching Category",
+          description: error?.message,
+        });
+      }
       setValue("title", data?.title || "");
+      setValue("category", String(data?.category_id));
+      // setValue("tags", );
+
       if (editorRef.current && editorRef.current.editor) {
         editorRef.current.editor.commands.setContent(data?.content as Content);
       }
     };
-    handleGetNoteContent();
+    const handleGetCategory = async () => {
+      const { data, error } = await getAllCategories();
+      if (error) {
+        toast({
+          title: "Error Fetching Category",
+          description: error?.message,
+        });
+      }
+      const formattedCategories = data!.map((category) => ({
+        value: String(category.id),
+        label: category.name!,
+        color: category.color!,
+      }));
+      setCategories(formattedCategories);
+    };
+    Promise.all([handleGetNoteContent(), handleGetCategory()]);
   }, []);
 
   const handleSaveNote = async (data: any) => {
     setSaveLoading(true);
     try {
-      const finalTitle = data.title || "Untitled";
+      console.log("data: ", data);
+      // const finalTitle = data.title || "Untitled";
+      // // console.log("data:", data);
 
-      if (editorRef.current && editorRef.current.editor) {
-        const editorContent = editorRef.current.editor.getJSON();
-        const contentString = JSON.stringify(editorContent);
+      // if (editorRef.current && editorRef.current.editor) {
+      //   const editorContent = editorRef.current.editor.getJSON();
+      //   const contentString = JSON.stringify(editorContent);
 
-        if (editorRef.current.editor.isEmpty) {
-          toast({
-            title: "Note not saved",
-            description: "Cannot save an empty note.",
-            variant: "default",
-          });
-          return;
-        }
+      //   if (editorRef.current.editor.isEmpty) {
+      //     toast({
+      //       title: "Note not saved",
+      //       description: "Cannot save an empty note.",
+      //       variant: "default",
+      //     });
+      //     return;
+      //   }
 
-        if (contentString !== lastSavedContentRef.current) {
-          const { data, error } = await saveNote({
-            id: params.id,
-            title: finalTitle,
-            content: editorContent,
-          });
+      //   if (contentString !== lastSavedContentRef.current) {
+      //     const { error } = await saveNote({
+      //       id: params.id,
+      //       title: finalTitle,
+      //       content: editorContent,
+      //       category_id: data.category,
+      //     });
 
-          if (error) {
-            toast({
-              title: "Error Saving Note",
-              description: error.message,
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: "Note Saved",
-              description: "Your note has been successfully saved.",
-              variant: "default",
-            });
-          }
-        }
-      }
+      //     if (error) {
+      //       toast({
+      //         title: "Error Saving Note",
+      //         description: error.message,
+      //         variant: "destructive",
+      //       });
+      //     } else {
+      //       toast({
+      //         title: "Note Saved",
+      //         description: "Your note has been successfully saved.",
+      //         variant: "default",
+      //       });
+      //     }
+      //   }
+      // }
     } catch (error: unknown) {
       toast({
         title: "Error Saving Note",
@@ -221,7 +273,7 @@ export default function Page() {
         {saveLoading && <p className="text-neutral-600">Saving</p>}
         <div className="flex justify-between items-center">
           <BackButton />
-          <CreateNoteDropdownMenu />
+          <CreateNoteDropdownMenu handleSave={handleSubmit(handleSaveNote)} />
         </div>
         <Input
           {...register("title")}
@@ -238,16 +290,18 @@ export default function Page() {
               />
               <p className="text-sm">Category</p>
             </div>
-            <MultiSelect
-              options={TAG}
-              placeholder="Click to select category "
-              onValueChange={setSelectedFrameworks}
-              defaultValue={selectedFrameworks}
-              maxCount={2}
+            <CategoryCombobox
+              options={categories}
+              label="Click to select category"
+              size="md"
+              className="w-full border-0 hover:bg-neutral-700/50 px-1"
+              icon={false}
+              value={selectedCategory} // This should now be a string
+              onChange={(value) => setValue("category", value)} // Set value in react-hook-form
             />
           </div>
-          <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2 mb-6">
-            <div className="flex gap-2 w-1/3 ">
+          <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
+            <div className="flex gap-2 w-1/3">
               <FaTags
                 size={ICON_SIZE}
                 color={ICON_COLOR}
@@ -255,15 +309,16 @@ export default function Page() {
               />
               <p className="text-sm">Tag</p>
             </div>
-            <MultiSelect
+            <TagMultiSelect
               options={TAG}
               placeholder="Click to select tags"
-              onValueChange={setSelectedFrameworks}
-              defaultValue={selectedFrameworks}
+              onValueChange={(value) => setValue("tags", value)}
+              defaultValue={selectedTags}
               maxCount={2}
             />
           </div>
         </div>
+        <Separator className="my-6" />
         <div className="pb-20" ref={inputRef}>
           <TiptapEditor
             ref={editorRef}

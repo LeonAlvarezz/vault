@@ -5,7 +5,7 @@ import {
   LoginSchema,
   SignupSchema,
 } from "@/types/profiles.type";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { formatZodIssue } from "@/utils/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";

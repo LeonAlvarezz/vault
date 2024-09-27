@@ -21,7 +21,8 @@ export async function getAllNotesByProfileId() {
   }
   const { data, error } = await supabase
     .from("notes")
-    .select("*, content: content->content")
+    .select("*, content: content->content, categories(name, color)")
     .eq("profile_id", user!.id);
+  console.log(data);
   return { data, error };
 }

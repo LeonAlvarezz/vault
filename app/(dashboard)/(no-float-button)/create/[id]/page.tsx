@@ -33,6 +33,7 @@ import { Category } from "@/types/category.type";
 import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
 import { Separator } from "@/components/ui/separator";
 import { getTags } from "@/data/client/tag";
+import { Skeleton } from "@/components/ui/skeleton";
 type SelectOption = {
   value: string;
   label: string;
@@ -51,6 +52,7 @@ export default function Page() {
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const lastSavedContentRef = useRef<string>("");
   const router = useRouter();
   const { register, handleSubmit, setValue, watch } = useForm({
@@ -58,12 +60,12 @@ export default function Page() {
       title: "",
       content: {},
       category: "",
-      tags: [""],
+      tags: [] as string[],
     },
   });
   const { toast } = useToast();
   const params = useParams<{ id: string }>();
-  const selectedCategory = watch("category") || "";
+  const selectedCategory = watch("category");
   const selectedTags = watch("tags");
 
   const onFocus = () => {
@@ -77,7 +79,21 @@ export default function Page() {
     // }
   };
 
-  const handleUpdate = () => {};
+  const handleGetTags = async () => {
+    const { data, error } = await getTags();
+    if (error) {
+      toast({
+        title: "Error Fetching Tags",
+        description: error?.message,
+      });
+    }
+    const formattedTags = data!.map((tag) => ({
+      value: String(tag.id),
+      label: tag.name!,
+      color: tag.color!,
+    }));
+    setTags(formattedTags);
+  };
   //Load Note
   useEffect(() => {
     const handleGetNoteContent = async () => {
@@ -89,13 +105,11 @@ export default function Page() {
         });
       }
       setValue("title", data?.title || "");
-      setValue("category", String(data?.category_id));
-      setValue(
-        "tags",
-        data?.tags?.map((tag) => {
-          return String(tag.tags?.id);
-        }) || []
-      );
+      if (data && data.category_id) {
+        setValue("category", String(data?.category_id));
+      }
+      const tagsArr = data?.tags?.map((tag) => String(tag.tags?.id));
+      setValue("tags", tagsArr || []);
 
       if (editorRef.current && editorRef.current.editor) {
         editorRef.current.editor.commands.setContent(data?.content as Content);
@@ -116,29 +130,34 @@ export default function Page() {
       }));
       setCategories(formattedCategories);
     };
-    const handleGetTags = async () => {
-      const { data, error } = await getTags();
-      if (error) {
+
+    const fetchInitialData = async () => {
+      setIsLoading(true);
+      try {
+        await Promise.all([
+          handleGetNoteContent(),
+          handleGetCategory(),
+          handleGetTags(),
+        ]);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
         toast({
-          title: "Error Fetching Tags",
-          description: error?.message,
+          title: "Error",
+          description: "Failed to load initial data. Please try again.",
+          variant: "destructive",
         });
+      } finally {
+        setIsLoading(false);
       }
-      const formattedTags = data!.map((tag) => ({
-        value: String(tag.id),
-        label: tag.name!,
-      }));
-      setTags(formattedTags);
     };
-    Promise.all([handleGetNoteContent(), handleGetCategory(), handleGetTags()]);
+
+    fetchInitialData();
   }, []);
 
   const handleSaveNote = async (data: any) => {
     setSaveLoading(true);
     try {
-      console.log("data: ", data);
       const finalTitle = data.title || "Untitled";
-      // console.log("data:", data);
 
       if (editorRef.current && editorRef.current.editor) {
         const editorContent = editorRef.current.editor.getJSON();
@@ -269,11 +288,15 @@ export default function Page() {
           <BackButton />
           <CreateNoteDropdownMenu handleSave={handleSubmit(handleSaveNote)} />
         </div>
-        <Input
-          {...register("title")}
-          className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0 mb-4"
-          placeholder="Untitled"
-        />
+        {isLoading ? (
+          <Skeleton className="w-32 h-10 mb-4" />
+        ) : (
+          <Input
+            {...register("title")}
+            className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0 mb-4"
+            placeholder="Untitled"
+          />
+        )}
         <div className="flex gap-2 flex-col">
           <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
             <div className="flex gap-2 w-1/3 ">
@@ -284,15 +307,19 @@ export default function Page() {
               />
               <p className="text-sm">Category</p>
             </div>
-            <CategoryCombobox
-              options={categories}
-              label="Click to select category"
-              size="md"
-              className="w-full border-0 hover:bg-neutral-700/50 px-1"
-              icon={false}
-              value={selectedCategory} // This should now be a string
-              onChange={(value) => setValue("category", value)} // Set value in react-hook-form
-            />
+            {isLoading ? (
+              <Skeleton className="w-full h-6 rounded-md" />
+            ) : (
+              <CategoryCombobox
+                options={categories}
+                label="Click to select category"
+                size="md"
+                className="w-full border-0 hover:bg-neutral-700/50 px-1"
+                icon={false}
+                value={selectedCategory}
+                onChange={(value) => setValue("category", value)}
+              />
+            )}
           </div>
           <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
             <div className="flex gap-2 w-1/3">
@@ -303,23 +330,32 @@ export default function Page() {
               />
               <p className="text-sm">Tag</p>
             </div>
-            <TagMultiSelect
-              options={tags}
-              placeholder="Click to select tags"
-              onValueChange={(value) => setValue("tags", value)}
-              defaultValue={selectedTags}
-              maxCount={2}
-            />
+            {isLoading ? (
+              <Skeleton className="w-full h-6 rounded-md" />
+            ) : (
+              <TagMultiSelect
+                options={tags}
+                placeholder="Click to select tags"
+                onValueChange={(value) => setValue("tags", value)}
+                defaultValue={selectedTags}
+                maxCount={3}
+                onTagUpdate={handleGetTags}
+              />
+            )}
           </div>
         </div>
         <Separator className="my-6" />
         <div className="pb-20" ref={inputRef}>
-          <TiptapEditor
-            ref={editorRef}
-            onFocus={() => setInputActive(true)}
-            onBlur={() => setInputActive(false)}
-            onUpdate={handleUpdate}
-          />
+          {isLoading ? (
+            <Skeleton className="w-full h-[300px] rounded-md" />
+          ) : (
+            <TiptapEditor
+              ref={editorRef}
+              onFocus={() => setInputActive(true)}
+              onBlur={() => setInputActive(false)}
+              onUpdate={handleGetTags}
+            />
+          )}
         </div>
         {/* <Button onClick={handleSubmit(handleSaveNote)}>Save</Button> */}
         {editorRef.current && editorRef.current.editor && (

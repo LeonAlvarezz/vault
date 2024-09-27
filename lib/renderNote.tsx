@@ -128,21 +128,21 @@ export function renderNoteDescription(node: BlockNode) {
       return (
         <>
           {node.content.map((textNode, index) => (
-            <p
+            <span
               key={index}
               className="w-full line-clamp-4 mt-2 text-xs text-neutral-500"
             >
               {textNode.text}
-            </p>
+            </span>
           ))}
         </>
       );
     }
     case NOTE_CONTENT_TYPE.IMAGE:
       return (
-        <p className="w-full line-clamp-4 mt-2 text-xs text-neutral-500">
+        <span className="w-full line-clamp-4 mt-2 text-xs text-neutral-500">
           Image
-        </p>
+        </span>
       );
   }
 }

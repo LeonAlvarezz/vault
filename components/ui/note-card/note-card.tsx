@@ -12,11 +12,15 @@ import NoteCardPublished from "./note-card-published";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 import { BlockNode, Note } from "@/types/note.type";
 import { renderNote, renderNoteDescription } from "@/lib/renderNote";
+import { formatDate } from "@/lib/date";
 type NoteCardProps = {
   note?: Note;
   published?: boolean;
 };
 export default function NoteCard({ published = false, note }: NoteCardProps) {
+  const isContentArray = (content: any): content is Array<any> => {
+    return Array.isArray(content);
+  };
   if (published) {
     return <NoteCardPublished />;
   }
@@ -28,10 +32,15 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] hover:border border-neutral-700  transition-all"
     >
       <div className="flex justify-between items-center mb-4">
-        <Tag color="orange" className="h-6">
-          <p>React</p>
-        </Tag>
-        <EditNoteDropdownMenu />
+        {note?.categories && (
+          <Tag color={note?.categories.color!} className="h-6">
+            <p>{note?.categories.name!}</p>
+          </Tag>
+        )}
+
+        <div className="flex justify-end w-full">
+          <EditNoteDropdownMenu />
+        </div>
         {/* <Button
           variant={"icon"}
           // size={"icon"}
@@ -43,9 +52,13 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
       <div className="flex justify-between items-center ">
         <div className="w-full">
           <h2 className="text-md font-semibold">{note?.title || "Untitled"}</h2>
-          {renderNoteDescription(note?.content[0] as BlockNode)}
+          {note?.content &&
+            isContentArray(note.content) &&
+            note.content.length > 0 && (
+              <p>{renderNoteDescription(note.content[0] as BlockNode)}</p>
+            )}
           <p className="mt-4 text-xs text-neutral-300 text-right w-full ">
-            16 Jul 2024
+            {formatDate(note?.created_at)}
           </p>
         </div>
         {/* <Button

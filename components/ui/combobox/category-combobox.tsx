@@ -20,6 +20,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Tag from "../tag";
+import { Color } from "@/lib/color";
+import { MdClose } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 type Options = {
   value: string;
   label: string;
@@ -68,9 +71,18 @@ export function CategoryCombobox({
           {value ? (
             <Tag
               key={value}
-              color={options.find((option) => option.value === value)?.color}
+              color={
+                options.find((option) => option.value === value)?.color as Color
+              }
             >
               {options.find((option) => option.value == value)?.label}
+              <IoClose
+                className="ml-2 h-4 w-4 cursor-pointer hover:text-blue-600"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onChange("");
+                }}
+              />
             </Tag>
           ) : (
             <p className="text-neutral-500 px-1">{label}</p>
@@ -95,7 +107,7 @@ export function CategoryCombobox({
                   value={`${option.value} ${option.label}`}
                   onSelect={(currentValue) => {
                     const selectedValue = currentValue.split(" ")[0];
-                    onChange(selectedValue); // Call the onChange handler
+                    onChange(selectedValue === value ? "" : selectedValue); // Call the onChange handler
                     setOpen(false);
                   }}
                 >

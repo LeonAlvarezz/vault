@@ -30,7 +30,7 @@ export default function EditNoteDropdownMenu() {
         <Button
           variant={"icon"}
           size={"icon"}
-          className="rounded-full hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0"
+          className="rounded-full size-8 p-2 hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0"
         >
           <SlOptionsVertical />
         </Button>
@@ -42,7 +42,7 @@ export default function EditNoteDropdownMenu() {
             onClick={(e) => handleDelete(e)}
             variant={"icon"}
             size={"icon"}
-            className="text-red-400"
+            className="text-red-400 h-fit"
           >
             Delete
           </Button>

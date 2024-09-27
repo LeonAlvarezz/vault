@@ -15,7 +15,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: number
-          name: string | null
+          name: string
           updated_at: string | null
         }
         Insert: {
@@ -23,7 +23,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
-          name?: string | null
+          name: string
           updated_at?: string | null
         }
         Update: {
@@ -31,7 +31,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
-          name?: string | null
+          name?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -45,9 +45,9 @@ export type Database = {
           deleted_at: string | null
           id: string
           like: number | null
-          profile_id: string | null
+          profile_id: string
           published_at: string | null
-          title: string | null
+          title: string
           updated_at: string | null
           view: number | null
         }
@@ -59,9 +59,9 @@ export type Database = {
           deleted_at?: string | null
           id?: string
           like?: number | null
-          profile_id?: string | null
+          profile_id?: string
           published_at?: string | null
-          title?: string | null
+          title: string
           updated_at?: string | null
           view?: number | null
         }
@@ -73,9 +73,9 @@ export type Database = {
           deleted_at?: string | null
           id?: string
           like?: number | null
-          profile_id?: string | null
+          profile_id?: string
           published_at?: string | null
-          title?: string | null
+          title?: string
           updated_at?: string | null
           view?: number | null
         }
@@ -99,47 +99,47 @@ export type Database = {
       profiles: {
         Row: {
           aboutMe: Json | null
-          auth_id: string | null
+          auth_id: string
           avatar_url: string | null
           bios: string | null
           created_at: string
-          email: string | null
+          email: string
           githubLink: string | null
           id: string
           linkedinLink: string | null
           occupation: string | null
           updated_at: string | null
-          username: string | null
+          username: string
           websiteLink: string | null
         }
         Insert: {
           aboutMe?: Json | null
-          auth_id?: string | null
+          auth_id?: string
           avatar_url?: string | null
           bios?: string | null
           created_at?: string
-          email?: string | null
+          email: string
           githubLink?: string | null
           id?: string
           linkedinLink?: string | null
           occupation?: string | null
           updated_at?: string | null
-          username?: string | null
+          username: string
           websiteLink?: string | null
         }
         Update: {
           aboutMe?: Json | null
-          auth_id?: string | null
+          auth_id?: string
           avatar_url?: string | null
           bios?: string | null
           created_at?: string
-          email?: string | null
+          email?: string
           githubLink?: string | null
           id?: string
           linkedinLink?: string | null
           occupation?: string | null
           updated_at?: string | null
-          username?: string | null
+          username?: string
           websiteLink?: string | null
         }
         Relationships: [
@@ -173,14 +173,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "notes-tags_note_id_fkey"
+            foreignKeyName: "rel_notes_tags_note_id_fkey"
             columns: ["note_id"]
             isOneToOne: false
             referencedRelation: "notes"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "notes-tags_tag_id_fkey"
+            foreignKeyName: "rel_notes_tags_tag_id_fkey"
             columns: ["tag_id"]
             isOneToOne: false
             referencedRelation: "tags"
@@ -190,30 +190,41 @@ export type Database = {
       }
       tags: {
         Row: {
+          color: string | null
           created_at: string
           deleted_at: string | null
           id: number
-          name: string | null
-          profile_id: string | null
+          name: string
+          profile_id: string
           updated_at: string | null
         }
         Insert: {
+          color?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: number
-          name?: string | null
-          profile_id?: string | null
+          name: string
+          profile_id: string
           updated_at?: string | null
         }
         Update: {
+          color?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: number
-          name?: string | null
-          profile_id?: string | null
+          name?: string
+          profile_id?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "tags_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

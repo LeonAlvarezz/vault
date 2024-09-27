@@ -2,17 +2,19 @@ import { Json } from "@/database.types";
 import { z } from "zod";
 
 export type Profile = {
-  about: Json | null;
+  aboutMe: Json | null;
+  auth_id: string;
+  avatar_url: string | null;
   bios: string | null;
-  contact_link: Json | null;
   created_at: string;
-  email: string | null;
-  id: number;
+  email: string;
+  githubLink: string | null;
+  id: string;
+  linkedinLink: string | null;
   occupation: string | null;
-  profile_url: string | null;
   updated_at: string | null;
-  user_id: string | null;
-  username: string | null;
+  username: string;
+  websiteLink: string | null;
 };
 
 export type InsertUserPayload = {

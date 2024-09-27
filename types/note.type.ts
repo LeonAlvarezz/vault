@@ -1,5 +1,6 @@
 import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
+import { Category } from "./category.type";
 
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
@@ -100,16 +101,18 @@ type ImageAttribute = {
 
 export type Note = {
   bookmark: number | null;
-  content: BlockNode[];
+  category_id: number | null;
+  content: Json | null;
   created_at: string;
   deleted_at: string | null;
   id: string;
   like: number | null;
+  profile_id: string;
   published_at: string | null;
-  title: string | null;
+  title: string;
   updated_at: string | null;
   view: number | null;
-  category_id: number | null;
+  categories: Category;
 };
 
 export type SaveNotePayload = {

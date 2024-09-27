@@ -41,8 +41,13 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
     const [hasScrolledUp, setHasScrolledUp] = useState(false);
 
     const editor = useEditor({
+      immediatelyRender: false,
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          bulletList: false,
+          heading: false,
+          codeBlock: false,
+        }),
         Placeholder.configure({
           placeholder: "Content goes here...",
         }),

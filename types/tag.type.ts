@@ -1,10 +1,10 @@
 export type Tag = {
+  color: string | null;
   created_at: string;
-  deleted_at: string | null;
+  description: string | null;
   id: number;
-  name: string | null;
+  name: string;
   updated_at: string | null;
-  profile_id: string | null;
 };
 export type NoteTag = {
   created_at: string;
@@ -15,4 +15,10 @@ export type NoteTag = {
 
 export type CreateTag = {
   name: string;
+};
+
+export type UpdateTag = {
+  id: number;
+  name: string;
+  color: string;
 };

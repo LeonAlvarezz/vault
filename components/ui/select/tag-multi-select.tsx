@@ -33,6 +33,9 @@ import {
 import Tag from "../tag";
 import { createTags } from "@/data/client/tag";
 import { useToast } from "../use-toast";
+import { IoIosOptions } from "react-icons/io";
+import { SlOptionsVertical } from "react-icons/sl";
+import TagEditDropdown from "../dropdown/tag-edit-dropdown";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -73,6 +76,7 @@ interface MultiSelectProps
     label: string;
     /** The unique value associated with the option. */
     value: string;
+    color?: string;
     /** Optional icon component to display alongside the option. */
     icon?: React.ComponentType<{ className?: string }>;
   }[];
@@ -122,6 +126,8 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+
+  onTagUpdate?: () => Promise<void>;
 }
 
 export const TagMultiSelect = React.forwardRef<
@@ -140,6 +146,7 @@ export const TagMultiSelect = React.forwardRef<
       modalPopover = false,
       asChild = false,
       className,
+      onTagUpdate,
       ...props
     },
     ref
@@ -149,11 +156,13 @@ export const TagMultiSelect = React.forwardRef<
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [empty, setEmpty] = React.useState(false);
+    const [inputValue, setInputValue] = React.useState("");
     const { toast } = useToast();
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
-        setSelectedValues(selectedValues);
+        setSelectedValues(defaultValue);
       }
     }, [defaultValue, selectedValues]);
 
@@ -161,34 +170,50 @@ export const TagMultiSelect = React.forwardRef<
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
       if (event.key === "Enter") {
+        event.preventDefault();
         setIsPopoverOpen(true);
         if (empty) {
-          const { error } = await createTags({
-            name: event.currentTarget.value,
-          });
+          try {
+            const { error } = await createTags({ name: inputValue.trim() });
 
-          if (error) {
-            if (error.code === "23505") {
-              toast({
-                title: "Error Creating Tag",
-                description: "Cannot create tag with the same name",
-                variant: "destructive",
-              });
+            if (error) {
+              if (error.code === "23505") {
+                toast({
+                  title: "Error Creating Tag",
+                  description: "Cannot create tag with the same name",
+                  variant: "destructive",
+                });
+              } else if (error.code === "23514") {
+                toast({
+                  title: "Error Creating Tag",
+                  description: "Tag name cannot be longer than 20 characters",
+                  variant: "destructive",
+                });
+              } else {
+                toast({
+                  title: "Error Creating Tag",
+                  description: error.message || "An unknown error occurred",
+                  variant: "destructive",
+                });
+              }
             } else {
               toast({
-                title: "Error Creating Tag",
-                description: error.message || "An unknown error occurred",
-                variant: "destructive",
+                title: "Tag Created",
+                description: "The tag was created successfully",
+                variant: "success",
               });
+              setInputValue("");
+
+              if (onTagUpdate) {
+                onTagUpdate();
+              }
             }
-          } else {
-            // Tag created successfully\
+          } catch (error) {
             toast({
-              title: "Tag Created",
-              description: "The tag was created successfully",
-              variant: "success",
+              title: "Error Creating Tag",
+              description: "An unexpected error occurred",
+              variant: "destructive",
             });
-            event.currentTarget.value = "";
           }
         }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
@@ -232,6 +257,10 @@ export const TagMultiSelect = React.forwardRef<
       }
     };
 
+    const handleInputChange = (search: string) => {
+      setInputValue(search);
+    };
+
     return (
       <Popover
         open={isPopoverOpen}
@@ -257,7 +286,7 @@ export const TagMultiSelect = React.forwardRef<
                     return (
                       <Tag
                         key={value}
-                        color="blue"
+                        color={option?.color}
                         // style={{ animationDuration: `${animation}s` }}
                       >
                         {IconComponent && (
@@ -311,12 +340,9 @@ export const TagMultiSelect = React.forwardRef<
         >
           <Command
             filter={(value, search) => {
-              // Get matching options
-              const hasMatch = options.some((option) =>
-                option.value.toLowerCase().includes(search.toLowerCase())
-              );
-
-              // If no match, set empty to true
+              const hasMatch = value
+                .toLowerCase()
+                .includes(search.toLowerCase());
               if (!hasMatch) {
                 setEmpty(true);
               } else {
@@ -330,6 +356,9 @@ export const TagMultiSelect = React.forwardRef<
             <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}
+              onValueChange={handleInputChange}
+              value={inputValue}
+              ref={inputRef}
             />
             <CommandList>
               <CommandEmpty>
@@ -338,7 +367,7 @@ export const TagMultiSelect = React.forwardRef<
                 </p>
               </CommandEmpty>
               <CommandGroup>
-                <CommandItem
+                {/* <CommandItem
                   key="all"
                   onSelect={toggleAll}
                   className="cursor-pointer"
@@ -354,13 +383,13 @@ export const TagMultiSelect = React.forwardRef<
                     <CheckIcon className="h-4 w-4" />
                   </div>
                   <span>(Select All)</span>
-                </CommandItem>
+                </CommandItem> */}
                 {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
                   return (
                     <CommandItem
                       key={option.value}
-                      value={option.value}
+                      value={option.label}
                       onSelect={() => toggleOption(option.value)}
                     >
                       <Check
@@ -369,7 +398,20 @@ export const TagMultiSelect = React.forwardRef<
                           isSelected ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      {option.label}
+                      {/* <p>{option.label}</p> */}
+                      <div className="flex justify-between items-center w-full">
+                        <Tag
+                          // key={value}
+                          color={option.color}
+                          // style={{ animationDuration: `${animation}s` }}
+                        >
+                          {option?.label}
+                        </Tag>
+                        <TagEditDropdown
+                          tag={option}
+                          onTagUpdate={onTagUpdate}
+                        />
+                      </div>
                     </CommandItem>
                   );
                 })}

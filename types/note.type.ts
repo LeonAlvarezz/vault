@@ -116,6 +116,13 @@ export type Note = {
   categories: Category | null;
 };
 
+export type NoteFilter = {
+  category?: string;
+  tag?: string;
+  sortBy?: string;
+  status: "published" | "unpublish" | "all";
+};
+
 export type SaveNotePayload = {
   id: string;
   title: string;

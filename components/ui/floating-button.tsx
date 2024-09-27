@@ -8,11 +8,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "./button";
 import { FaNoteSticky } from "react-icons/fa6";
 import QuickSnip from "@/public/image/icons/quick-snip.svg";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useQuickSnipStore } from "@/stores/quick-snip-modal";
 import { useToast } from "./use-toast";
 import { createNote } from "@/data/client/note";
 import { User } from "@supabase/supabase-js";
+import { shouldShowFloatingButton } from "@/utils/route";
 type Props = {
   className?: string;
   user?: User | null;
@@ -21,6 +22,11 @@ export default function FloatingButton({ className }: Props) {
   const [isActive, setIsActive] = useState(false);
   const { setShowModal } = useQuickSnipStore();
   const router = useRouter();
+  const pathname = usePathname();
+  const showFloatingButton = pathname
+    ? shouldShowFloatingButton(pathname)
+    : false;
+
   const { toast } = useToast();
 
   const handleCreateNote = async () => {
@@ -44,7 +50,9 @@ export default function FloatingButton({ className }: Props) {
       });
     }
   };
-
+  if (!showFloatingButton) {
+    return null;
+  }
   return (
     <div className="fixed bottom-[68px] sm:bottom-4 right-5 xl:right-64 z-50 flex flex-col items-end">
       <div

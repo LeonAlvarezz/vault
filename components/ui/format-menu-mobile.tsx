@@ -97,6 +97,8 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
       const dataUrl = await blobToBase64(image);
 
       const transaction = editor!.state.tr;
+      const pos = transaction.selection.anchor;
+
       editor!
         .chain()
         .setImage({
@@ -105,23 +107,30 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
         })
         .run();
 
-      const pos = transaction.selection.anchor;
+      const { publicUrl, error } = await uploadImage(image);
 
-      if (dataUrl) {
-        const { error } = await uploadImage(image);
+      if (error) {
+        editor!
+          .chain()
+          .deleteRange({ from: pos, to: pos + 1 })
+          .run();
 
-        if (error) {
-          editor!
-            .chain()
-            .deleteRange({ from: pos, to: pos + 1 })
-            .run();
-
-          toast({
-            title: "Error Upload Image",
-            description: error.message,
-          });
-        }
+        toast({
+          title: "Error Uploading Image",
+          description: error.message,
+        });
+        return;
       }
+
+      editor!
+        .chain()
+        .focus()
+        .deleteRange({ from: pos, to: pos + 1 })
+        .setImage({
+          src: publicUrl!,
+          alt: image.name,
+        })
+        .run();
     };
 
     handleUploadImage();

@@ -12,31 +12,22 @@ import { Input } from "@/components/ui/input";
 import { BiSolidCategory } from "react-icons/bi";
 import { ICON_COLOR, ICON_SIZE } from "@/components/ui/sidebar/sidebar";
 import { FaTags } from "react-icons/fa";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import EditNoteDropdownMenu from "@/components/ui/dropdown/edit-note-dropdown";
 import LinkModal from "@/components/ui/modal/link-modal";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { getNoteContent, saveNote } from "@/data/client/note";
 import BackButton from "@/components/ui/button/back-button";
-import {
-  useForm,
-  Controller,
-  FieldValue,
-  type FieldValues,
-} from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useParams } from "next/navigation";
 import { Content } from "@tiptap/react";
 import { TagMultiSelect } from "@/components/ui/select/tag-multi-select";
 import { getAllCategories } from "@/data/client/category";
-import { Category } from "@/types/category.type";
 import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
 import { Separator } from "@/components/ui/separator";
 import { getTags } from "@/data/client/tag";
 import { Skeleton } from "@/components/ui/skeleton";
 import UploadButton from "@/components/ui/button/upload-button";
 import { FaImage, FaPen } from "react-icons/fa6";
-import Image from "next/image";
 import { uploadImage } from "@/data/client/image";
 import { toBase64 } from "@/lib/image";
 import ImageContainer from "@/components/ui/image-container";
@@ -52,7 +43,6 @@ export default function Page() {
 
   const [categories, setCategories] = useState<SelectOption[]>([]);
   const [tags, setTags] = useState<SelectOption[]>([]);
-  // const [selectedCategory, setSelectedCategory] = useState<string>();
 
   const [image, setImage] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
@@ -61,7 +51,6 @@ export default function Page() {
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const lastSavedContentRef = useRef<string>("");
-  const router = useRouter();
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       title: "",
@@ -75,18 +64,6 @@ export default function Page() {
   const params = useParams<{ id: string }>();
   const selectedCategory = watch("category");
   const selectedTags = watch("tags");
-
-  const onFocus = () => {
-    setInputActive(true);
-    // if (inputRef.current) {
-    //   inputRef.current.scrollIntoView({
-    //     behavior: "smooth",
-    //     block: "end",
-    //     inline: "end",
-    //   });
-    // }
-  };
-
   const handleGetTags = async () => {
     const { data, error } = await getTags();
     if (error) {

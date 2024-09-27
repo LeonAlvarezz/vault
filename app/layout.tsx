@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import CommandSearch from "@/components/ui/search/command-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { CategorizationProvider } from "@/context/categorization-context";
+import {} from "@/context/categorization-context";
 
 // const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
@@ -41,9 +41,7 @@ export default function RootLayout({
           font.className
         )}
       >
-        <ThemeProviders>
-          <CategorizationProvider>{children}</CategorizationProvider>
-        </ThemeProviders>
+        <ThemeProviders>{children}</ThemeProviders>
         <Toaster />
         <CommandSearch />
 

@@ -24,15 +24,15 @@ export default function NoteCardPublished() {
       />
       <div className="flex flex-col flex-grow p-1">
         <div className="flex-grow flex flex-col gap-2 mt-1">
+          <Tag color="orange" className="h-6">
+            <p>React</p>
+          </Tag>
           <div>
             <div className="w-full justify-between items-center flex">
               <h2 className="text-md font-semibold">What is React</h2>
               <EditNoteDropdownMenu className="left-3" />
             </div>
 
-            <Tag color="orange" className="h-6 mb-2">
-              <p>React</p>
-            </Tag>
             <p className="w-full line-clamp-2 mt-2 text-xs text-neutral-500">
               As we delve into 2024, the landscape of web development continues
               to evolve at a rapid pace. React, one of the most popular

@@ -41,6 +41,7 @@ export type Database = {
           bookmark: number | null
           category_id: number | null
           content: Json | null
+          cover_url: string | null
           created_at: string
           deleted_at: string | null
           id: string
@@ -55,6 +56,7 @@ export type Database = {
           bookmark?: number | null
           category_id?: number | null
           content?: Json | null
+          cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: string
@@ -69,6 +71,7 @@ export type Database = {
           bookmark?: number | null
           category_id?: number | null
           content?: Json | null
+          cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: string

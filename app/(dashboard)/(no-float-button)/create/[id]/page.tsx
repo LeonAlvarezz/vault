@@ -34,6 +34,12 @@ import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
 import { Separator } from "@/components/ui/separator";
 import { getTags } from "@/data/client/tag";
 import { Skeleton } from "@/components/ui/skeleton";
+import UploadButton from "@/components/ui/button/upload-button";
+import { FaImage, FaPen } from "react-icons/fa6";
+import Image from "next/image";
+import { uploadImage } from "@/data/client/image";
+import { toBase64 } from "@/lib/image";
+import ImageContainer from "@/components/ui/image-container";
 type SelectOption = {
   value: string;
   label: string;
@@ -48,7 +54,8 @@ export default function Page() {
   const [tags, setTags] = useState<SelectOption[]>([]);
   // const [selectedCategory, setSelectedCategory] = useState<string>();
 
-  const [link, setLink] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -61,6 +68,7 @@ export default function Page() {
       content: {},
       category: "",
       tags: [] as string[],
+      cover: "",
     },
   });
   const { toast } = useToast();
@@ -110,6 +118,12 @@ export default function Page() {
       }
       const tagsArr = data?.tags?.map((tag) => String(tag.tags?.id));
       setValue("tags", tagsArr || []);
+      console.log("data?.cover_url:", data?.cover_url);
+
+      if (data?.cover_url) {
+        setValue("cover", data?.cover_url);
+        setImagePreviewUrl(data.cover_url);
+      }
 
       if (editorRef.current && editorRef.current.editor) {
         editorRef.current.editor.commands.setContent(data?.content as Content);
@@ -179,6 +193,7 @@ export default function Page() {
             content: editorContent,
             category_id: data.category,
             tags: data.tags,
+            cover_url: data.cover,
           });
 
           if (error) {
@@ -206,6 +221,30 @@ export default function Page() {
       setSaveLoading(false);
     }
   };
+  const handleUploadCover = async (image: File) => {
+    const base64 = await toBase64(image);
+    setImagePreviewUrl(base64);
+
+    const { publicUrl, error } = await uploadImage(image);
+
+    if (error) {
+      setImagePreviewUrl(null);
+      toast({
+        title: "Error Upload Image",
+        description: error.message,
+      });
+      return;
+    }
+
+    setValue("cover", publicUrl);
+    setImagePreviewUrl(publicUrl);
+  };
+
+  useEffect(() => {
+    if (!image) return;
+
+    handleUploadCover(image);
+  }, [image]);
 
   // // Save data every 10 seconds
   // const handleAutoSave = useCallback(() => {
@@ -288,16 +327,47 @@ export default function Page() {
           <BackButton />
           <CreateNoteDropdownMenu handleSave={handleSubmit(handleSaveNote)} />
         </div>
+        {imagePreviewUrl && (
+          <div className="relative bg-neutral-800 mb-2">
+            <ImageContainer
+              src={imagePreviewUrl}
+              className="h-20 opacity-50"
+              preview={false}
+            />
+
+            <UploadButton
+              className="absolute w-fit h-fit py-1 px-2 group bottom-0 hover:bg-neutral-800"
+              setImage={setImage}
+            >
+              <div className="text-xs text-neutral-100 font-normal items-center flex gap-2 group-hover:text-neutral-300">
+                <FaPen size={12} />
+                <p>Edit</p>
+              </div>
+            </UploadButton>
+          </div>
+        )}
+
         {isLoading ? (
           <Skeleton className="w-32 h-10 mb-4" />
         ) : (
           <Input
             {...register("title")}
-            className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0 mb-4"
+            className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0"
             placeholder="Untitled"
           />
         )}
-        <div className="flex gap-2 flex-col">
+        {!imagePreviewUrl && (
+          <UploadButton
+            className="block w-fit h-fit py-1 px-2 hover:bg-neutral-700/50 group "
+            setImage={setImage}
+          >
+            <div className="text-xs text-neutral-700 font-normal flex gap-2 group-hover:text-neutral-300">
+              <FaImage size={16} />
+              <p>Upload Cover</p>
+            </div>
+          </UploadButton>
+        )}
+        <div className="flex gap-2 flex-col mt-4">
           <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
             <div className="flex gap-2 w-1/3 ">
               <BiSolidCategory

@@ -1,4 +1,4 @@
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainerBlur from "@/components/ui/image-container-blur";
 import {
   BlockNode,
   NOTE_CONTENT_TYPE,
@@ -15,7 +15,7 @@ export function renderNote(node: BlockNode): JSX.Element {
     case NOTE_CONTENT_TYPE.IMAGE:
       return (
         <div className="mb-4 bg-red-500">
-          <ImageContainer src={node.attrs.src} alt={node.attrs.alt} />
+          <ImageContainerBlur src={node.attrs.src} alt={node.attrs.alt} />
         </div>
       );
     case NOTE_CONTENT_TYPE.PARAGRAPH:

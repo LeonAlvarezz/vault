@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
@@ -10,7 +10,7 @@ export default async function Page({ searchParams }: Props) {
   return (
     <>
       <section>
-        <ImageContainer
+        <ImageContainerBlur
           src="/image/default-cover1.png"
           className="overflow-hidden h-[150px] w-full"
         />

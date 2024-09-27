@@ -11,8 +11,11 @@ import { SlOptionsVertical } from "react-icons/sl";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { useToast } from "../use-toast";
-
-export default function EditNoteDropdownMenu() {
+import { cn } from "@/lib/utils";
+type Props = {
+  className?: string;
+};
+export default function EditNoteDropdownMenu({ className }: Props) {
   const { toast } = useToast();
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -30,7 +33,10 @@ export default function EditNoteDropdownMenu() {
         <Button
           variant={"icon"}
           size={"icon"}
-          className="rounded-full size-8 p-2 hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0"
+          className={cn(
+            "rounded-full size-7 hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0",
+            className
+          )}
         >
           <SlOptionsVertical />
         </Button>

@@ -1,7 +1,7 @@
 import { NodeViewWrapper, NodeViewProps, Node } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainer from "@/components/ui/image-container-blur";
 import { cn } from "@/lib/utils";
 import NextImage from "next/image";
 import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";

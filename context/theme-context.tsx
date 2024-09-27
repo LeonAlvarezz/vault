@@ -2,7 +2,7 @@
 import { ThemeProvider } from "next-themes";
 import React from "react";
 
-export default function Providers({
+export default function ThemeProviders({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -1,4 +1,4 @@
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React from "react";
 
 export default function AccountTab() {
@@ -21,7 +21,7 @@ export default function AccountTab() {
         projects that push the boundaries of what's possible in web development.
        `}
       </p>
-      <ImageContainer
+      <ImageContainerBlur
         className="w-full aspect-video mt-4"
         src="https://images.unsplash.com/photo-1710306973761-717ec384efd3?q=80&w=2788&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />

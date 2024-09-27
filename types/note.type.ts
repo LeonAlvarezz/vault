@@ -103,6 +103,7 @@ export type Note = {
   bookmark: number | null;
   category_id: number | null;
   content: Json | null;
+  cover_url: string | null;
   created_at: string;
   deleted_at: string | null;
   id: string;
@@ -112,7 +113,7 @@ export type Note = {
   title: string;
   updated_at: string | null;
   view: number | null;
-  categories: Category;
+  categories: Category | null;
 };
 
 export type SaveNotePayload = {
@@ -121,4 +122,5 @@ export type SaveNotePayload = {
   category_id: string;
   content: JSONContent;
   tags: string[];
+  cover_url: string | null;
 };

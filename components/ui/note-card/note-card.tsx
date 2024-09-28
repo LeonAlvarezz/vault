@@ -38,11 +38,13 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
       )}
       <div className="flex justify-between">
         <div>
-          <h2 className="text-md font-semibold">{note?.title || "Untitled"}</h2>
+          <h2 className="text-md font-semibold mb-1">
+            {note?.title || "Untitled"}
+          </h2>
           {note?.content &&
             isContentArray(note.content) &&
             note.content.length > 0 && (
-              <p>{renderNoteDescription(note.content[0] as BlockNode)}</p>
+              <>{renderNoteDescription(note.content[0] as BlockNode)}</>
             )}
         </div>
 

@@ -1,6 +1,7 @@
 import { BlockNode, SaveNotePayload } from "@/types/note.type";
 import { createClient } from "@/lib/supabase/client";
 import { Tag } from "@/types/tag.type";
+import { revalidatePathClient } from "@/app/api/action";
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = createClient();
@@ -45,6 +46,8 @@ export async function saveNote(payload: SaveNotePayload) {
     return { data: null, error: insertError };
   }
 
+  revalidatePathClient("/note");
+
   return { data: noteData, error: null };
 }
 
@@ -63,6 +66,8 @@ export async function createNote() {
     .insert([{ title: "Untitled", profile_id: user?.id }])
     .select()
     .single();
+
+  revalidatePathClient("/note");
   return { data, error };
 }
 

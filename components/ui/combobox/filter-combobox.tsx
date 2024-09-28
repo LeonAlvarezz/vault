@@ -54,7 +54,6 @@ export function FilterCombobox({
   const pathname = usePathname();
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams);
-    console.log("params:", params.toString());
 
     // Update or add the new filter
     params.set(filterKey, value);

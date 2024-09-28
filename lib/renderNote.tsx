@@ -135,21 +135,63 @@ export function renderNoteDescription(node: BlockNode) {
       return (
         <>
           {node.content.map((textNode, index) => (
-            <span
+            <p
               key={index}
-              className="w-full line-clamp-4 mt-2 text-xs text-neutral-500"
+              className="w-full line-clamp-4 text-xs text-neutral-500"
             >
               {textNode.text}
-            </span>
+            </p>
           ))}
         </>
       );
     }
-    case NOTE_CONTENT_TYPE.IMAGE:
+    case NOTE_CONTENT_TYPE.IMAGE: {
       return (
-        <span className="w-full line-clamp-4 mt-2 text-xs text-neutral-500">
-          Image
-        </span>
+        <p className="w-full line-clamp-4 text-xs text-neutral-500">Image</p>
       );
+    }
+    case NOTE_CONTENT_TYPE.HEADING: {
+      return (
+        <p className="w-full text-xs text-neutral-500">
+          {node.content.map((textNode, index) => (
+            <span key={index}>{textNode.text}</span>
+          ))}
+        </p>
+      );
+    }
+    case NOTE_CONTENT_TYPE.BULLET_LIST:
+    case NOTE_CONTENT_TYPE.ORDERED_LIST: {
+      return (
+        <ul className="list-disc ">
+          {node.content.map((listItemNode, index) => (
+            <li key={index}>
+              {listItemNode.content.map((paragraphNode, pIndex) => (
+                <span key={pIndex} className="text-xs text-neutral-500">
+                  {paragraphNode.content
+                    .map((textNode) => textNode.text)
+                    .join(" ")}
+                </span>
+              ))}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    case NOTE_CONTENT_TYPE.BLOCKQUOTE: {
+      return (
+        <blockquote className="text-xs text-neutral-500">
+          {node.content.map((paragraphNode, index) => (
+            <p key={index}>
+              {paragraphNode.content.map((textNode) => textNode.text).join(" ")}
+            </p>
+          ))}
+        </blockquote>
+      );
+    }
+    case NOTE_CONTENT_TYPE.HARD_BREAK: {
+      return <br />;
+    }
+    default:
+      return null;
   }
 }

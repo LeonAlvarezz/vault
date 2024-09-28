@@ -36,6 +36,7 @@ export default function UploadButton({
     <>
       <Button
         onPointerDown={handleUploadClick}
+        type="button"
         variant={"icon"}
         size={"icon"}
         className={className}

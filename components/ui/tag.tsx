@@ -2,26 +2,31 @@ import { cn } from "@/lib/utils";
 import React from "react";
 type Props = {
   children: React.ReactNode;
-  color?: "red" | "violet" | "green" | "blue" | "violet" | "yellow" | "orange"; // Limit color options
+  color?: string; // Limit color options
   className?: string;
 };
 
 export default function Tag({ className, color = "blue", children }: Props) {
   const colorClasses = {
-    red: "border-red-300 text-red-300",
-    violet: "border-violet-300 text-violet-300",
-    green: "border-green-300 text-green-300",
-    purple: "border-purple-300 text-purple-300",
-    yellow: "border-yellow-300 text-yellow-300",
-    orange: "border-orange-300 text-orange-300",
-    blue: "border-blue-300 text-blue-300", // default color
+    red: "border-red-800 bg-red-900/30 text-white",
+    violet: "border-violet-800 bg-violet-900/30 text-white",
+    green: "border-green-800 bg-green-900/30 text-white",
+    purple: "border-purple-800 bg-purple-900/30 text-white",
+    yellow: "border-yellow-800 bg-yellow-900/30 text-white",
+    orange: "border-orange-800 bg-orange-900/30 text-white",
+    gray: "border-gray-700 bg-gray-900/90 text-white",
+    teal: "border-teal-800 bg-teal-900/30 text-white",
+    indigo: "border-indigo-800 bg-indigo-900/30 text-white",
+    blue: "border-blue-800 bg-blue-900/30 text-white",
   };
+
+  type Color = keyof typeof colorClasses;
 
   return (
     <div
       className={cn(
         `w-fit h-6 border rounded-full text-[12px] items-center flex justify-center px-4`,
-        colorClasses[color], // Apply the color-specific classes
+        colorClasses[color as Color] || colorClasses.blue,
         className
       )}
     >

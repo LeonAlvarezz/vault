@@ -1,7 +1,7 @@
 import { NodeViewWrapper, NodeViewProps, Node } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainer from "@/components/ui/image-container-blur";
 import { cn } from "@/lib/utils";
 import NextImage from "next/image";
 import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";
@@ -29,6 +29,7 @@ const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              marginBlock: "10px",
             }}
             sizes="(max-width: 1250px) 100vw, 1250px"
           />
@@ -38,7 +39,7 @@ const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
   );
 };
 
-declare module "@tiptap/react" {
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     image: {
       /**
@@ -59,6 +60,7 @@ export const CustomImageExtension = (uploadFn: UploadFn) => {
     name: "image",
     group: "inline",
     draggable: true,
+    inline: true,
     addAttributes: () => ({
       src: {},
       alt: { default: null },
@@ -79,6 +81,17 @@ export const CustomImageExtension = (uploadFn: UploadFn) => {
         },
       },
     ],
+    parseDOM: [
+      {
+        tag: "img[src]",
+        getAttrs: (dom: HTMLElement) => ({
+          src: dom.getAttribute("src"),
+          title: dom.getAttribute("title"),
+          alt: dom.getAttribute("alt"),
+        }),
+      },
+    ],
+    toDOM: (node: any) => ["img", node.attrs],
     renderHTML: ({ HTMLAttributes }) => ["img", HTMLAttributes],
     // @ts-ignore
     addCommands() {
@@ -103,6 +116,5 @@ export const CustomImageExtension = (uploadFn: UploadFn) => {
     addProseMirrorPlugins() {
       return [dropImagePlugin(uploadFn)];
     },
-    inline: true,
   });
 };

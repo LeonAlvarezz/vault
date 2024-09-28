@@ -2,6 +2,7 @@
 import { BlockNode, Note, NOTE_CONTENT_TYPE } from "@/types/note.type";
 import { renderNote } from "@/lib/renderNote";
 import {
+  Content,
   EditorContent,
   JSONContent,
   mergeAttributes,
@@ -72,7 +73,7 @@ export default async function RenderWithTiptap({ data, note }: Props) {
   });
 
   useEffect(() => {
-    editor?.commands.setContent(note.content);
+    editor?.commands.setContent(note.content as Content);
   }, [editor]);
   if (!editor) {
     return <Loading />;

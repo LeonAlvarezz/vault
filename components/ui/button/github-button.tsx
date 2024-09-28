@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "../button";
-import ImageContainer from "../image-container";
 import { FaGithub } from "react-icons/fa";
 
 export default function GithubButton() {

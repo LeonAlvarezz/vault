@@ -10,6 +10,7 @@ export default function BackButton() {
     <Button
       variant={"icon"}
       size={"icon"}
+      type="button"
       onClick={() => router.back()}
       className="group w-6 h-6 hover:text-blue-500 p-0"
     >

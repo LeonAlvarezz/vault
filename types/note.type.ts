@@ -1,5 +1,6 @@
 import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
+import { Category } from "./category.type";
 
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
@@ -10,7 +11,7 @@ export enum NOTE_CONTENT_TYPE {
   BULLET_LIST = "bulletList",
   ORDERED_LIST = "orderedList",
   BLOCKQUOTE = "blockquote",
-
+  HARD_BREAK = "hardBreak",
   LIST_ITEM = "listItem",
 }
 
@@ -20,6 +21,7 @@ export enum TEXT_MARK_TYPE {
   BOLD = "bold",
   ITALIC = "italic",
   LINK = "link",
+  TEXT = "text ",
 }
 
 export type BlockNode =
@@ -31,6 +33,7 @@ export type BlockNode =
   | OrderedListNode
   | ListItemNode
   | BlockQuoteNode
+  | HardBreakNode
   | TextNode;
 
 type CodeBlockNode = {
@@ -45,6 +48,10 @@ type HeadingNode = {
   type: NOTE_CONTENT_TYPE.HEADING;
   attrs: { level: number };
   content: TextNode[];
+};
+
+type HardBreakNode = {
+  type: NOTE_CONTENT_TYPE.HARD_BREAK;
 };
 type BulletListNode = {
   type: NOTE_CONTENT_TYPE.BULLET_LIST;
@@ -100,19 +107,33 @@ type ImageAttribute = {
 
 export type Note = {
   bookmark: number | null;
-  content: BlockNode[];
+  category_id: number | null;
+  content: Json | null;
+  cover_url: string | null;
   created_at: string;
   deleted_at: string | null;
   id: string;
   like: number | null;
+  profile_id: string;
   published_at: string | null;
-  title: string | null;
+  title: string;
   updated_at: string | null;
   view: number | null;
+  categories?: Category | null;
+};
+
+export type NoteFilter = {
+  category?: string;
+  tag?: string;
+  sortBy?: string;
+  status: "published" | "unpublish" | "all";
 };
 
 export type SaveNotePayload = {
   id: string;
   title: string;
+  category_id: string;
   content: JSONContent;
+  tags: string[];
+  cover_url: string | null;
 };

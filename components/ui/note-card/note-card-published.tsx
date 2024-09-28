@@ -1,5 +1,5 @@
 import React from "react";
-import ImageContainer from "../image-container";
+import ImageContainerBlur from "../image-container-blur";
 import { Button } from "../button";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
@@ -16,22 +16,23 @@ export default function NoteCardPublished() {
   return (
     <Link
       href={"/note/1"}
-      className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid  hover:border border-neutral-700  hover:scale-[1.02] transition-transform"
+      className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] transition-transform"
     >
-      <ImageContainer
+      <ImageContainerBlur
         className="h-[200px] overflow-hidden rounded-sm "
         src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       />
       <div className="flex flex-col flex-grow p-1">
-        <div className="flex w-full justify-between items-center">
+        <div className="flex-grow flex flex-col gap-2 mt-1">
           <Tag color="orange" className="h-6">
             <p>React</p>
           </Tag>
-          <EditNoteDropdownMenu />
-        </div>
-        <div className="flex-grow flex flex-col gap-2 mt-1">
           <div>
-            <h2 className="text-md font-semibold">What is React</h2>
+            <div className="w-full justify-between items-center flex">
+              <h2 className="text-md font-semibold">What is React</h2>
+              <EditNoteDropdownMenu className="left-3" />
+            </div>
+
             <p className="w-full line-clamp-2 mt-2 text-xs text-neutral-500">
               As we delve into 2024, the landscape of web development continues
               to evolve at a rapid pace. React, one of the most popular
@@ -40,14 +41,6 @@ export default function NoteCardPublished() {
               component-based architecture and virtual DOM, React offers
             </p>
           </div>
-          {/* <Button
-            onClick={handleButtonClick}
-            variant={"icon"}
-            size={"icon"}
-            className="group w-5 h-5 hover:text-blue-500 self-end z-50"
-          >
-            <SlOptionsVertical />
-          </Button> */}
         </div>
         <NoteCardFooter />
       </div>

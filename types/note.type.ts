@@ -11,7 +11,7 @@ export enum NOTE_CONTENT_TYPE {
   BULLET_LIST = "bulletList",
   ORDERED_LIST = "orderedList",
   BLOCKQUOTE = "blockquote",
-
+  HARD_BREAK = "hardBreak",
   LIST_ITEM = "listItem",
 }
 
@@ -21,6 +21,7 @@ export enum TEXT_MARK_TYPE {
   BOLD = "bold",
   ITALIC = "italic",
   LINK = "link",
+  TEXT = "text ",
 }
 
 export type BlockNode =
@@ -32,6 +33,7 @@ export type BlockNode =
   | OrderedListNode
   | ListItemNode
   | BlockQuoteNode
+  | HardBreakNode
   | TextNode;
 
 type CodeBlockNode = {
@@ -46,6 +48,10 @@ type HeadingNode = {
   type: NOTE_CONTENT_TYPE.HEADING;
   attrs: { level: number };
   content: TextNode[];
+};
+
+type HardBreakNode = {
+  type: NOTE_CONTENT_TYPE.HARD_BREAK;
 };
 type BulletListNode = {
   type: NOTE_CONTENT_TYPE.BULLET_LIST;
@@ -113,7 +119,7 @@ export type Note = {
   title: string;
   updated_at: string | null;
   view: number | null;
-  categories: Category | null;
+  categories?: Category | null;
 };
 
 export type NoteFilter = {

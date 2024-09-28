@@ -16,16 +16,26 @@ import { common, createLowlight } from "lowlight";
 import Loading from "@/app/loading";
 import React from "react";
 type Props = {
-  data?: any[] | null;
-  // id: string;
   note: Note;
 };
-export default async function Render({ data, note }: Props) {
-  return (
-    <div className="tiptap flex text-sm flex-col gap-1.5">
-      {note.content.map((block, blockIndex) => (
-        <React.Fragment key={blockIndex}>{renderNote(block)}</React.Fragment>
-      ))}
-    </div>
-  );
+export default async function Render({ note }: Props) {
+  if (!note.content) {
+    return "No Content";
+  }
+
+  if (Array.isArray(note.content)) {
+    return (
+      <div className="tiptap text-sm">
+        {note.content.map((block, index) => {
+          return (
+            <React.Fragment key={index}>
+              {renderNote(block as BlockNode)}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return <h1>Invalid Content Format {note.content.toString()}</h1>;
 }

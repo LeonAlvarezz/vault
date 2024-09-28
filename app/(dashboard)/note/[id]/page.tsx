@@ -30,7 +30,7 @@ export default async function NoteDetailPage({ params }: Props) {
         <Tag color="blue" className="text-xs h-6">
           React
         </Tag>
-        <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col my-2 gap-y-2">
+        <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 mb-6 gap-y-2">
           <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
             <Link href={"/profile/id"}>
               <div className="flex gap-2">

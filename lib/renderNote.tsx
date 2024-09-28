@@ -14,15 +14,17 @@ export function renderNote(node: BlockNode): JSX.Element {
   switch (node.type) {
     case NOTE_CONTENT_TYPE.IMAGE:
       return (
-        <div className="mb-4 bg-red-500">
+        <div className="mb-4">
           <ImageContainerBlur src={node.attrs.src} alt={node.attrs.alt} />
         </div>
       );
     case NOTE_CONTENT_TYPE.PARAGRAPH:
-      return <p className="text-">{renderContent(node.content)}</p>;
+      if (node.content) {
+        return <div>{renderContent(node.content)}</div>;
+      } else return <br className="h-[20px]" />;
 
     case NOTE_CONTENT_TYPE.TEXT:
-      return renderText(node);
+      return <>{renderText(node)}</>;
 
     case NOTE_CONTENT_TYPE.CODE_BLOCK:
       const language = node.attrs?.language || "ts";
@@ -80,6 +82,9 @@ export function renderNote(node: BlockNode): JSX.Element {
       const HeadingTag = `h${node.attrs?.level}` as keyof JSX.IntrinsicElements;
       return <HeadingTag>{renderContent(node.content)}</HeadingTag>;
 
+    case NOTE_CONTENT_TYPE.HARD_BREAK:
+      return <br />;
+
     default:
       return <>{node}</>;
   }
@@ -90,28 +95,30 @@ const renderText = (node: TextNode): React.ReactElement => {
     return <></>;
   }
 
-  if (!node.marks || node.marks.length === 0) {
-    return <>{node.text}</>;
+  let renderedText: React.ReactElement = <span>{node.text}</span>;
+
+  if (node.marks && node.marks.length > 0) {
+    renderedText = node.marks.reduce((acc, mark) => {
+      switch (mark.type) {
+        case TEXT_MARK_TYPE.BOLD:
+          return <strong>{acc}</strong>;
+        case TEXT_MARK_TYPE.ITALIC:
+          return <em>{acc}</em>;
+        case TEXT_MARK_TYPE.CODE:
+          return <code className="w-fit px-2">{acc}</code>;
+        case TEXT_MARK_TYPE.LINK:
+          return (
+            <a href={mark.attrs?.href} target={mark.attrs?.target}>
+              {acc}
+            </a>
+          );
+        default:
+          return acc;
+      }
+    }, renderedText);
   }
 
-  return node.marks.reduce((acc, mark) => {
-    switch (mark.type) {
-      case TEXT_MARK_TYPE.BOLD:
-        return <strong>{acc}</strong>;
-      case TEXT_MARK_TYPE.ITALIC:
-        return <em>{acc}</em>;
-      case TEXT_MARK_TYPE.CODE:
-        return <code>{acc}</code>;
-      case TEXT_MARK_TYPE.LINK:
-        return (
-          <a href={mark.attrs?.href} target={mark.attrs?.target}>
-            {acc}
-          </a>
-        );
-      default:
-        return <>{acc}</>;
-    }
-  }, <>{node.text}</>);
+  return <span>{renderedText}</span>;
 };
 
 const renderContent = (content?: BlockNode[]): React.ReactNode => {

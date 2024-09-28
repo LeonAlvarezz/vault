@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { NoteFilter } from "@/types/note.type";
-export const revalidate = 10;
+export const revalidate = 0;
 
 const STATUS = [
   {
@@ -44,7 +44,6 @@ type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default async function NotePage({ searchParams }: Props) {
-  console.log(searchParams?.category);
   const { data: notes } = await getAllNotesByProfileId(
     searchParams as NoteFilter
   );

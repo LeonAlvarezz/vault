@@ -50,6 +50,7 @@ export default function Page() {
   const [open, setOpen] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldUpdate, setShouldUpdate] = useState(true);
   const lastSavedContentRef = useRef<string>("");
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -95,16 +96,13 @@ export default function Page() {
       }
       const tagsArr = data?.tags?.map((tag) => String(tag.tags?.id));
       setValue("tags", tagsArr || []);
-      console.log("data?.cover_url:", data?.cover_url);
 
       if (data?.cover_url) {
         setValue("cover", data?.cover_url);
         setImagePreviewUrl(data.cover_url);
       }
 
-      if (editorRef.current && editorRef.current.editor) {
-        editorRef.current.editor.commands.setContent(data?.content as Content);
-      }
+      editorRef.current?.editor?.commands.setContent(data?.content as Content);
     };
     const handleGetCategory = async () => {
       const { data, error } = await getAllCategories();
@@ -143,7 +141,7 @@ export default function Page() {
     };
 
     fetchInitialData();
-  }, []);
+  }, [shouldUpdate]);
 
   const handleSaveNote = async (data: any) => {
     setSaveLoading(true);
@@ -222,6 +220,10 @@ export default function Page() {
 
     handleUploadCover(image);
   }, [image]);
+
+  useEffect(() => {
+    if (shouldUpdate) setShouldUpdate(false);
+  }, [shouldUpdate]);
 
   // // Save data every 10 seconds
   // const handleAutoSave = useCallback(() => {

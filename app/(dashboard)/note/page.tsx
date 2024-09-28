@@ -44,7 +44,6 @@ type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default async function NotePage({ searchParams }: Props) {
-  console.log(searchParams?.category);
   const { data: notes } = await getAllNotesByProfileId(
     searchParams as NoteFilter
   );

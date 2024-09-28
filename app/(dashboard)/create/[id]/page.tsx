@@ -103,6 +103,9 @@ export default function Page() {
       }
 
       editorRef.current?.editor?.commands.setContent(data?.content as Content);
+      console.log("editorRef.current:", editorRef.current);
+      console.log("editorRef.current?.editor?:", editorRef.current?.editor);
+      console.log("shouldUpdate:", shouldUpdate);
     };
     const handleGetCategory = async () => {
       const { data, error } = await getAllCategories();

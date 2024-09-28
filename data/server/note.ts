@@ -22,7 +22,9 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   }
   let query = supabase
     .from("notes")
-    .select("*, content: content->content, categories!inner(*)")
+    .select(
+      "*, content: content->content, categories!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id))"
+    )
     .eq("profile_id", user!.id);
 
   if (filter?.category && filter?.category !== "all") {
@@ -41,8 +43,11 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
     }
   }
 
-  if (filter?.tag) {
-    query = query.contains("tags", [filter.tag]);
+  if (filter?.tags) {
+    const tagsArray = Array.isArray(filter.tags) ? filter.tags : [filter.tags];
+    if (tagsArray.length > 0) {
+      query = query.in("tags.tags.name", tagsArray);
+    }
   }
 
   const { data, error } = await query;

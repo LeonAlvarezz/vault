@@ -66,8 +66,6 @@ export async function deleteTag(id: number) {
   }
   const { error } = await supabase.from("tags").delete().match({ id: id });
   if (error) {
-    console.log("error:", error.message);
-
     return { data: null, error };
   }
   return { error };

@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { NoteFilter } from "@/types/note.type";
+import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
+import { getTags } from "@/data/server/tag";
 const STATUS = [
   {
     value: "all",
@@ -24,20 +26,6 @@ const STATUS = [
   },
 ];
 
-const TAG = [
-  {
-    value: "framework",
-    label: "Framework",
-  },
-  {
-    value: "Websocket",
-    label: "Websocket",
-  },
-  {
-    value: "tutorial",
-    label: "Tutorial",
-  },
-];
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
@@ -46,6 +34,16 @@ export default async function NotePage({ searchParams }: Props) {
     searchParams as NoteFilter
   );
   const { data: categories } = await getAllCategories();
+  const { data: tags } = await getTags();
+  console.log("tags:", tags);
+  const tagsOption = tags?.map((tag) => {
+    return {
+      label: tag.name,
+      value: tag.name,
+      color: tag.color!,
+    };
+  });
+
   return (
     <>
       <SearchInput />
@@ -55,7 +53,7 @@ export default async function NotePage({ searchParams }: Props) {
             href={"?category=all"}
             className={cn(
               "rounded-full px-8 text-sm border w-fit h-10 py-2 border-neutral-700 hover:border-main hover:text-second capitalize flex justify-center items-center",
-              (searchParams?.category === "all" || searchParams) &&
+              (searchParams?.category === "all" || !searchParams) &&
                 "bg-main border-0 hover:text-white"
             )}
           >
@@ -93,16 +91,14 @@ export default async function NotePage({ searchParams }: Props) {
           options={STATUS}
           label="All Note"
         />
-        <FilterCombobox filterKey={"tag"} options={TAG} label="Tags" />
+        <MultiFilterCombobox
+          filterKey={"tags"}
+          defaultValue={(searchParams?.tags as string[]) || []}
+          options={tagsOption || []}
+          placeholder="Tags"
+          maxCount={1}
+        />
       </div>
-
-      {/* <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2 ">
-        <div className="grid gap-2">
-          <NoteCard />
-          <NoteCard />
-          <NoteCard published />
-        </div>
-      </section> */}
       <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
         {notes?.map((note, index) =>
           note.published_at ? (
@@ -111,12 +107,6 @@ export default async function NotePage({ searchParams }: Props) {
             <NoteCard key={index} note={note} />
           )
         )}
-        {/* <NoteCard />
-        <NoteCard published />
-        <NoteCard published />
-        <NoteCard published />
-        <NoteCard />
-        <NoteCard /> */}
       </section>
     </>
   );

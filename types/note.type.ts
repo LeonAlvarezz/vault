@@ -124,7 +124,7 @@ export type Note = {
 
 export type NoteFilter = {
   category?: string;
-  tag?: string;
+  tags: string[];
   sortBy?: string;
   status: "published" | "unpublish" | "all";
 };

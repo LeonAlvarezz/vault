@@ -32,6 +32,7 @@ type ComboboxProps = {
   label?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  defaultValue?: string;
 };
 
 const sizeClasses = {
@@ -45,10 +46,12 @@ export function FilterCombobox({
   options,
   filterKey,
   className,
+  defaultValue = "",
   label = "Select option...",
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(defaultValue);
+  console.log("value:", value);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();

@@ -9,20 +9,52 @@ import { SlOptionsVertical } from "react-icons/sl";
 import Tag from "../tag";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 import Link from "next/link";
-import InteractionButton from "./interaction-button";
 import NoteCardFooter from "./note-card-footer";
-
-export default function NoteCardPublished() {
+import { BlockNode, Note } from "@/types/note.type";
+import { renderNoteDescription } from "@/lib/renderNote";
+type Props = {
+  note: Note;
+};
+export default function NoteCardPublished({ note }: Props) {
+  const isContentArray = (content: any): content is Array<any> => {
+    return Array.isArray(content);
+  };
   return (
     <Link
-      href={"/note/1"}
-      className="max-w-full h-auto bg-neutral-800 p-2 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] transition-transform"
+      href={`/create/${note?.id}`}
+      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] transition-transform"
     >
-      <ImageContainerBlur
-        className="h-[200px] overflow-hidden rounded-sm "
-        src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      />
-      <div className="flex flex-col flex-grow p-1">
+      {note?.cover_url && (
+        <ImageContainerBlur
+          className="h-[200px] overflow-hidden rounded-sm "
+          src={note.cover_url}
+          alt={note.title}
+        />
+      )}
+
+      <div className="mt-2">
+        {note?.categories && (
+          <Tag color={note?.categories.color!} className="h-6">
+            <p>{note?.categories.name!}</p>
+          </Tag>
+        )}
+      </div>
+      <div className="flex justify-between mt-1">
+        <div>
+          <h2 className="text-md font-semibold mb-1">
+            {note?.title || "Untitled"}
+          </h2>
+          {note?.content &&
+            isContentArray(note.content) &&
+            note.content.length > 0 && (
+              <>{renderNoteDescription(note.content[0] as BlockNode)}</>
+            )}
+        </div>
+
+        <EditNoteDropdownMenu className="left-3" />
+      </div>
+      <NoteCardFooter note={note} />
+      {/* <div className="flex flex-col flex-grow p-1">
         <div className="flex-grow flex flex-col gap-2 mt-1">
           <Tag color="orange" className="h-6">
             <p>React</p>
@@ -43,7 +75,7 @@ export default function NoteCardPublished() {
           </div>
         </div>
         <NoteCardFooter />
-      </div>
+      </div> */}
     </Link>
   );
 }

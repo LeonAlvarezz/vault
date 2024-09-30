@@ -14,7 +14,7 @@ import { renderNote, renderNoteDescription } from "@/lib/renderNote";
 import { formatDate } from "@/lib/date";
 import ImageContainerBlur from "../image-container-blur";
 type NoteCardProps = {
-  note?: Note;
+  note: Note;
   published?: boolean;
 };
 export default function NoteCard({ published = false, note }: NoteCardProps) {
@@ -22,7 +22,7 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
     return Array.isArray(content);
   };
   if (published) {
-    return <NoteCardPublished />;
+    return <NoteCardPublished note={note} />;
   }
 
   return (
@@ -50,7 +50,7 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
 
         <EditNoteDropdownMenu />
       </div>
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-end mt-4">
         {note?.categories && (
           <Tag color={note?.categories.color!} className="h-6">
             <p>{note?.categories.name!}</p>

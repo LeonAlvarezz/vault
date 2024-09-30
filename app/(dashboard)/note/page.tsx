@@ -12,6 +12,7 @@ import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combo
 import { getTags } from "@/data/server/tag";
 import Loading from "@/app/loading";
 import ImageContainer from "@/components/ui/image-container";
+import CategorySwipe from "./_component/category-swipe";
 const STATUS = [
   {
     value: "all",
@@ -48,42 +49,16 @@ export default async function NotePage({ searchParams }: Props) {
     <>
       <SearchInput />
       <div className="flex mt-4 justify-between">
-        <div className="flex gap-4 overflow-x-auto no-scrollbar">
-          <Suspense fallback={<Skeleton className="w-full rounded-md h-20" />}>
-            <Link
-              href={"?category=all"}
-              className={cn(
-                "rounded-full px-8 text-sm border w-fit h-10 py-2 border-neutral-700 hover:border-main hover:text-second capitalize flex justify-center items-center",
-                (searchParams?.category === "all" || !searchParams?.category) &&
-                  "bg-main border-0 hover:text-white"
-              )}
-            >
-              <p className="w-full whitespace-nowrap">All Note</p>
-            </Link>
-            {categories ? (
-              categories.map((category) => (
-                <Link
-                  href={"?category=" + category.name}
-                  key={category.id}
-                  className={cn(
-                    "rounded-full px-8 text-sm border w-fit h-10 py-2 border-neutral-700 hover:border-main hover:text-second capitalize flex justify-center items-center",
-                    searchParams?.category === category.name &&
-                      "bg-main border-0 hover:text-white"
-                  )}
-                >
-                  <p className="w-full whitespace-nowrap">{category.name}</p>
-                </Link>
-              ))
-            ) : (
-              <Skeleton className="w-full rounded-md h-20" />
-            )}
-          </Suspense>
-        </div>
+        <CategorySwipe
+          categories={categories || []}
+          searchParams={searchParams}
+        />
       </div>
       <div className="mt-4 flex gap-2">
         <FilterCombobox
           filterKey={"status"}
           options={STATUS}
+          defaultValue={searchParams?.status as string}
           label="All Note"
         />
         <MultiFilterCombobox

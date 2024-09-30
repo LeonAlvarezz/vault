@@ -1,6 +1,7 @@
 import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
 import { Category } from "./category.type";
+import { Profile } from "./profiles.type";
 
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
@@ -120,13 +121,14 @@ export type Note = {
   updated_at: string | null;
   view: number | null;
   categories?: Category | null;
+  profile?: Profile | null;
 };
 
 export type NoteFilter = {
   category?: string;
   tags: string[];
   sortBy?: string;
-  status: "published" | "unpublish" | "all";
+  status: "published" | "unpublished" | "all";
 };
 
 export type SaveNotePayload = {

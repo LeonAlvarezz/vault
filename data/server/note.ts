@@ -23,7 +23,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id))"
+      "*, content: content->content, categories!inner(*), profile:profiles!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id))"
     )
     .eq("profile_id", user!.id);
 
@@ -37,7 +37,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
         query = query.not("published_at", "is", null);
         break;
 
-      case "unpublish":
+      case "unpublished":
         query = query.is("published_at", null);
         break;
     }

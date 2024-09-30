@@ -55,9 +55,9 @@ export default function NotePage() {
       </div>
 
       <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+        {/* <NoteCard />
+        <NoteCard published /> */}
         <NoteCard />
-        <NoteCard published />
-        {/* <NoteCard /> */}
       </section>
     </>
   );

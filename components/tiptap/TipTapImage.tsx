@@ -1,10 +1,10 @@
 import { NodeViewWrapper, NodeViewProps, Node } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import ImageContainer from "@/components/ui/image-container-blur";
 import { cn } from "@/lib/utils";
 import NextImage from "next/image";
 import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";
+import ImageContainer from "../ui/image-container";
 
 // Define a React component to handle image rendering
 const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
@@ -18,23 +18,22 @@ const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
   }
   return (
     <NodeViewWrapper>
-      <>
-        <div className={cn("relative ")}>
-          <NextImage
-            src={src}
-            alt={alt}
-            width={0}
-            height={0}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              marginBlock: "10px",
-            }}
-            sizes="(max-width: 1250px) 100vw, 1250px"
-          />
-        </div>
-      </>
+      {/* <div className={cn("relative")}>
+        <NextImage
+          src={src}
+          alt={alt}
+          width={0}
+          height={0}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            marginBlock: "10px",
+          }}
+          sizes="(max-width: 1250px) 100vw, 1250px"
+        />
+      </div> */}
+      <ImageContainer src={src} alt={alt} blur />
     </NodeViewWrapper>
   );
 };

@@ -28,7 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import UploadButton from "@/components/ui/button/upload-button";
 import { FaImage, FaPen } from "react-icons/fa6";
 import { uploadImage } from "@/data/client/image";
-import { toBase64 } from "@/lib/image";
+import { compressImage, toBase64 } from "@/lib/image";
 import ImageContainer from "@/components/ui/image-container";
 import ConfirmPublishDialog from "@/components/ui/dialog/confirm-publish-dialog";
 import { Note } from "@/types/note.type";
@@ -226,6 +226,9 @@ export default function Page() {
   const handleUploadCover = async (image: File) => {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
+
+    // const compressedImage = await compressImage(image, { maxSizeMB: 1 });
+    // console.log("compressedImage:", compressedImage);
 
     const { publicUrl, error } = await uploadImage(image);
 

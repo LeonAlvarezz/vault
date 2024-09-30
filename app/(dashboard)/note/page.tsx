@@ -13,6 +13,7 @@ import { getTags } from "@/data/server/tag";
 import Loading from "@/app/loading";
 import ImageContainer from "@/components/ui/image-container";
 import CategorySwipe from "./_component/category-swipe";
+import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 const STATUS = [
   {
     value: "all",
@@ -32,11 +33,17 @@ type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default async function NotePage({ searchParams }: Props) {
-  const { data: notes } = await getAllNotesByProfileId(
-    searchParams as NoteFilter
-  );
-  const { data: categories } = await getAllCategories();
-  const { data: tags } = await getTags();
+  const [{ data: notes }, { data: categories }, { data: tags }] =
+    await Promise.all([
+      getAllNotesByProfileId(searchParams as NoteFilter),
+      getAllCategories(),
+      getTags(),
+    ]);
+  // const { data: notes } = await getAllNotesByProfileId(
+  //   searchParams as NoteFilter
+  // );
+  // const { data: categories } = await getAllCategories();
+  // const { data: tags } = await getTags();
   const tagsOption = tags?.map((tag) => {
     return {
       label: tag.name,
@@ -69,8 +76,8 @@ export default async function NotePage({ searchParams }: Props) {
           maxCount={1}
         />
       </div>
-      <Suspense>
-        {notes && notes.length > 0 ? (
+      {notes && notes.length > 0 ? (
+        <Suspense fallback={<NoteSkeleton />}>
           <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
             {notes?.map((note, index) =>
               note.published_at ? (
@@ -80,23 +87,23 @@ export default async function NotePage({ searchParams }: Props) {
               )
             )}
           </section>
-        ) : (
-          <div
-            className="w-full flex justify-center items-center"
-            style={{ minHeight: "calc(100svh - 280px)" }}
-          >
-            <div className="flex flex-col gap-4 items-center ">
-              <ImageContainer
-                src="/image/empty-note.svg"
-                alt="empty"
-                className="size-[100px] opacity-80"
-                preview={false}
-              />
-              <h1 className="text-neutral-500 ">No note available</h1>
-            </div>
+        </Suspense>
+      ) : (
+        <div
+          className="w-full flex justify-center items-center"
+          style={{ minHeight: "calc(100svh - 280px)" }}
+        >
+          <div className="flex flex-col gap-4 items-center ">
+            <ImageContainer
+              src="/image/empty-note.svg"
+              alt="empty"
+              className="size-[100px] opacity-80"
+              preview={false}
+            />
+            <h1 className="text-neutral-500 ">No note available</h1>
           </div>
-        )}
-      </Suspense>
+        </div>
+      )}
     </>
   );
 }

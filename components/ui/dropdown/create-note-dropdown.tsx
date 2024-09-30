@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +13,12 @@ import ShareModal from "../modal/share-modal";
 import { IoShareSocial } from "react-icons/io5";
 type Props = {
   handleSave: (data: any) => Promise<void>;
+  setOpenConfirmDialog: Dispatch<SetStateAction<boolean>>;
 };
-export default function CreateNoteDropdownMenu({ handleSave }: Props) {
+export default function CreateNoteDropdownMenu({
+  handleSave,
+  setOpenConfirmDialog,
+}: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,33 +31,30 @@ export default function CreateNoteDropdownMenu({ handleSave }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
-        <DropdownMenuItem>
-          <Button
-            variant={"icon"}
-            className="p-0 flex items-center h-fit font-normal text-neutral-300"
-          >
-            <MdPublish className="mr-2 h-4 w-4" />
-            <p className="whitespace-nowrap">Publish</p>
-          </Button>
+        <DropdownMenuItem
+          className="p-2 flex items-center h-fit font-normal text-neutral-300"
+          onClick={() => {
+            setOpenConfirmDialog(true);
+          }}
+        >
+          <MdPublish className="mr-2 h-4 w-4" />
+          <p className="whitespace-nowrap">Publish</p>
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <ShareModal>
-            <div className="flex">
-              <IoShareSocial className="mr-2 h-4 w-4" />
-              <p>Share</p>
-            </div>
-          </ShareModal>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem>
-          <Button
-            variant={"icon"}
-            className="p-0 flex items-center h-fit font-normal text-neutral-300"
-            onMouseDown={handleSave}
+        <ShareModal>
+          <DropdownMenuItem
+            className="p-2 flex items-center h-fit font-normal text-neutral-300"
+            onSelect={(e) => e.preventDefault()}
           >
-            <MdSave className="mr-2 h-4 w-4" />
-            <p className="whitespace-nowrap">Save</p>
-          </Button>
+            <IoShareSocial className="mr-2 h-4 w-4" />
+            <p>Share</p>
+          </DropdownMenuItem>
+        </ShareModal>
+        <DropdownMenuItem
+          className="p-2 flex items-center h-fit font-normal text-neutral-300"
+          onMouseDown={handleSave}
+        >
+          <MdSave className="mr-2 h-4 w-4" />
+          <p className="whitespace-nowrap">Save</p>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -71,6 +71,24 @@ export async function createNote() {
   return { data, error };
 }
 
+export async function publishNote(id: string) {
+  const supabase = createClient();
+  const now = new Date();
+  const { error } = await supabase
+    .from("notes")
+    .update({ published_at: now.toISOString() })
+    .match({ id });
+  return { error };
+}
+export async function unpublishNote(id: string) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("notes")
+    .update({ published_at: null })
+    .match({ id });
+  return { error };
+}
+
 export async function getNoteContent(id: string) {
   const supabase = createClient();
   const { data, error } = await supabase

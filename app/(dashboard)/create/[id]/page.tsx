@@ -6,7 +6,6 @@ import TiptapEditor, {
   TiptapEditorRef,
 } from "@/components/tiptap/TipTapEditor";
 import CreateNoteDropdownMenu from "@/components/ui/dropdown/create-note-dropdown";
-import { Button } from "@/components/ui/button";
 import StatContainer from "@/components/ui/statistic/stat-container";
 import { Input } from "@/components/ui/input";
 import { BiSolidCategory } from "react-icons/bi";
@@ -18,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { getNoteContent, saveNote } from "@/data/client/note";
 import BackButton from "@/components/ui/button/back-button";
 import { useForm } from "react-hook-form";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Content } from "@tiptap/react";
 import { TagMultiSelect } from "@/components/ui/select/tag-multi-select";
 import { getAllCategories } from "@/data/client/category";
@@ -31,6 +30,9 @@ import { FaImage, FaPen } from "react-icons/fa6";
 import { uploadImage } from "@/data/client/image";
 import { toBase64 } from "@/lib/image";
 import ImageContainer from "@/components/ui/image-container";
+import ConfirmPublishDialog from "@/components/ui/dialog/confirm-publish-dialog";
+import { Note } from "@/types/note.type";
+import { ToastAction } from "@/components/ui/toast";
 type SelectOption = {
   value: string;
   label: string;
@@ -40,18 +42,18 @@ export default function Page() {
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<TiptapEditorRef>(null);
-
   const [categories, setCategories] = useState<SelectOption[]>([]);
   const [tags, setTags] = useState<SelectOption[]>([]);
-
   const [image, setImage] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState(true);
-  const lastSavedContentRef = useRef<string>("");
+  const [note, setNote] = useState<Note>();
+
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       title: "",
@@ -65,6 +67,8 @@ export default function Page() {
   const params = useParams<{ id: string }>();
   const selectedCategory = watch("category");
   const selectedTags = watch("tags");
+  const router = useRouter();
+
   const handleGetTags = async () => {
     const { data, error } = await getTags();
     if (error) {
@@ -80,33 +84,55 @@ export default function Page() {
     }));
     setTags(formattedTags);
   };
-  //Load Note
-  useEffect(() => {
-    const handleGetNoteContent = async () => {
-      const { data, error } = await getNoteContent(params.id);
-      if (error) {
+
+  const handleGetNoteContent = async () => {
+    const { data, error } = await getNoteContent(params.id);
+    if (error) {
+      if ((error.code = "PGRST116")) {
         toast({
-          title: "Error Fetching Category",
+          title: "Unauthorized",
+          description: "You are not authenticated to view this note",
+        });
+      } else {
+        toast({
+          title: "Error Fetching Note",
           description: error?.message,
         });
       }
-      setValue("title", data?.title || "");
-      if (data && data.category_id) {
-        setValue("category", String(data?.category_id));
-      }
-      const tagsArr = data?.tags?.map((tag) => String(tag.tags?.id));
-      setValue("tags", tagsArr || []);
+      router.push("/note");
+    }
+    if (!data) {
+      toast({
+        title: "Unexpected Error",
+        action: (
+          <div className="flex gap-2">
+            <ToastAction altText="Try again" onClick={() => router.refresh}>
+              Try again
+            </ToastAction>
+            <ToastAction altText="Home" onClick={() => router.push("/note")}>
+              Go Home
+            </ToastAction>
+          </div>
+        ),
+      });
+    }
+    setNote(data!);
+    setValue("title", data?.title || "");
+    if (data && data.category_id) {
+      setValue("category", String(data?.category_id));
+    }
+    const tagsArr = data?.tags?.map((tag) => String(tag.tags?.id));
+    setValue("tags", tagsArr || []);
 
-      if (data?.cover_url) {
-        setValue("cover", data?.cover_url);
-        setImagePreviewUrl(data.cover_url);
-      }
+    if (data?.cover_url) {
+      setValue("cover", data?.cover_url);
+      setImagePreviewUrl(data.cover_url);
+    }
 
-      editorRef.current?.editor?.commands.setContent(data?.content as Content);
-      console.log("editorRef.current:", editorRef.current);
-      console.log("editorRef.current?.editor?:", editorRef.current?.editor);
-      console.log("shouldUpdate:", shouldUpdate);
-    };
+    editorRef.current?.editor?.commands.setContent(data?.content as Content);
+  };
+  //Load Note
+  useEffect(() => {
     const handleGetCategory = async () => {
       const { data, error } = await getAllCategories();
       if (error) {
@@ -164,29 +190,27 @@ export default function Page() {
           return;
         }
 
-        if (contentString !== lastSavedContentRef.current) {
-          const { error } = await saveNote({
-            id: params.id,
-            title: finalTitle,
-            content: editorContent,
-            category_id: data.category,
-            tags: data.tags,
-            cover_url: data.cover,
-          });
+        const { error } = await saveNote({
+          id: params.id,
+          title: finalTitle,
+          content: editorContent,
+          category_id: data.category,
+          tags: data.tags,
+          cover_url: data.cover,
+        });
 
-          if (error) {
-            toast({
-              title: "Error Saving Note",
-              description: error.message,
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: "Note Saved",
-              description: "Your note has been successfully saved.",
-              variant: "default",
-            });
-          }
+        if (error) {
+          toast({
+            title: "Error Saving Note",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Note Saved",
+            description: "Your note has been successfully saved.",
+            variant: "default",
+          });
         }
       }
     } catch (error: unknown) {
@@ -270,6 +294,28 @@ export default function Page() {
   //   };
   // }, [handleAutoSave]);
 
+  if (isLoading) {
+    return (
+      <div>
+        <div className="flex justify-between items-center">
+          <BackButton />
+          <CreateNoteDropdownMenu
+            handleSave={handleSubmit(handleSaveNote)}
+            setOpenConfirmDialog={setOpenConfirmDialog}
+          />
+        </div>
+        <div className="flex gap-2 flex-col">
+          <Skeleton className="w-32 h-10 mb-4" />
+          <Skeleton className="w-full h-10 rounded-md" />
+          <Skeleton className="w-full h-10 rounded-md" />
+
+          <Separator className="my-6" />
+          <Skeleton className="w-full h-[300px] rounded-md" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div
@@ -304,7 +350,10 @@ export default function Page() {
         {saveLoading && <p className="text-neutral-600">Saving</p>}
         <div className="flex justify-between items-center">
           <BackButton />
-          <CreateNoteDropdownMenu handleSave={handleSubmit(handleSaveNote)} />
+          <CreateNoteDropdownMenu
+            handleSave={handleSubmit(handleSaveNote)}
+            setOpenConfirmDialog={setOpenConfirmDialog}
+          />
         </div>
         {imagePreviewUrl && (
           <div className="relative bg-neutral-800 mb-2">
@@ -326,15 +375,11 @@ export default function Page() {
           </div>
         )}
 
-        {isLoading ? (
-          <Skeleton className="w-32 h-10 mb-4" />
-        ) : (
-          <Input
-            {...register("title")}
-            className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0"
-            placeholder="Untitled"
-          />
-        )}
+        <Input
+          {...register("title")}
+          className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0"
+          placeholder="Untitled"
+        />
         {!imagePreviewUrl && (
           <UploadButton
             className="block w-fit h-fit py-1 px-2 hover:bg-neutral-700/50 group "
@@ -356,19 +401,16 @@ export default function Page() {
               />
               <p className="text-sm">Category</p>
             </div>
-            {isLoading ? (
-              <Skeleton className="w-full h-6 rounded-md" />
-            ) : (
-              <CategoryCombobox
-                options={categories}
-                label="Click to select category"
-                size="md"
-                className="w-full border-0 hover:bg-neutral-700/50 px-1"
-                icon={false}
-                value={selectedCategory}
-                onChange={(value) => setValue("category", value)}
-              />
-            )}
+
+            <CategoryCombobox
+              options={categories}
+              label="Click to select category"
+              size="md"
+              className="w-full border-0 hover:bg-neutral-700/50 px-1"
+              icon={false}
+              value={selectedCategory}
+              onChange={(value) => setValue("category", value)}
+            />
           </div>
           <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
             <div className="flex gap-2 w-1/3">
@@ -379,32 +421,24 @@ export default function Page() {
               />
               <p className="text-sm">Tag</p>
             </div>
-            {isLoading ? (
-              <Skeleton className="w-full h-6 rounded-md" />
-            ) : (
-              <TagMultiSelect
-                options={tags}
-                placeholder="Click to select tags"
-                onValueChange={(value) => setValue("tags", value)}
-                defaultValue={selectedTags}
-                maxCount={3}
-                onTagUpdate={handleGetTags}
-              />
-            )}
+            <TagMultiSelect
+              options={tags}
+              placeholder="Click to select tags"
+              onValueChange={(value) => setValue("tags", value)}
+              defaultValue={selectedTags}
+              maxCount={3}
+              onTagUpdate={handleGetTags}
+            />
           </div>
         </div>
         <Separator className="my-6" />
         <div className="pb-20" ref={inputRef}>
-          {isLoading ? (
-            <Skeleton className="w-full h-[300px] rounded-md" />
-          ) : (
-            <TiptapEditor
-              ref={editorRef}
-              onFocus={() => setInputActive(true)}
-              onBlur={() => setInputActive(false)}
-              onUpdate={handleGetTags}
-            />
-          )}
+          <TiptapEditor
+            ref={editorRef}
+            onFocus={() => setInputActive(true)}
+            onBlur={() => setInputActive(false)}
+            onUpdate={handleGetTags}
+          />
         </div>
         {editorRef.current && editorRef.current.editor && (
           <LinkModal
@@ -413,6 +447,13 @@ export default function Page() {
             setOpen={setOpen}
           />
         )}
+
+        <ConfirmPublishDialog
+          open={openConfirmDialog}
+          setOpen={setOpenConfirmDialog}
+          note={note}
+          refresh={handleGetNoteContent}
+        />
       </form>
     </>
   );

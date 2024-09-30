@@ -18,6 +18,7 @@ type Props = {
 };
 
 export default async function NoteDetailPage({ params }: Props) {
+  // TODO: Protect this route, make it accessible only when it is published
   const { data } = await getNoteById(params.id);
   if (!data) {
     return <div>No Note Available</div>;

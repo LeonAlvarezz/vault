@@ -20,7 +20,6 @@ type Props = {
 export default function LinkModal({ editor, setOpen, open }: Props) {
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
-  // const [open, setOpen] = useState(false);
   const [shouldShowMenu, setShouldShowMenu] = useState(false);
 
   const addLink = () => {

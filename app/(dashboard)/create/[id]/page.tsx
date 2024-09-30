@@ -292,9 +292,6 @@ export default function Page() {
       </div>
 
       <div className="hidden xl:block fixed top-20 left-28 w-[200px]">
-        <Button variant={"main"} onClick={handleSubmit(handleSaveNote)}>
-          Save
-        </Button>
         <div className="flex flex-col gap-2 mt-4">
           <p>Statistic</p>
           <StatContainer label="Views" count={2000} rate={10} />
@@ -409,7 +406,6 @@ export default function Page() {
             />
           )}
         </div>
-        {/* <Button onClick={handleSubmit(handleSaveNote)}>Save</Button> */}
         {editorRef.current && editorRef.current.editor && (
           <LinkModal
             editor={editorRef.current.editor}

@@ -20,7 +20,7 @@ export default async function DashboardLayout({
       <Sidebar />
       <SidebarMobile />
       <main className="w-[90%] sm:w-[80%] xl:w-[50%] pt-10 pb-20 mx-auto z-10 relative">
-        <Suspense fallback={<Loading />}>{children}</Suspense>
+        {children}
         <FloatingButton />
         <Tutorial />
       </main>

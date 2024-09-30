@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
@@ -19,9 +20,9 @@ export default function ImageContainer({
   preview = true,
 }: Props) {
   return (
-    <PhotoProvider>
-      <div className={cn("relative", className)}>
-        {preview ? (
+    <div className={cn("relative", className)}>
+      {preview ? (
+        <PhotoProvider>
           <PhotoView src={src}>
             <Image
               src={src}
@@ -32,17 +33,17 @@ export default function ImageContainer({
               sizes="(max-width: 1250px) 100vw, 1250px"
             />
           </PhotoView>
-        ) : (
-          <Image
-            src={src}
-            alt={alt}
-            width={0}
-            height={0}
-            style={{ width: "100%", height: "100%", objectFit: objectFit }}
-            sizes="(max-width: 1250px) 100vw, 1250px"
-          />
-        )}
-      </div>
-    </PhotoProvider>
+        </PhotoProvider>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          width={0}
+          height={0}
+          style={{ width: "100%", height: "100%", objectFit: objectFit }}
+          sizes="(max-width: 1250px) 100vw, 1250px"
+        />
+      )}
+    </div>
   );
 }

@@ -34,6 +34,7 @@ import UploadButton from "./button/upload-button";
 import { uploadImage } from "@/data/client/image";
 import { useToast } from "./use-toast";
 import { blobToBase64 } from "@/lib/dropImagePlugin";
+import { compressImage } from "@/lib/image";
 type Props = {
   editor: Editor | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -107,7 +108,8 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
         })
         .run();
 
-      const { publicUrl, error } = await uploadImage(image);
+      const compressedImage = await compressImage(image, { maxSizeMB: 1 });
+      const { publicUrl, error } = await uploadImage(compressedImage);
 
       if (error) {
         editor!

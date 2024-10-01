@@ -33,6 +33,7 @@ import ImageContainer from "@/components/ui/image-container";
 import ConfirmPublishDialog from "@/components/ui/dialog/confirm-publish-dialog";
 import { Note } from "@/types/note.type";
 import { ToastAction } from "@/components/ui/toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 type SelectOption = {
   value: string;
   label: string;
@@ -179,7 +180,6 @@ export default function Page() {
 
       if (editorRef.current && editorRef.current.editor) {
         const editorContent = editorRef.current.editor.getJSON();
-        const contentString = JSON.stringify(editorContent);
 
         if (editorRef.current.editor.isEmpty) {
           toast({
@@ -227,10 +227,10 @@ export default function Page() {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
 
-    // const compressedImage = await compressImage(image, { maxSizeMB: 1 });
-    // console.log("compressedImage:", compressedImage);
+    const compressedImage = await compressImage(image, { maxSizeMB: 1 });
+    console.log("compressedImage:", compressedImage);
 
-    const { publicUrl, error } = await uploadImage(image);
+    const { publicUrl, error } = await uploadImage(compressedImage);
 
     if (error) {
       setImagePreviewUrl(null);
@@ -350,7 +350,15 @@ export default function Page() {
       </div>
       {/* <form onSubmit={handleSubmit(handleSaveNote)}> */}
       <form>
-        {saveLoading && <p className="text-neutral-600">Saving</p>}
+        {saveLoading && (
+          <div className="fixed top-4 flex gap-2 items-center">
+            <AiOutlineLoading3Quarters
+              className="animate-spin text-neutral-500"
+              size={14}
+            />
+            <p className="text-neutral-500">Saving</p>
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <BackButton />
           <CreateNoteDropdownMenu

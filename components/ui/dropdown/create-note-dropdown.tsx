@@ -12,7 +12,7 @@ import { MdPublish, MdModeEdit, MdSave } from "react-icons/md";
 import ShareModal from "../modal/share-modal";
 import { IoShareSocial } from "react-icons/io5";
 type Props = {
-  handleSave: (data: any) => Promise<void>;
+  handleSave: () => Promise<void>;
   setOpenConfirmDialog: Dispatch<SetStateAction<boolean>>;
 };
 export default function CreateNoteDropdownMenu({
@@ -32,29 +32,48 @@ export default function CreateNoteDropdownMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuItem
-          className="p-2 flex items-center h-fit font-normal text-neutral-300"
+          className="p-0"
           onClick={() => {
             setOpenConfirmDialog(true);
           }}
         >
-          <MdPublish className="mr-2 h-4 w-4" />
-          <p className="whitespace-nowrap">Publish</p>
+          <Button
+            variant={"icon"}
+            type="button"
+            className="  p-2 w-full flex items-center justify-start h-full font-normal hover:bg-neutral-700/50 text-neutral-300"
+          >
+            <MdPublish className="mr-2 h-4 w-4" />
+            <p className="whitespace-nowrap">Publish</p>
+          </Button>
         </DropdownMenuItem>
         <ShareModal>
           <DropdownMenuItem
-            className="p-2 flex items-center h-fit font-normal text-neutral-300"
+            className="p-0"
             onSelect={(e) => e.preventDefault()}
           >
-            <IoShareSocial className="mr-2 h-4 w-4" />
-            <p>Share</p>
+            <Button
+              variant={"icon"}
+              type="button"
+              className="  p-2 w-full flex items-center justify-start h-full font-normal hover:bg-neutral-700/50 text-neutral-300"
+            >
+              <IoShareSocial className="mr-2 h-4 w-4" />
+              <p>Share</p>
+            </Button>
           </DropdownMenuItem>
         </ShareModal>
-        <DropdownMenuItem
-          className="p-2 flex items-center h-fit font-normal text-neutral-300"
-          onMouseDown={handleSave}
-        >
-          <MdSave className="mr-2 h-4 w-4" />
-          <p className="whitespace-nowrap">Save</p>
+        <DropdownMenuItem className="p-0">
+          <Button
+            variant={"icon"}
+            type="button"
+            className="py-2 px-2 w-full flex items-center justify-start h-full font-normal hover:bg-neutral-700/50 text-neutral-300"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              handleSave();
+            }}
+          >
+            <MdSave className="mr-2 h-4 w-4" />
+            <p className="whitespace-nowrap">Save</p>
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { Suspense } from "react";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import NoteCard from "@/components/ui/note-card/note-card";
@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/select";
 import SearchInput from "@/components/ui/search/search-input";
 import OrderSelect from "@/components/ui/select/order-select";
+import { getNoteExplore } from "@/data/server/note";
+import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
+import ImageContainer from "@/components/ui/image-container";
 
 const STATUS = [
   {
@@ -64,7 +67,11 @@ const ORDER = [
   },
 ];
 
-export default function NotePage() {
+export default async function NotePage() {
+  const { data: notes, error } = await getNoteExplore();
+  if (error) {
+    throw new Error(error.message);
+  }
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
@@ -87,11 +94,40 @@ export default function NotePage() {
 
         <OrderSelect options={ORDER} />
       </div>
-      <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
+
+      {notes && notes.length > 0 ? (
+        <Suspense fallback={<NoteSkeleton />}>
+          <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+            {notes?.map((note, index) =>
+              note.published_at ? (
+                <NoteCard key={index} note={note} published />
+              ) : (
+                <NoteCard key={index} note={note} />
+              )
+            )}
+          </section>
+        </Suspense>
+      ) : (
+        <div
+          className="w-full flex justify-center items-center"
+          style={{ minHeight: "calc(100svh - 280px)" }}
+        >
+          <div className="flex flex-col gap-4 items-center ">
+            <ImageContainer
+              src="/image/empty-note.svg"
+              alt="empty"
+              className="size-[100px] opacity-80"
+              preview={false}
+            />
+            <h1 className="text-neutral-500 ">No note available</h1>
+          </div>
+        </div>
+      )}
+      {/* <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
         {Array.from({ length: 30 }).map((_, index) => (
           <NoteCard published key={index} />
         ))}
-      </section>
+      </section> */}
     </>
   );
 }

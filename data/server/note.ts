@@ -23,9 +23,10 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), profile:profiles!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id))"
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
     )
-    .eq("profile_id", user!.id);
+    .eq("profile_id", user!.id)
+    .eq("likes.profile_id", user!.id);
 
   if (filter?.category && filter?.category !== "all") {
     query = query.eq("categories.name", filter.category);
@@ -50,6 +51,31 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
     }
   }
 
+  const { data, error } = await query;
+
+  return { data, error };
+}
+
+export async function getNoteExplore() {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  let query = supabase
+    .from("notes")
+    .select(
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+    )
+    .not("published_at", "is", null)
+    .eq("likes.profile_id", user!.id)
+    .eq("bookmarks.profile_id", user!.id);
+  if (user) {
+    query = query.eq("likes.profile_id", user.id);
+  }
   const { data, error } = await query;
 
   return { data, error };

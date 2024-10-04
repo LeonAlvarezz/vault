@@ -51,7 +51,6 @@ export function FilterCombobox({
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(defaultValue);
-  console.log("value:", value);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();

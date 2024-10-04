@@ -2,6 +2,8 @@ import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
 import { Category } from "./category.type";
 import { Profile } from "./profiles.type";
+import { Like } from "./like.type";
+import { Bookmark } from "./bookmark.type";
 
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
@@ -122,6 +124,8 @@ export type Note = {
   view: number | null;
   categories?: Category | null;
   profile?: Profile | null;
+  likes: Like[] | null;
+  bookmarks: Bookmark[] | null;
 };
 
 export type NoteFilter = {

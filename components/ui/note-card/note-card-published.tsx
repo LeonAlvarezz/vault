@@ -1,17 +1,14 @@
 import React from "react";
 import ImageContainerBlur from "../image-container-blur";
-import { Button } from "../button";
-import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
-import { FaRegHeart } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
-import { SlOptionsVertical } from "react-icons/sl";
 import Tag from "../tag";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 import Link from "next/link";
 import NoteCardFooter from "./note-card-footer";
 import { BlockNode, Note } from "@/types/note.type";
 import { renderNoteDescription } from "@/lib/renderNote";
+import { likeNote } from "@/data/server/like";
+import { revalidatePath } from "next/cache";
+import { bookmarkNote } from "@/data/server/bookmark";
 type Props = {
   note: Note;
 };
@@ -19,10 +16,28 @@ export default function NoteCardPublished({ note }: Props) {
   const isContentArray = (content: any): content is Array<any> => {
     return Array.isArray(content);
   };
+
+  const toggleLike = async () => {
+    "use server";
+    const { error } = await likeNote(note.id);
+    if (!error) {
+      revalidatePath("/note");
+    }
+    return error;
+  };
+
+  const toggleBookmark = async () => {
+    "use server";
+    const { error } = await bookmarkNote(note.id);
+    if (!error) {
+      revalidatePath("/note");
+    }
+    return error;
+  };
   return (
     <Link
       href={`/create/${note?.id}`}
-      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] transition-transform"
+      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform"
     >
       {note?.cover_url && (
         <ImageContainerBlur
@@ -53,7 +68,12 @@ export default function NoteCardPublished({ note }: Props) {
 
         <EditNoteDropdownMenu className="left-3" />
       </div>
-      <NoteCardFooter note={note} />
+      <NoteCardFooter
+        note={note}
+        toggleLike={toggleLike}
+        toggleBookmark={toggleBookmark}
+      />
+
       {/* <div className="flex flex-col flex-grow p-1">
         <div className="flex-grow flex flex-col gap-2 mt-1">
           <Tag color="orange" className="h-6">

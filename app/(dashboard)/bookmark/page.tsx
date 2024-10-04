@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { Suspense } from "react";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import NoteCard from "@/components/ui/note-card/note-card";
@@ -13,6 +13,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SearchInput from "@/components/ui/search/search-input";
+import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
+import ImageContainer from "@/components/ui/image-container";
+import { getBookmarkNote } from "@/data/server/note";
+import { getBookmark } from "@/data/server/bookmark";
+import NoteCardPublished from "@/components/ui/note-card/note-card-published";
+import { getAllCategories } from "@/data/client/category";
+import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
+import { NoteFilter } from "@/types/note.type";
+import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
+import { getTags } from "@/data/server/tag";
 
 const STATUS = [
   {
@@ -29,36 +39,81 @@ const STATUS = [
   },
 ];
 
-const TAG = [
-  {
-    value: "framework",
-    label: "Framework",
-  },
-  {
-    value: "Websocket",
-    label: "Websocket",
-  },
-  {
-    value: "tutorial",
-    label: "Tutorial",
-  },
-];
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
-export default function NotePage() {
+export default async function BookmarkPage({ searchParams }: Props) {
+  const [{ data: bookmarks, error }, { data: categories }, { data: tags }] =
+    await Promise.all([
+      getBookmark(searchParams as NoteFilter),
+      getAllCategories(),
+      getTags(),
+    ]);
+
+  const tagsOption = tags?.map((tag) => {
+    return {
+      label: tag.name,
+      value: tag.name,
+      color: tag.color!,
+    };
+  });
+  const categoryOption = [
+    { label: "All", value: "all" },
+    ...(categories?.map((category) => ({
+      label: category.name,
+      value: category.name,
+    })) || []),
+  ];
+
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Bookmark</h1>
       <SearchInput />
       <div className="flex gap-2 mt-4">
-        <Combobox options={STATUS} label="Category" size="sm" />
-        <Combobox options={TAG} label="Tags" size="sm" />
+        <FilterCombobox
+          filterKey={"status"}
+          options={STATUS}
+          defaultValue={searchParams?.status as string}
+          label="All Note"
+        />
+
+        <FilterCombobox
+          filterKey={"category"}
+          options={categoryOption!}
+          defaultValue={searchParams?.category as string}
+          label="Category"
+        />
       </div>
 
-      <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
-        {/* <NoteCard />
-        <NoteCard published /> */}
-        <NoteCard />
-      </section>
+      {bookmarks && bookmarks.length > 0 ? (
+        <Suspense fallback={<NoteSkeleton />}>
+          <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+            {bookmarks.map((bookmark, index) =>
+              bookmark.note.published_at ? (
+                <NoteCardPublished key={index} note={bookmark.note} bookmark />
+              ) : (
+                <NoteCard key={index} note={bookmark.note} />
+              )
+            )}
+          </section>
+        </Suspense>
+      ) : (
+        <div
+          className="w-full flex justify-center items-center"
+          style={{ minHeight: "calc(100svh - 280px)" }}
+        >
+          <div className="flex flex-col gap-4 items-center ">
+            <ImageContainer
+              src="/image/empty-note.svg"
+              alt="empty"
+              className="size-[100px] opacity-80"
+              preview={false}
+            />
+            <h1 className="text-neutral-500 ">No note available</h1>
+          </div>
+        </div>
+      )}
     </>
   );
 }

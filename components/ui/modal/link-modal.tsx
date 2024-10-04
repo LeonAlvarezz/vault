@@ -62,10 +62,6 @@ export default function LinkModal({ editor, setOpen, open }: Props) {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("open:", open);
-  // });
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogTrigger asChild>

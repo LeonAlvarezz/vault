@@ -124,8 +124,8 @@ export type Note = {
   view: number | null;
   categories?: Category | null;
   profile?: Profile | null;
-  likes: Like[] | null;
-  bookmarks: Bookmark[] | null;
+  likes?: Like[] | null;
+  bookmarks?: Bookmark[] | null;
 };
 
 export type NoteFilter = {

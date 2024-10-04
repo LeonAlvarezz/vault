@@ -15,9 +15,9 @@ import { formatDate } from "@/lib/date";
 import ImageContainerBlur from "../image-container-blur";
 type NoteCardProps = {
   note?: Note;
-  published?: boolean;
+  bookmark?: boolean;
 };
-export default function NoteCard({ published = false, note }: NoteCardProps) {
+export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
   const isContentArray = (content: any): content is Array<any> => {
     return Array.isArray(content);
   };
@@ -54,10 +54,6 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
       </Link>
     );
   }
-  if (published) {
-    return <NoteCardPublished note={note} />;
-  }
-
   return (
     <Link
       href={`/create/${note?.id}`}
@@ -65,8 +61,9 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
     >
       {note?.cover_url && (
         <ImageContainerBlur
-          className="h-[200px] overflow-hidden rounded-sm mb-2"
+          className="h-[200px] bg-neutral-900 overflow-hidden rounded-sm mb-2 object-contain"
           src={note?.cover_url}
+          objectFit="cover"
         />
       )}
       <div className="flex justify-between">
@@ -81,7 +78,7 @@ export default function NoteCard({ published = false, note }: NoteCardProps) {
             )}
         </div>
 
-        <EditNoteDropdownMenu />
+        <EditNoteDropdownMenu className="left-3" />
       </div>
       <div className="flex justify-between items-end mt-4">
         {note?.categories && (

@@ -72,6 +72,7 @@ export default function Page() {
 
   const handleGetTags = async () => {
     const { data, error } = await getTags();
+
     if (error) {
       toast({
         title: "Error Fetching Tags",
@@ -228,7 +229,6 @@ export default function Page() {
     setImagePreviewUrl(base64);
 
     const compressedImage = await compressImage(image, { maxSizeMB: 1 });
-    console.log("compressedImage:", compressedImage);
 
     const { publicUrl, error } = await uploadImage(compressedImage);
 

@@ -137,7 +137,7 @@ export function renderNoteDescription(node: BlockNode) {
           {node.content.map((textNode, index) => (
             <p
               key={index}
-              className="w-full line-clamp-4 text-xs text-neutral-500"
+              className="w-full line-clamp-2 text-xs text-neutral-500"
             >
               {textNode.text}
             </p>

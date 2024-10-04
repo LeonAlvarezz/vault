@@ -8,40 +8,78 @@ import React from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-import { getNoteById } from "@/data/server/note";
+import { getNoteById, increaseView } from "@/data/server/note";
 import BackButton from "@/components/ui/button/back-button";
 import RelatedNoteCarousel from "@/components/ui/carousel/related-note-carousel";
 import Render from "@/components/tiptap/Render";
 import RenderHTML from "@/components/tiptap/RenderHTML";
+import InteractionButton from "@/components/ui/note-card/interaction-button";
+import { likeNote } from "@/data/server/like";
+import { bookmarkNote } from "@/data/server/bookmark";
+import { revalidatePath } from "next/cache";
+import { formatDate } from "@/lib/date";
 type Props = {
   params: { id: string };
 };
 
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published
-  const { data } = await getNoteById(params.id);
-  if (!data) {
+  const { data: note } = await getNoteById(params.id);
+  if (!note) {
     return <div>No Note Available</div>;
   }
+
+  // TODO: Uncomment to enable increase view
+  // const { error: viewError } = await increaseView(params.id);
+  // if (viewError) {
+  //   console.error("Failed to increase view count:", viewError);
+  // }
+
+  const toggleLike = async () => {
+    "use server";
+    const { error } = await likeNote(note.id);
+    if (!error) {
+      revalidatePath("/note");
+    }
+    return error;
+  };
+
+  const toggleBookmark = async () => {
+    "use server";
+    const { error } = await bookmarkNote(note.id);
+    if (!error) {
+      revalidatePath("/note");
+    }
+    return error;
+  };
+
   return (
     <div className="pb-10">
       <section className="flex gap-2 flex-col">
         <BackButton />
-        <h1 className="text-2xl">{data.title}</h1>
-        <Tag color="blue" className="text-xs h-6">
-          React
-        </Tag>
+        <h1 className="text-2xl">{note.title}</h1>
+        {note?.categories && (
+          <Tag color={note?.categories.color!} className="h-6">
+            <p>{note?.categories.name!}</p>
+          </Tag>
+        )}
         <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 mb-6 gap-y-2">
           <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
-            <Link href={"/profile/id"}>
+            <Link href={`/profile/${note.profile_id}`}>
               <div className="flex gap-2">
                 <Avatar className="size-10">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  {note.profile?.avatar_url && (
+                    <AvatarImage src={note.profile.avatar_url} />
+                  )}
+                  <AvatarFallback>
+                    {note.profile?.username.slice(0, 1).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-sm">John Doe</p>
-                  <p className="text-xs text-neutral-400">16 Jul 2024</p>
+                  <p className="text-sm">{note.profile.username}</p>
+                  <p className="text-xs text-neutral-400">
+                    {formatDate(note.published_at || "")}
+                  </p>
                 </div>
               </div>
             </Link>
@@ -52,26 +90,20 @@ export default async function NoteDetailPage({ params }: Props) {
               <ContactButton layout="alternative" />
             </div>
           </div>
-          <div className="flex gap-2 items-end">
-            <Button
-              // onClick={handleButtonClick}
-              variant={"icon"}
-              className="group size-9 hover:text-red-500 hover:border-red-500 self-end border border-neutral-600 p-1 rounded-full"
-            >
-              <FaRegHeart size={16} />
-            </Button>
-            <Button
-              // onClick={handleButtonClick}
-              variant={"icon"}
-              className="group size-9 hover:text-blue-500 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full"
-            >
-              <IoBookmarkOutline size={16} />
-            </Button>
-          </div>
+          <InteractionButton
+            note={note}
+            toggleBookmark={toggleBookmark}
+            toggleLike={toggleLike}
+            bookmark={
+              note.bookmarks &&
+              note.bookmarks.length > 0 &&
+              note.bookmarks[0].deleted_at === null
+                ? true
+                : false
+            }
+          />
         </div>
-        {/* <RenderWithTiptap note={data} /> */}
-        <Render note={data} />
-        {/* <RenderHTML note={data} /> */}
+        <Render note={note} />
       </section>
       {/* <RelatedNoteCarousel /> */}
     </div>

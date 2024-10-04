@@ -14,6 +14,7 @@ import Loading from "@/app/loading";
 import ImageContainer from "@/components/ui/image-container";
 import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
+import NoteCardPublished from "@/components/ui/note-card/note-card-published";
 const STATUS = [
   {
     value: "all",
@@ -81,7 +82,7 @@ export default async function NotePage({ searchParams }: Props) {
           <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
             {notes?.map((note, index) =>
               note.published_at ? (
-                <NoteCard key={index} note={note} published />
+                <NoteCardPublished key={index} note={note} />
               ) : (
                 <NoteCard key={index} note={note} />
               )

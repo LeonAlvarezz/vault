@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/command";
 import Tag from "../tag";
 import { useDebouncedCallback } from "use-debounce";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -166,6 +166,7 @@ export const MultiFilterCombobox = React.forwardRef<
     const [inputValue, setInputValue] = React.useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     React.useEffect(() => {
@@ -180,7 +181,7 @@ export const MultiFilterCombobox = React.forwardRef<
 
       tags.forEach((tag) => params.append(filterKey, tag));
 
-      const newUrl = `/note?${params.toString()}`;
+      const newUrl = `${pathname}?${params.toString()}`;
       router.push(newUrl);
     }, 500);
 
@@ -296,9 +297,7 @@ export const MultiFilterCombobox = React.forwardRef<
               </div>
             ) : (
               <div className="flex items-center justify-between w-full px-1">
-                <span className="text-sm text-neutral-500 font-normal">
-                  {placeholder}
-                </span>
+                <span className="text-sm font-normal">{placeholder}</span>
                 <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </div>
             )}

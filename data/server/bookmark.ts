@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { NoteFilter } from "@/types/note.type";
 
 export async function bookmarkNote(noteId: string) {
   const supabase = createClient();
@@ -103,4 +104,43 @@ export async function bookmarkNote(noteId: string) {
     return { error: createError };
   }
   return { error: null };
+}
+
+export async function getBookmark(filter?: NoteFilter) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { error: authErr };
+  }
+  let query = supabase
+    .from("bookmarks")
+    .select(
+      "*, note:notes!inner(*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*))"
+    )
+    .eq("profile_id", user!.id)
+    .is("deleted_at", null);
+
+  if (filter?.category && filter?.category !== "all") {
+    query = query.eq("notes.categories.name", filter.category);
+  }
+
+  if (filter?.status && filter?.status !== "all") {
+    switch (filter.status) {
+      case "published":
+        query = query.not("notes.published_at", "is", null);
+        break;
+
+      case "unpublished":
+        query = query.is("notes.published_at", null);
+        break;
+    }
+  }
+
+  const { data, error } = await query;
+
+  return { data, error };
 }

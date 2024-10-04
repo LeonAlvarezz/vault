@@ -7,12 +7,14 @@ type Props = {
   src: string;
   alt?: string;
   className?: string;
+  objectFit?: "cover" | "contain" | "fill";
 };
 
 export default async function ImageContainerBlur({
   src,
   alt = "",
   className,
+  objectFit = "cover",
 }: Props) {
   const { placeholder } = await getPlaceholderImage(src);
   return (
@@ -24,7 +26,7 @@ export default async function ImageContainerBlur({
         placeholder="blur"
         width={0}
         height={0}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ width: "100%", height: "100%", objectFit: objectFit }}
         sizes="(max-width: 1250px) 100vw, 1250px"
       />
     </div>

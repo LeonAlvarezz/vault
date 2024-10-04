@@ -44,7 +44,7 @@ export default function NoteTab() {
       </Select>
       <div className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
         {Array.from({ length: 10 }).map((_, index: number) => (
-          <NoteCard key={index} published={index % 3 ? true : false} />
+          <NoteCard key={index} />
         ))}
       </div>
     </>

@@ -1,9 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { GoHomeFill } from "react-icons/go";
 import { MdExplore } from "react-icons/md";
-import { IoSearch, IoSettingsSharp } from "react-icons/io5";
+import { IoBookmark, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { FaStickyNote, FaUser } from "react-icons/fa";
-import { FaBookBookmark } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 
 import SidebarItem from "./sidebar-item";
@@ -44,7 +43,7 @@ export const SIDEBAR_ITEM = [
   },
   {
     id: "bookmark",
-    icon: <FaBookBookmark color={ICON_COLOR} size={ICON_SIZE} />,
+    icon: <IoBookmark color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/bookmark",
   },
   {

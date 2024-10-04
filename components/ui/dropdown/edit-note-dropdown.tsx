@@ -34,7 +34,7 @@ export default function EditNoteDropdownMenu({ className }: Props) {
           variant={"icon"}
           size={"icon"}
           className={cn(
-            "rounded-full size-7 hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0",
+            "rounded-full size-7 flex-shrink-0 hover:bg-neutral-700/50 relative left-4 focus-visible:ring-offset-0",
             className
           )}
         >

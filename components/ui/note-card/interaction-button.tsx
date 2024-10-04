@@ -1,31 +1,124 @@
 "use client";
-import React from "react";
+import React, { useTransition } from "react";
 import { FaRegHeart } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { Button } from "../button";
-
-export default function InteractionButton() {
-  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+import { Note } from "@/types/note.type";
+import { AuthError, PostgrestError } from "@supabase/supabase-js";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
+import { toast } from "../use-toast";
+import { cn } from "@/lib/utils";
+type Props = {
+  note: Note;
+  toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
+  toggleBookmark: () => Promise<AuthError | PostgrestError | null | undefined>;
+  bookmark?: boolean;
+};
+export default function InteractionButton({
+  toggleBookmark,
+  toggleLike,
+  note,
+  bookmark = false,
+}: Props) {
+  const [isLikePending, startLikeTransition] = useTransition();
+  const [isBookmarkPending, startBookmarkTransition] = useTransition();
+  const handleToggleBookmark = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.stopPropagation();
-    console.log("Button clicked!");
+    event.preventDefault();
+    try {
+      startBookmarkTransition(async () => {
+        const error = await toggleBookmark();
+        if (error) {
+          toast({
+            title: "Error Bookmark Post",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Add Note to Bookmark",
+            variant: "success",
+          });
+        }
+      });
+    } catch (error) {
+      toast({
+        title: "Unexpected Error!",
+        description: error instanceof Error ? error.message : String(error),
+        variant: "destructive",
+      });
+    }
+  };
+  const handleToggleLike = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    event.preventDefault();
+    try {
+      startLikeTransition(async () => {
+        const error = await toggleLike();
+        if (error) {
+          toast({
+            title: "Error Liking Post",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Successfully Like Post",
+            variant: "success",
+          });
+        }
+      });
+    } catch (error) {
+      toast({
+        title: "Unexpected Error!",
+        description: error instanceof Error ? error.message : String(error),
+        variant: "destructive",
+      });
+    }
   };
   return (
     <div className="flex gap-2 items-end">
       <Button
-        onClick={handleButtonClick}
+        onClick={handleToggleLike}
         variant={"icon"}
-        size={"icon"}
-        className="group w-5 h-5 hover:text-red-500 self-end"
+        className={cn(
+          "group size-9 hover:border-red-500 self-end border border-neutral-600 p-1 rounded-full",
+
+          isLikePending ||
+            (note.likes &&
+              note.likes.length > 0 &&
+              note.likes[0].deleted_at === null &&
+              "border-0 bg-red-500 hover:opacity-80 hover:bg-red-500")
+        )}
       >
-        <FaRegHeart className="group w-full h-full" />
+        {isLikePending ||
+        (note.likes &&
+          note.likes.length > 0 &&
+          note.likes[0].deleted_at === null) ? (
+          <IoIosHeart size={20} />
+        ) : (
+          <IoIosHeartEmpty size={20} className="group-hover:text-red-500" />
+        )}
       </Button>
       <Button
-        onClick={handleButtonClick}
+        onClick={handleToggleBookmark}
         variant={"icon"}
-        size={"icon"}
-        className="group w-5 h-5 hover:text-blue-500 self-end"
+        className={cn(
+          "group size-9 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full",
+
+          (isBookmarkPending || bookmark) &&
+            "border-0 bg-blue-500 hover:opacity-80 hover:bg-blue-500"
+        )}
       >
-        <IoBookmarkOutline className="group w-full h-full" />
+        {isBookmarkPending || bookmark ? (
+          <IoBookmark size={20} />
+        ) : (
+          <IoBookmarkOutline size={20} className="group-hover:text-blue-500" />
+        )}
       </Button>
     </div>
   );

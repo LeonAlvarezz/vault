@@ -17,11 +17,13 @@ type Props = {
   note: Note;
   toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
   toggleBookmark: () => Promise<AuthError | PostgrestError | null | undefined>;
+  bookmark?: boolean;
 };
 export default function NoteCardFooter({
   note,
   toggleLike,
   toggleBookmark,
+  bookmark,
 }: Props) {
   const { toast } = useToast();
   const router = useRouter();
@@ -134,10 +136,7 @@ export default function NoteCardFooter({
           onClick={handleToggleBookmark}
           className="p-0 h-fit "
         >
-          {isBookmarkPending ||
-          (note.bookmarks &&
-            note.bookmarks.length > 0 &&
-            note.bookmarks[0].deleted_at === null) ? (
+          {isBookmarkPending || bookmark ? (
             <IoBookmark size={20} className="text-blue-500 hover:opacity-50" />
           ) : (
             <IoBookmarkOutline size={20} className="hover:text-blue-500" />

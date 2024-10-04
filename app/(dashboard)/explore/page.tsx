@@ -17,6 +17,12 @@ import OrderSelect from "@/components/ui/select/order-select";
 import { getNoteExplore } from "@/data/server/note";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import ImageContainer from "@/components/ui/image-container";
+import NoteCardPublished from "@/components/ui/note-card/note-card-published";
+import { NoteFilter } from "@/types/note.type";
+import { getAllCategories } from "@/data/client/category";
+import { getTags } from "@/data/server/tag";
+import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
+import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 
 const STATUS = [
   {
@@ -67,28 +73,52 @@ const ORDER = [
   },
 ];
 
-export default async function NotePage() {
-  const { data: notes, error } = await getNoteExplore();
-  if (error) {
-    throw new Error(error.message);
-  }
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+export default async function NotePage({ searchParams }: Props) {
+  const [{ data: notes }, { data: categories }, { data: tags }] =
+    await Promise.all([
+      getNoteExplore(searchParams as NoteFilter),
+      getAllCategories(),
+      getTags(),
+    ]);
+
+  const categoryOption = [
+    { label: "All", value: "all" },
+    ...(categories?.map((category) => ({
+      label: category.name,
+      value: category.name,
+    })) || []),
+  ];
+
+  const tagsOption = tags?.map((tag) => {
+    return {
+      label: tag.name,
+      value: tag.name,
+      color: tag.color!,
+    };
+  });
+
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
       <SearchInput />
       <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
         <div className="flex gap-2">
-          <Combobox
-            options={STATUS}
+          <FilterCombobox
+            filterKey={"category"}
+            options={categoryOption!}
+            defaultValue={searchParams?.category as string}
             label="Category"
-            size="sm"
-            className="basis-1/2"
           />
-          <Combobox
-            options={TAG}
-            label="Tags"
-            size="sm"
-            className="basis-1/2"
+          <MultiFilterCombobox
+            filterKey={"tags"}
+            defaultValue={(searchParams?.tags as string[]) || []}
+            options={tagsOption || []}
+            placeholder="Tags"
+            maxCount={1}
           />
         </div>
 
@@ -100,7 +130,7 @@ export default async function NotePage() {
           <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
             {notes?.map((note, index) =>
               note.published_at ? (
-                <NoteCard key={index} note={note} published />
+                <NoteCardPublished key={index} note={note} />
               ) : (
                 <NoteCard key={index} note={note} />
               )
@@ -123,11 +153,6 @@ export default async function NotePage() {
           </div>
         </div>
       )}
-      {/* <section className="my-6 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-2">
-        {Array.from({ length: 30 }).map((_, index) => (
-          <NoteCard published key={index} />
-        ))}
-      </section> */}
     </>
   );
 }

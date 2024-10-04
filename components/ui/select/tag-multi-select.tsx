@@ -172,7 +172,8 @@ export const TagMultiSelect = React.forwardRef<
       if (event.key === "Enter") {
         event.preventDefault();
         setIsPopoverOpen(true);
-        if (empty) {
+
+        if (empty || options.length == 0) {
           try {
             const { error } = await createTags({ name: inputValue.trim() });
 
@@ -348,8 +349,6 @@ export const TagMultiSelect = React.forwardRef<
               } else {
                 setEmpty(false);
               }
-
-              // Returning 1 to keep the default behavior of rendering matching items
               return hasMatch ? 1 : 0;
             }}
           >
@@ -430,13 +429,14 @@ export const TagMultiSelect = React.forwardRef<
                       >
                         Clear
                       </CommandItem>
+
+                      <div className="pb-2 flex justify-center items-center">
+                        <p className="text-xs text-neutral-400 pr-4 pl-2">
+                          Type and enter to create new tag +
+                        </p>
+                      </div>
                     </>
                   )}
-                </div>
-                <div className="pb-2 flex justify-center items-center">
-                  <p className="text-xs text-neutral-400 pr-4 pl-2">
-                    Type and enter to create new tag +
-                  </p>
                 </div>
               </CommandGroup>
             </CommandList>

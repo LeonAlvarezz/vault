@@ -11,8 +11,9 @@ import { revalidatePath } from "next/cache";
 import { bookmarkNote } from "@/data/server/bookmark";
 type Props = {
   note: Note;
+  bookmark?: boolean;
 };
-export default function NoteCardPublished({ note }: Props) {
+export default function NoteCardPublished({ note, bookmark = false }: Props) {
   const isContentArray = (content: any): content is Array<any> => {
     return Array.isArray(content);
   };
@@ -36,14 +37,16 @@ export default function NoteCardPublished({ note }: Props) {
   };
   return (
     <Link
-      href={`/create/${note?.id}`}
+      href={`/note/${note?.id}`}
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform"
     >
       {note?.cover_url && (
+        //TODO Find a way to better render image cover
         <ImageContainerBlur
-          className="h-[200px] overflow-hidden rounded-sm "
+          className="h-[200px] overflow-hidden rounded-sm bg-neutral-900 aspect-video "
           src={note.cover_url}
           alt={note.title}
+          objectFit="cover"
         />
       )}
 
@@ -72,6 +75,15 @@ export default function NoteCardPublished({ note }: Props) {
         note={note}
         toggleLike={toggleLike}
         toggleBookmark={toggleBookmark}
+        bookmark={
+          bookmark
+            ? bookmark
+            : note.bookmarks &&
+              note.bookmarks.length > 0 &&
+              note.bookmarks[0].deleted_at === null
+            ? true
+            : false
+        }
       />
 
       {/* <div className="flex flex-col flex-grow p-1">

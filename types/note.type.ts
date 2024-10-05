@@ -131,7 +131,7 @@ export type Note = {
 export type NoteFilter = {
   category?: string;
   tags: string[];
-  sortBy?: string;
+  sortBy?: "recent" | "most_popular" | "trending" | "most_liked";
   status: "published" | "unpublished" | "all";
 };
 

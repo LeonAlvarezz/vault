@@ -13,15 +13,12 @@ import { BlockNode, Note } from "@/types/note.type";
 import { renderNote, renderNoteDescription } from "@/lib/renderNote";
 import { formatDate } from "@/lib/date";
 import ImageContainerBlur from "../image-container-blur";
+import { isContentArray } from "@/utils/string";
 type NoteCardProps = {
   note?: Note;
   bookmark?: boolean;
 };
 export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
-  const isContentArray = (content: any): content is Array<any> => {
-    return Array.isArray(content);
-  };
-
   if (!note) {
     return (
       <Link

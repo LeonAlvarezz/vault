@@ -15,6 +15,7 @@ import ImageContainer from "@/components/ui/image-container";
 import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoteCardPublished from "@/components/ui/note-card/note-card-published";
+import NoNote from "@/components/ui/note-card/no-note";
 const STATUS = [
   {
     value: "all",
@@ -94,15 +95,7 @@ export default async function NotePage({ searchParams }: Props) {
           className="w-full flex justify-center items-center"
           style={{ minHeight: "calc(100svh - 280px)" }}
         >
-          <div className="flex flex-col gap-4 items-center ">
-            <ImageContainer
-              src="/image/empty-note.svg"
-              alt="empty"
-              className="size-[100px] opacity-80"
-              preview={false}
-            />
-            <h1 className="text-neutral-500 ">No note available</h1>
-          </div>
+          <NoNote />
         </div>
       )}
     </>

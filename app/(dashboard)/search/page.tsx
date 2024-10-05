@@ -81,7 +81,7 @@ const RECENT_SEARCH = [
   },
 ];
 
-export default function SearchPage() {
+export default async function SearchPage() {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Search</h1>

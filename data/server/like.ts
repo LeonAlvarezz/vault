@@ -90,6 +90,18 @@ export async function likeNote(noteId: string) {
       return { error: updateError };
     }
 
+    const like = action === "like" ? 1 : -1;
+    const { error: addNoteLikeError } = await supabase.rpc("increment", {
+      table_name: "notes",
+      field_name: "like",
+      x: like,
+      row_id: noteId,
+    });
+
+    if (addNoteLikeError) {
+      return { error: addNoteLikeError };
+    }
+
     return { error: null };
   }
 
@@ -99,6 +111,17 @@ export async function likeNote(noteId: string) {
 
   if (createError) {
     return { error: createError };
+  }
+
+  const { error: addNoteLikeError } = await supabase.rpc("increment", {
+    table_name: "notes",
+    field_name: "like",
+    x: 1,
+    row_id: noteId,
+  });
+
+  if (addNoteLikeError) {
+    return { error: addNoteLikeError };
   }
   return { error: null };
 }

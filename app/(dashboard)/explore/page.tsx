@@ -122,7 +122,12 @@ export default async function NotePage({ searchParams }: Props) {
           />
         </div>
 
-        <OrderSelect options={ORDER} />
+        <FilterCombobox
+          filterKey={"sortBy"}
+          options={ORDER}
+          defaultValue={searchParams?.sortBy as string}
+          label="Sort By"
+        />
       </div>
 
       {notes && notes.length > 0 ? (

@@ -81,14 +81,62 @@ export async function getNoteExplore(filter?: NoteFilter) {
     .select(
       "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
     )
-    .not("published_at", "is", null)
-    .eq("likes.profile_id", user!.id)
-    .eq("bookmarks.profile_id", user!.id);
+    .not("published_at", "is", null);
   if (user) {
-    query = query.eq("likes.profile_id", user.id);
+    query = query
+      .eq("likes.profile_id", user.id)
+      .eq("bookmarks.profile_id", user!.id);
   }
-  const { data, error } = await query;
 
+  if (filter?.category && filter?.category !== "all") {
+    query = query.eq("categories.name", filter.category);
+  }
+
+  if (filter?.status && filter?.status !== "all") {
+    switch (filter.status) {
+      case "published":
+        query = query.not("published_at", "is", null);
+        break;
+
+      case "unpublished":
+        query = query.is("published_at", null);
+        break;
+    }
+  }
+
+  if (filter?.tags) {
+    const tagsArray = Array.isArray(filter.tags) ? filter.tags : [filter.tags];
+    if (tagsArray.length > 0) {
+      query = query.in("tags.tags.name", tagsArray);
+    }
+  }
+
+  if (filter?.sortBy) {
+    switch (filter.sortBy) {
+      case "recent":
+        query = query.order("created_at", { ascending: false }); // Assuming you're sorting by creation date
+        break;
+
+      case "most_liked":
+        query = query.order("like", { ascending: false });
+        break;
+
+      case "most_popular":
+        query = query.order("view", { ascending: true });
+        break;
+
+      case "trending":
+        query = query
+          .order("like", { ascending: false })
+          .order("view", { ascending: false })
+          .order("created_at", { ascending: false });
+        break;
+    }
+  }
+
+  const { data, error } = await query;
+  // console.log("data:", data);
+  console.log("error:", error);
   return { data, error };
 }
 
@@ -104,7 +152,7 @@ export async function getBookmarkNote(filter?: NoteFilter) {
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*))"
     )
     .eq("bookmarks.profile_id", user!.id)
     .eq("likes.profile_id", user!.id);

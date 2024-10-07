@@ -1,5 +1,6 @@
 import { Json } from "@/database.types";
 import { Profile } from "./profiles.type";
+import { Bookmark } from "./bookmark.type";
 
 export type SearchResultCol = {
   id: string;
@@ -7,6 +8,7 @@ export type SearchResultCol = {
   cover_url: string | null;
   content: Json | null;
   profiles: Profile | null;
+  bookmarks: Bookmark[] | null;
 };
 
 export type SearchResult = {

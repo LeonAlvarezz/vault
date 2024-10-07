@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SearchInput from "@/components/ui/search/search-input";
+import { searchNoteCol } from "@/data/client/search";
 
 const STATUS = [
   {
@@ -116,6 +117,7 @@ export default async function SearchPage() {
           <h2 className="text-xl font-bold">Trending</h2>
         </div>
         <div className="flex flex-col gap-2">
+          {/* TODO: Work on saving user search, analyze to find trending search */}
           {RECENT_SEARCH.map((result, index) => (
             <div
               key={index}

@@ -15,24 +15,25 @@ export default function SearchResultColumn({ searchResult }: Props) {
   return (
     <Link
       href={`/note/${searchResult.id}`}
-      className="grid grid-cols-4 gap-4 px-2 items-center rounded-sm h-20 hover:bg-neutral-700/50 hover:cursor-pointer"
+      className="grid grid-cols-4 gap-4 px-2 items-center rounded-sm h-32 hover:bg-neutral-700/50 hover:cursor-pointer"
     >
       {searchResult.cover_url && (
         <ImageContainer
           src={searchResult.cover_url}
           alt="placeholder"
-          className="h-full overflow-hidden"
+          className="h-32"
+          objectFit="contain"
         />
       )}
       <div className="col-span-3">
         <p className="text-sm">{searchResult.title}</p>
-        <p className="w-full line-clamp-1 mb-1 text-xs text-neutral-500">
+        <div className="w-full line-clamp-1 mb-1 text-xs text-neutral-500">
           {searchResult?.content &&
             isContentArray(searchResult.content) &&
             searchResult.content.length > 0 && (
               <>{renderNoteDescription(searchResult.content[0] as BlockNode)}</>
             )}
-        </p>
+        </div>
 
         <div
           className="flex gap-2 rounded-sm p-0.5  items-center"

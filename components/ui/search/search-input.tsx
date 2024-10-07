@@ -14,10 +14,12 @@ import NoNote from "../note-card/no-note";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaArrowDown } from "react-icons/fa";
 import Link from "next/link";
+import SearchResultContainer from "./search-result-container";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchKey?: string;
 };
-export default function SearchInput({ onChange }: Props) {
+export default function SearchInput({ onChange, searchKey = "public" }: Props) {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -25,6 +27,7 @@ export default function SearchInput({ onChange }: Props) {
   const { toast } = useToast();
   const [searchCols, setSearchCols] = useState<SearchResultCol[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [empty, setEmpty] = useState(false);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (!query) return;
@@ -38,13 +41,10 @@ export default function SearchInput({ onChange }: Props) {
 
   const debouncedGetSearchCol = useDebouncedCallback(async (query: string) => {
     if (!query) return;
-    const searchQuery = constructSearchQuery(query, "|");
-    console.log("searchQuery:", searchQuery);
+    const searchQuery = constructSearchQuery(query, "<->");
     setSearchLoading(true);
     try {
-      const { data, error } = await searchNoteCol(searchQuery);
-      console.log("error:", error);
-      console.log("data:", data);
+      const { data, error } = await searchNoteCol(searchQuery, searchKey);
       if (error) {
         toast({
           title: "Error Fetching Search Col!",
@@ -52,7 +52,12 @@ export default function SearchInput({ onChange }: Props) {
           variant: "destructive",
         });
       } else {
-        setSearchCols(data!);
+        if (data.length > 0) {
+          setSearchCols(data);
+          setEmpty(false);
+        } else {
+          setEmpty(true);
+        }
       }
     } catch (error) {
       toast({
@@ -92,37 +97,43 @@ export default function SearchInput({ onChange }: Props) {
 
   return (
     <div className="relative">
-      <div className="relative">
-        {focus && (
-          <div className="w-full absolute top-12 h-fit bg-popover">
-            {searchLoading ? (
-              <div className="h-full w-full p-6 flex justify-center items-center">
-                <AiOutlineLoading3Quarters
-                  size={14}
-                  className="animate-spin mr-2"
-                />
-              </div>
-            ) : searchCols && searchCols.length > 0 ? (
-              <div className="grid grid-cols-1 gap-2 py-4 px-2">
-                {searchCols.map((col) => (
-                  <SearchResultColumn key={col.id} searchResult={col} />
-                ))}
-                <Link
-                  href={`/search?query=${query}`}
-                  className="flex gap-2 justify-center items-center"
-                >
-                  <FaArrowDown size={12} />
-                  <p className="text-xs">More Result</p>
-                </Link>
-              </div>
-            ) : (
-              <div className="h-full min-w-[200px] p-6 flex justify-center items-center">
-                <NoNote />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      {/* {focus && query.length > 0 && (
+        <div className="w-full absolute top-12 h-fit bg-popover">
+          {searchLoading ? (
+            <div className="h-full w-full p-6 flex justify-center items-center">
+              <AiOutlineLoading3Quarters
+                size={14}
+                className="animate-spin mr-2"
+              />
+            </div>
+          ) : searchCols && searchCols.length > 0 ? (
+            <div className="grid grid-cols-1 gap-2 py-4 px-2">
+              {searchCols.map((col) => (
+                <SearchResultColumn key={col.id} searchResult={col} />
+              ))}
+              <Link
+                href={`/search?query=${query}`}
+                className="flex gap-2 mt-5 justify-center items-center"
+              >
+                <FaArrowDown size={12} />
+                <p className="text-xs">More Result</p>
+              </Link>
+            </div>
+          ) : (
+            <div className="h-full min-w-[200px] p-6 flex justify-center items-center">
+              <NoNote />
+            </div>
+          )}
+        </div>
+      )} */}
+
+      <SearchResultContainer
+        query={query}
+        searchCols={searchCols}
+        loading={searchLoading}
+        show={focus && query.length > 0 ? true : false}
+        empty={empty}
+      />
 
       <Input
         variant={"outline"}
@@ -131,7 +142,9 @@ export default function SearchInput({ onChange }: Props) {
         value={query}
         onFocus={handleFocus}
         onBlur={() => {
-          setFocus(false);
+          setTimeout(() => {
+            setFocus(false);
+          }, 100);
         }}
         onChange={handleChange}
       />

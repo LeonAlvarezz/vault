@@ -69,7 +69,7 @@ export default async function BookmarkPage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Bookmark</h1>
-      <SearchInput />
+      <SearchInput searchKey="bookmark" />
       <div className="flex gap-2 mt-4">
         <FilterCombobox
           filterKey={"status"}

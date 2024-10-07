@@ -1,4 +1,5 @@
 import { Plugin, PluginKey } from "prosemirror-state";
+import { compressImage } from "./image";
 
 export type UploadFn = (image: File) => Promise<
   | {
@@ -49,7 +50,20 @@ export const dropImagePlugin = (upload: UploadFn) => {
               view.dispatch(transaction);
 
               if (upload) {
-                await upload(image);
+                const compressedImage = await compressImage(image, {
+                  maxSizeMB: 1,
+                });
+                const { publicUrl, error } = await upload(compressedImage);
+
+                if (!error && publicUrl) {
+                  // Once upload is successful, replace the data URL with the final public URL
+                  const pos = view.state.selection.anchor - 1; // Assuming the image is at the current selection's anchor
+                  view.dispatch(
+                    view.state.tr.setNodeMarkup(pos, null, {
+                      src: publicUrl,
+                    })
+                  );
+                }
               }
             }
           } else {
@@ -108,7 +122,20 @@ export const dropImagePlugin = (upload: UploadFn) => {
               view.dispatch(transaction);
 
               if (upload) {
-                await upload(image);
+                const compressedImage = await compressImage(image, {
+                  maxSizeMB: 1,
+                });
+                const { publicUrl, error } = await upload(compressedImage);
+
+                if (!error && publicUrl) {
+                  // Once upload is successful, replace the data URL with the final public URL
+                  const pos = view.state.selection.anchor - 1; // Assuming the image is at the current selection's anchor
+                  view.dispatch(
+                    view.state.tr.setNodeMarkup(pos, null, {
+                      src: publicUrl,
+                    })
+                  );
+                }
               }
             } else {
               reader.onload = (readerEvent) => {

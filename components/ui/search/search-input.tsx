@@ -41,7 +41,8 @@ export default function SearchInput({ onChange, searchKey = "public" }: Props) {
 
   const debouncedGetSearchCol = useDebouncedCallback(async (query: string) => {
     if (!query) return;
-    const searchQuery = constructSearchQuery(query, "<->");
+    setSearchCols([]);
+    const searchQuery = constructSearchQuery(query, "|");
     setSearchLoading(true);
     try {
       const { data, error } = await searchNoteCol(searchQuery, searchKey);

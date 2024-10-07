@@ -33,23 +33,24 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // const protectedPaths = [
-  //   "/dashboard",
-  //   "/explore",
-  //   "/note",
-  //   "/settings",
-  //   "/profile",
-  //   "/bookmark",
-  // ];
+  const protectedPaths = [
+    "/dashboard",
+    "/explore",
+    "/note",
+    "/create",
+    "/settings",
+    "/profile",
+    "/bookmark",
+  ];
 
-  // const isProtectedPath = protectedPaths.some((path) =>
-  //   request.nextUrl.pathname.startsWith(path)
-  // );
+  const isProtectedPath = protectedPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
 
-  // if (!user && isProtectedPath && !request.url.startsWith("/auth")) {
-  //   url.pathname = "/auth/login";
-  //   return NextResponse.redirect(url);
-  // }
+  if (!user && isProtectedPath && !request.url.startsWith("/auth")) {
+    url.pathname = "/auth/login";
+    return NextResponse.redirect(url);
+  }
 
   if (
     url.pathname === "/profile" ||

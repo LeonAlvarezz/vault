@@ -16,3 +16,31 @@ export async function searchNoteCol(query: string) {
 
   return { data, error };
 }
+
+export async function commandSearch(searchQuery: string, isGlobal: boolean) {
+  const supabase = createClient();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+
+  let query = supabase
+    .from("notes")
+    .select(
+      "id, title, content->content, published_at, profiles!notes_profile_id_fkey!inner(*)"
+    );
+
+  if (!isGlobal) {
+    query = query.eq("profile_id", user!.id);
+  } else {
+    query = query.not("published_at", "is", null).neq("profile_id", user!.id);
+  }
+
+  const { data, error } = await query.textSearch("fts", searchQuery).limit(4);
+
+  return { data, error };
+}

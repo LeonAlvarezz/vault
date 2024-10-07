@@ -8,3 +8,11 @@ export type SearchResultCol = {
   content: Json | null;
   profiles: Profile | null;
 };
+
+export type SearchResult = {
+  id: string;
+  title: string;
+  content: Json | null;
+  profiles: Profile | null;
+  published_at: string | null;
+};

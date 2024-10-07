@@ -9,7 +9,7 @@ export const sanitizeSearchInput = (input: string): string => {
 };
 
 export const constructSearchQuery = (query: string, searchOption: string) => {
-  return query.split(" ").join(` ${searchOption} `);
+  return query.trim().split(/\s+/).join(` ${searchOption} `);
 };
 
 export const isContentArray = (content: any): content is Array<any> => {

@@ -142,8 +142,8 @@ export async function getNoteExplore(filter?: NoteFilter) {
   }
 
   const { data, error } = await query;
-  // console.log("data:", data);
-  console.log("error:", error);
+  //
+
   return { data, error };
 }
 
@@ -254,3 +254,23 @@ export async function increaseView(noteId: string) {
 
   return { error: null };
 }
+
+export const isNoteOwner = async (noteId: string) => {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { count, error } = await supabase
+    .from("notes")
+    .select("*", { count: "exact", head: true })
+    .eq("profile_id", user!.id);
+  if (error) {
+    return { count: 0, error };
+  }
+
+  return { count, error };
+};

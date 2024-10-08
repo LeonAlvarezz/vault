@@ -17,8 +17,9 @@ import Link from "next/link";
 import SearchResultContainer from "./search-result-container";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchKey?: string;
 };
-export default function SearchInput({ onChange }: Props) {
+export default function SearchInput({ onChange, searchKey = "public" }: Props) {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
@@ -26,6 +27,7 @@ export default function SearchInput({ onChange }: Props) {
   const { toast } = useToast();
   const [searchCols, setSearchCols] = useState<SearchResultCol[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [empty, setEmpty] = useState(false);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (!query) return;
@@ -39,8 +41,8 @@ export default function SearchInput({ onChange }: Props) {
 
   const debouncedGetSearchCol = useDebouncedCallback(async (query: string) => {
     if (!query) return;
+    setSearchCols([]);
     const searchQuery = constructSearchQuery(query, "|");
-    console.log("searchQuery:", searchQuery);
     setSearchLoading(true);
     try {
       const { data, error } = await searchNoteCol(searchQuery);
@@ -51,7 +53,12 @@ export default function SearchInput({ onChange }: Props) {
           variant: "destructive",
         });
       } else {
-        setSearchCols(data!);
+        if (data.length > 0) {
+          setSearchCols(data);
+          setEmpty(false);
+        } else {
+          setEmpty(true);
+        }
       }
     } catch (error) {
       toast({

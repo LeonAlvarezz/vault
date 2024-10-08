@@ -1,5 +1,6 @@
 import { Json } from "@/database.types";
 import { Profile } from "./profiles.type";
+import { Bookmark } from "./bookmark.type";
 
 export type SearchResultCol = {
   id: string;
@@ -8,6 +9,7 @@ export type SearchResultCol = {
   // content: Json | null;
   content_text: string | null;
   profiles: Profile | null;
+  bookmarks?: Bookmark[] | null;
 };
 
 export type SearchResult = {

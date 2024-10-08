@@ -17,7 +17,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import { mergeAttributes } from "@tiptap/core";
+import { EditorEvents, mergeAttributes } from "@tiptap/core";
 import { isMobile } from "react-device-detect";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "../ui/button";
@@ -29,7 +29,7 @@ export interface TiptapEditorRef {
 }
 
 interface TiptapEditorProps {
-  onUpdate?: () => void;
+  onUpdate?: (props: EditorEvents["update"]) => void;
   onFocus: () => void;
   onBlur?: () => void;
 }

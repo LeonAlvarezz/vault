@@ -127,6 +127,7 @@ export type Note = {
   profile?: Profile | null;
   likes?: Like[] | null;
   bookmarks?: Bookmark[] | null;
+  embedding?: string | null;
 };
 
 export type NoteFilter = {
@@ -145,4 +146,5 @@ export type SaveNotePayload = {
   tags: string[];
   cover_url: string | null;
   content_text: string | null;
+  // embedding: number[] | null;
 };

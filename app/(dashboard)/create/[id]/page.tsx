@@ -18,7 +18,7 @@ import { getNoteContent, saveNote } from "@/data/client/note";
 import BackButton from "@/components/ui/button/back-button";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { Content } from "@tiptap/react";
+import { Content, EditorEvents } from "@tiptap/react";
 import { TagMultiSelect } from "@/components/ui/select/tag-multi-select";
 import { getAllCategories } from "@/data/client/category";
 import { CategoryCombobox } from "@/components/ui/combobox/category-combobox";
@@ -34,6 +34,7 @@ import ConfirmPublishDialog from "@/components/ui/dialog/confirm-publish-dialog"
 import { Note } from "@/types/note.type";
 import { ToastAction } from "@/components/ui/toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useDebouncedCallback } from "use-debounce";
 type SelectOption = {
   value: string;
   label: string;
@@ -174,57 +175,61 @@ export default function Page() {
     fetchInitialData();
   }, [shouldUpdate]);
 
-  const handleSaveNote = async (data: any) => {
-    setSaveLoading(true);
-    try {
-      const finalTitle = data.title || "Untitled";
+  const handleSaveNote = useCallback(
+    async (data: any) => {
+      setSaveLoading(true);
+      try {
+        const finalTitle = data.title || "Untitled";
 
-      if (editorRef.current && editorRef.current.editor) {
-        const editorContent = editorRef.current.editor.getJSON();
+        if (editorRef.current && editorRef.current.editor) {
+          const editorContent = editorRef.current.editor.getJSON();
 
-        if (editorRef.current.editor.isEmpty) {
-          toast({
-            title: "Note not saved",
-            description: "Cannot save an empty note.",
-            variant: "default",
+          if (editorRef.current.editor.isEmpty) {
+            toast({
+              title: "Note not saved",
+              description: "Cannot save an empty note.",
+              variant: "default",
+            });
+            return;
+          }
+
+          const { error } = await saveNote({
+            id: params.id,
+            title: finalTitle,
+            content: editorContent,
+            category_id: data.category,
+            tags: data.tags,
+            cover_url: data.cover,
+            content_text: editorRef.current.editor.getText(),
           });
-          return;
-        }
 
-        const { error } = await saveNote({
-          id: params.id,
-          title: finalTitle,
-          content: editorContent,
-          category_id: data.category,
-          tags: data.tags,
-          cover_url: data.cover,
-          content_text: editorRef.current.editor.getText(),
+          if (error) {
+            toast({
+              title: "Error Saving Note",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
+          //  else {
+          //   toast({
+          //     title: "Note Saved",
+          //     description: "Your note has been successfully saved.",
+          //     variant: "default",
+          //   });
+          // }
+        }
+      } catch (error: unknown) {
+        toast({
+          title: "Error Saving Note",
+          description: error instanceof Error ? error.message : String(error),
+          variant: "destructive",
         });
-
-        if (error) {
-          toast({
-            title: "Error Saving Note",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Note Saved",
-            description: "Your note has been successfully saved.",
-            variant: "default",
-          });
-        }
+      } finally {
+        setSaveLoading(false);
       }
-    } catch (error: unknown) {
-      toast({
-        title: "Error Saving Note",
-        description: error instanceof Error ? error.message : String(error),
-        variant: "destructive",
-      });
-    } finally {
-      setSaveLoading(false);
-    }
-  };
+    },
+    [params.id, toast]
+  );
   const handleUploadCover = async (image: File) => {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
@@ -246,6 +251,20 @@ export default function Page() {
     setImagePreviewUrl(publicUrl);
   };
 
+  const handleUserStoppedTyping = useDebouncedCallback(
+    () => {
+      handleAutoSave();
+      // console.log("User stopped typing for 5 seconds");
+      // Perform any action you want when the user stops typing
+      // For example, you could save the content or trigger an API call
+    },
+    5000 // 5000 milliseconds = 5 seconds
+  );
+
+  const handleUpdateTiptap = (props: EditorEvents["update"]) => {
+    handleUserStoppedTyping();
+  };
+
   useEffect(() => {
     if (!image) return;
 
@@ -256,11 +275,14 @@ export default function Page() {
     if (shouldUpdate) setShouldUpdate(false);
   }, [shouldUpdate]);
 
+  // TODO: When user type then when they stop for 5 secs save it to db?
+
+  // TODO: Uncomment to enable auto save
   // // Save data every 10 seconds
-  // const handleAutoSave = useCallback(() => {
-  //   const formValues = watch();
-  //   handleSaveNote(formValues);
-  // }, [watch, handleSaveNote]);
+  const handleAutoSave = useCallback(() => {
+    const formValues = watch();
+    handleSaveNote(formValues);
+  }, [watch, handleSaveNote]);
 
   // useEffect(() => {
   //   const intervalId = setInterval(() => {
@@ -297,7 +319,6 @@ export default function Page() {
   //     window.removeEventListener("beforeunload", handleBeforeUnload);
   //   };
   // }, [handleAutoSave]);
-
   if (isLoading) {
     return (
       <div>
@@ -449,7 +470,7 @@ export default function Page() {
             ref={editorRef}
             onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}
-            onUpdate={handleGetTags}
+            onUpdate={handleUpdateTiptap}
           />
         </div>
         {editorRef.current && editorRef.current.editor && (

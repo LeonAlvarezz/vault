@@ -14,6 +14,7 @@ export async function saveNote(payload: SaveNotePayload) {
       content: payload.content as BlockNode[],
       category_id: +payload.category_id,
       cover_url: payload.cover_url,
+      content_text: payload.content_text,
     })
     .eq("id", payload.id)
     .select();

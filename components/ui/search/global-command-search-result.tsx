@@ -9,28 +9,23 @@ import { isContentArray } from "@/utils/string";
 import { formatDate } from "@/lib/date";
 import Link from "next/link";
 type Props = {
-  keyterm: string;
   searchResult: SearchResult;
   onSelect: () => void;
 };
 export default function GlobalCommandSearchResult({
-  keyterm,
   searchResult,
   onSelect,
 }: Props) {
   return (
     <Link href={`/note/${searchResult.id}`}>
       <CommandItem
-        key={`word-${keyterm}`}
         className="flex flex-col gap-1 items-start !px-6 my-1"
         onSelect={onSelect}
       >
         <h2 className="">{searchResult.title}</h2>
-        {searchResult?.content &&
-          isContentArray(searchResult.content) &&
-          searchResult.content.length > 0 && (
-            <>{renderNoteDescription(searchResult.content[0] as BlockNode)}</>
-          )}
+        <p className="text-xs text-neutral-500 line-clamp-1">
+          {searchResult.content_text}
+        </p>
 
         <div className="w-full flex justify-between items-end">
           <div

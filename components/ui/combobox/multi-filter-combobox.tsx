@@ -168,6 +168,9 @@ export const MultiFilterCombobox = React.forwardRef<
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const selectedArray = Array.isArray(selectedValues)
+      ? selectedValues
+      : [selectedValues];
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -251,7 +254,7 @@ export const MultiFilterCombobox = React.forwardRef<
             {selectedValues.length > 0 ? (
               <div className="flex justify-between items-center w-full">
                 <div className="flex flex-wrap items-center gap-2">
-                  {selectedValues.slice(0, maxCount).map((value) => {
+                  {selectedArray.slice(0, maxCount).map((value) => {
                     const option = options.find((o) => o.value === value);
                     const IconComponent = option?.icon;
                     return (
@@ -274,7 +277,7 @@ export const MultiFilterCombobox = React.forwardRef<
                       </Tag>
                     );
                   })}
-                  {selectedValues.length > maxCount && (
+                  {selectedArray.length > maxCount && (
                     <Badge
                       className={cn(
                         "bg-popover text-foreground border-foreground/1 hover:bg-transparent",

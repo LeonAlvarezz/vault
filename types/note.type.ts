@@ -112,6 +112,7 @@ export type Note = {
   bookmark: number | null;
   category_id: number | null;
   content: Json | null;
+  content_text: string | null;
   cover_url: string | null;
   created_at: string;
   deleted_at: string | null;
@@ -133,6 +134,7 @@ export type NoteFilter = {
   tags: string[];
   sortBy?: "recent" | "most_popular" | "trending" | "most_liked";
   status: "published" | "unpublished" | "all";
+  query?: string;
 };
 
 export type SaveNotePayload = {
@@ -142,4 +144,5 @@ export type SaveNotePayload = {
   content: JSONContent;
   tags: string[];
   cover_url: string | null;
+  content_text: string | null;
 };

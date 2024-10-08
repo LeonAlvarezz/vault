@@ -5,10 +5,10 @@ import ContactButton from "@/components/ui/button/contact-button";
 import Tag from "@/components/ui/tag";
 import Link from "next/link";
 import React from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaPen, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-import { getNoteById, increaseView } from "@/data/server/note";
+import { getNoteById, increaseView, isNoteOwner } from "@/data/server/note";
 import BackButton from "@/components/ui/button/back-button";
 import RelatedNoteCarousel from "@/components/ui/carousel/related-note-carousel";
 import Render from "@/components/tiptap/Render";
@@ -25,6 +25,8 @@ type Props = {
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published
   const { data: note } = await getNoteById(params.id);
+  const { count, error } = await isNoteOwner(params.id);
+  const isOwner = count && count > 1 ? true : false;
   if (!note) {
     return <div>No Note Available</div>;
   }
@@ -52,11 +54,15 @@ export default async function NoteDetailPage({ params }: Props) {
     }
     return error;
   };
-
   return (
     <div className="pb-10">
       <section className="flex gap-2 flex-col">
-        <BackButton />
+        <div className="flex justify-between items-center ">
+          <BackButton />
+          <Link href={`/create/${note.id}`} className="h-fit hover:text-second">
+            <FaPen size={14} />
+          </Link>
+        </div>
         <h1 className="text-2xl">{note.title}</h1>
         {note?.categories && (
           <Tag color={note?.categories.color!} className="h-6">

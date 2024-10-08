@@ -2,6 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
+import { constructSearchQuery } from "@/utils/string";
+import { searchBookmarkNote, searchUserNote } from "./search";
 
 export async function bookmarkNote(noteId: string) {
   const supabase = createClient();
@@ -138,6 +140,12 @@ export async function getBookmark(filter?: NoteFilter) {
         query = query.is("notes.published_at", null);
         break;
     }
+  }
+
+  if (filter?.query) {
+    const query = constructSearchQuery(filter.query, "|");
+    const { data, error } = await searchBookmarkNote(query);
+    return { data, error };
   }
 
   const { data, error } = await query;

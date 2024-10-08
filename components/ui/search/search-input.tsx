@@ -45,7 +45,7 @@ export default function SearchInput({ onChange, searchKey = "public" }: Props) {
     const searchQuery = constructSearchQuery(query, "|");
     setSearchLoading(true);
     try {
-      const { data, error } = await searchNoteCol(searchQuery, searchKey);
+      const { data, error } = await searchNoteCol(searchQuery);
       if (error) {
         toast({
           title: "Error Fetching Search Col!",
@@ -98,43 +98,42 @@ export default function SearchInput({ onChange, searchKey = "public" }: Props) {
 
   return (
     <div className="relative">
-      {/* {focus && query.length > 0 && (
-        <div className="w-full absolute top-12 h-fit bg-popover">
-          {searchLoading ? (
-            <div className="h-full w-full p-6 flex justify-center items-center">
-              <AiOutlineLoading3Quarters
-                size={14}
-                className="animate-spin mr-2"
-              />
-            </div>
-          ) : searchCols && searchCols.length > 0 ? (
-            <div className="grid grid-cols-1 gap-2 py-4 px-2">
-              {searchCols.map((col) => (
-                <SearchResultColumn key={col.id} searchResult={col} />
-              ))}
-              <Link
-                href={`/search?query=${query}`}
-                className="flex gap-2 mt-5 justify-center items-center"
-              >
-                <FaArrowDown size={12} />
-                <p className="text-xs">More Result</p>
-              </Link>
-            </div>
-          ) : (
-            <div className="h-full min-w-[200px] p-6 flex justify-center items-center">
-              <NoNote />
-            </div>
-          )}
-        </div>
-      )} */}
-
       <SearchResultContainer
-        query={query}
-        searchCols={searchCols}
+        show={focus}
         loading={searchLoading}
-        show={focus && query.length > 0 ? true : false}
-        empty={empty}
+        searchCols={searchCols}
+        query={query}
       />
+      {/* {focus && (
+          <div className="w-full absolute top-12 h-fit bg-popover">
+            {searchLoading ? (
+              <div className="h-full w-full p-6 flex justify-center items-center">
+                <AiOutlineLoading3Quarters
+                  size={14}
+                  className="animate-spin mr-2"
+                />
+              </div>
+            ) : searchCols && searchCols.length > 0 ? (
+              <div className="grid grid-cols-1 gap-2 py-4 px-2">
+                {searchCols.map((col) => (
+                  <SearchResultColumn key={col.id} searchResult={col} />
+                ))}
+                <Link
+                  href={`/search?query=${query}`}
+                  className="flex gap-2 justify-center items-center"
+                >
+                  <FaArrowDown size={12} />
+                  <p className="text-xs">More Result</p>
+                </Link>
+              </div>
+            ) : (
+              <div className="h-full min-w-[200px] p-6 flex justify-center items-center">
+                <NoNote />
+              </div>
+            )}
+          </div>
+        )}
+      </div> */}
 
       <Input
         variant={"outline"}
@@ -145,11 +144,11 @@ export default function SearchInput({ onChange, searchKey = "public" }: Props) {
         onBlur={() => {
           setTimeout(() => {
             setFocus(false);
-          }, 100);
+          }, 200);
         }}
         onChange={handleChange}
       />
-      <kbd className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-popover px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+      <kbd className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-popover px-1.5 font-mono text-[10px] font-medium text-neutral-300 opacity-100">
         <span className="text-xs">⌘</span>K
       </kbd>
       <Button

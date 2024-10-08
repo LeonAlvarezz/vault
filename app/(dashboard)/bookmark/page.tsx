@@ -1,17 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
 import React, { Suspense } from "react";
-import { IoSearch } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
 import NoteCard from "@/components/ui/note-card/note-card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import SearchInput from "@/components/ui/search/search-input";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import ImageContainer from "@/components/ui/image-container";
@@ -23,6 +12,7 @@ import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { NoteFilter } from "@/types/note.type";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import { getTags } from "@/data/server/tag";
+import SearchInputLocal from "@/components/ui/search/search-input-local";
 
 const STATUS = [
   {
@@ -69,7 +59,7 @@ export default async function BookmarkPage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Bookmark</h1>
-      <SearchInput searchKey="bookmark" />
+      <SearchInputLocal />
       <div className="flex gap-2 mt-4">
         <FilterCombobox
           filterKey={"status"}

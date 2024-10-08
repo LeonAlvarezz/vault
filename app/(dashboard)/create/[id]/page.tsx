@@ -198,6 +198,7 @@ export default function Page() {
           category_id: data.category,
           tags: data.tags,
           cover_url: data.cover,
+          content_text: editorRef.current.editor.getText(),
         });
 
         if (error) {

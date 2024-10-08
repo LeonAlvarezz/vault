@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
+import { searchUserNote } from "../server/search";
+import { constructSearchQuery } from "@/utils/string";
 
 export async function getNoteById(id: string) {
   const supabase = createClient();
@@ -58,12 +60,17 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   if (filter?.tags) {
     const tagsArray = Array.isArray(filter.tags) ? filter.tags : [filter.tags];
     if (tagsArray.length > 0) {
-      query = query.in("tags.tags.name", tagsArray);
+      query = query.in("tags.tags.name", tagsArray).not("tags", "is", null);
     }
   }
 
-  const { data, error } = await query;
+  if (filter?.query) {
+    const query = constructSearchQuery(filter.query, "|");
+    const { data, error } = await searchUserNote(query);
+    return { data, error };
+  }
 
+  const { data, error } = await query;
   return { data, error };
 }
 
@@ -178,6 +185,12 @@ export async function getBookmarkNote(filter?: NoteFilter) {
     if (tagsArray.length > 0) {
       query = query.in("tags.tags.name", tagsArray);
     }
+  }
+
+  if (filter?.query) {
+    const query = constructSearchQuery(filter.query, "|");
+    const { data, error } = await searchUserNote(query);
+    return { data, error };
   }
 
   const { data, error } = await query;

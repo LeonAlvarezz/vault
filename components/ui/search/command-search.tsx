@@ -196,8 +196,7 @@ export default function CommandSearch() {
               <CommandGroup heading="Global">
                 {searchResult.map((result, index) => (
                   <GlobalCommandSearchResult
-                    key={index}
-                    keyterm={String(index)}
+                    key={result.id}
                     searchResult={result}
                     onSelect={() => setOpen(false)}
                   />
@@ -211,8 +210,7 @@ export default function CommandSearch() {
               <CommandGroup heading="Result">
                 {searchResult.map((result, index) => (
                   <LocalCommandSearchResult
-                    key={index}
-                    keyterm={String(index)}
+                    key={result.id}
                     searchResult={result}
                     onSelect={() => setOpen(false)}
                   />

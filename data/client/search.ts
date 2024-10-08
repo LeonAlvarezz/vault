@@ -5,7 +5,7 @@ export async function searchNoteCol(query: string) {
   const { data, error } = await supabase
     .from("notes")
     .select(
-      "id, title, cover_url, content->content, profiles!notes_profile_id_fkey!inner(*)"
+      "id, title, cover_url, content_text, profiles!notes_profile_id_fkey!inner(*)"
     )
     .textSearch("fts", query)
     .limit(4);
@@ -31,7 +31,7 @@ export async function commandSearch(searchQuery: string, isGlobal: boolean) {
   let query = supabase
     .from("notes")
     .select(
-      "id, title, content->content, published_at, profiles!notes_profile_id_fkey!inner(*)"
+      "id, title, published_at, content_text, profiles!notes_profile_id_fkey!inner(*)"
     );
 
   if (!isGlobal) {

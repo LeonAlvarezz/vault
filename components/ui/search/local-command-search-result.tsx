@@ -7,12 +7,10 @@ import { isContentArray } from "@/utils/string";
 import { BlockNode } from "@/types/note.type";
 import Link from "next/link";
 type Props = {
-  keyterm: string;
   searchResult: SearchResult;
   onSelect: () => void;
 };
 export default function LocalCommandSearchResulT({
-  keyterm,
   searchResult,
   onSelect,
 }: Props) {
@@ -24,11 +22,9 @@ export default function LocalCommandSearchResulT({
       >
         <h2 className="">{searchResult.title}</h2>
 
-        {searchResult?.content &&
-          isContentArray(searchResult.content) &&
-          searchResult.content.length > 0 && (
-            <>{renderNoteDescription(searchResult.content[0] as BlockNode)}</>
-          )}
+        <p className="text-xs text-neutral-500 line-clamp-1">
+          {searchResult.content_text}
+        </p>
       </CommandItem>
       <Separator />
     </Link>

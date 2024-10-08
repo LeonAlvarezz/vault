@@ -160,6 +160,7 @@ export type Database = {
           bookmark: number | null
           category_id: number | null
           content: Json | null
+          content_text: string | null
           cover_url: string | null
           created_at: string
           deleted_at: string | null
@@ -176,6 +177,7 @@ export type Database = {
           bookmark?: number | null
           category_id?: number | null
           content?: Json | null
+          content_text?: string | null
           cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -192,6 +194,7 @@ export type Database = {
           bookmark?: number | null
           category_id?: number | null
           content?: Json | null
+          content_text?: string | null
           cover_url?: string | null
           created_at?: string
           deleted_at?: string | null
@@ -356,6 +359,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      extract_text_from_json: {
+        Args: {
+          json_data: Json
+        }
+        Returns: string
+      }
       increment: {
         Args: {
           table_name: string

@@ -221,6 +221,7 @@ export const MultiSelect = React.forwardRef<
                   {selectedValues.slice(0, maxCount).map((value) => {
                     const option = options.find((o) => o.value === value);
                     const IconComponent = option?.icon;
+
                     return (
                       <Tag
                         key={value}
@@ -266,7 +267,6 @@ export const MultiSelect = React.forwardRef<
                 <span className="text-sm text-neutral-500 font-normal">
                   {placeholder}
                 </span>
-                {/* <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" /> */}
               </div>
             )}
           </Button>

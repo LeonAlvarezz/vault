@@ -14,6 +14,7 @@ import NoNote from "../note-card/no-note";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaArrowDown } from "react-icons/fa";
 import Link from "next/link";
+import SearchResultContainer from "./search-result-container";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -43,8 +44,6 @@ export default function SearchInput({ onChange }: Props) {
     setSearchLoading(true);
     try {
       const { data, error } = await searchNoteCol(searchQuery);
-      console.log("error:", error);
-      console.log("data:", data);
       if (error) {
         toast({
           title: "Error Fetching Search Col!",
@@ -92,8 +91,13 @@ export default function SearchInput({ onChange }: Props) {
 
   return (
     <div className="relative">
-      <div className="relative">
-        {focus && (
+      <SearchResultContainer
+        show={focus}
+        loading={searchLoading}
+        searchCols={searchCols}
+        query={query}
+      />
+      {/* {focus && (
           <div className="w-full absolute top-12 h-fit bg-popover">
             {searchLoading ? (
               <div className="h-full w-full p-6 flex justify-center items-center">
@@ -122,7 +126,7 @@ export default function SearchInput({ onChange }: Props) {
             )}
           </div>
         )}
-      </div>
+      </div> */}
 
       <Input
         variant={"outline"}
@@ -131,11 +135,13 @@ export default function SearchInput({ onChange }: Props) {
         value={query}
         onFocus={handleFocus}
         onBlur={() => {
-          setFocus(false);
+          setTimeout(() => {
+            setFocus(false);
+          }, 200);
         }}
         onChange={handleChange}
       />
-      <kbd className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-popover px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+      <kbd className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-popover px-1.5 font-mono text-[10px] font-medium text-neutral-300 opacity-100">
         <span className="text-xs">⌘</span>K
       </kbd>
       <Button

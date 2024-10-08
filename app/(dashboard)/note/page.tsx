@@ -16,6 +16,8 @@ import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoteCardPublished from "@/components/ui/note-card/note-card-published";
 import NoNote from "@/components/ui/note-card/no-note";
+import SearchInputLocal from "@/components/ui/search/search-input-local";
+import NoteList from "./_component/note-list";
 const STATUS = [
   {
     value: "all",
@@ -41,11 +43,6 @@ export default async function NotePage({ searchParams }: Props) {
       getAllCategories(),
       getTags(),
     ]);
-  // const { data: notes } = await getAllNotesByProfileId(
-  //   searchParams as NoteFilter
-  // );
-  // const { data: categories } = await getAllCategories();
-  // const { data: tags } = await getTags();
   const tagsOption = tags?.map((tag) => {
     return {
       label: tag.name,
@@ -56,13 +53,14 @@ export default async function NotePage({ searchParams }: Props) {
 
   return (
     <>
-      <SearchInput />
+      <SearchInputLocal />
       <div className="flex mt-4 justify-between">
         <CategorySwipe
           categories={categories || []}
           searchParams={searchParams}
         />
       </div>
+
       <div className="mt-4 flex gap-2">
         <FilterCombobox
           filterKey={"status"}
@@ -80,7 +78,8 @@ export default async function NotePage({ searchParams }: Props) {
       </div>
       {notes && notes.length > 0 ? (
         <Suspense fallback={<NoteSkeleton />}>
-          <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+          <NoteList notes={notes} />
+          {/* <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6 align-super">
             {notes?.map((note, index) =>
               note.published_at ? (
                 <NoteCardPublished key={index} note={note} />
@@ -88,7 +87,7 @@ export default async function NotePage({ searchParams }: Props) {
                 <NoteCard key={index} note={note} />
               )
             )}
-          </section>
+          </section> */}
         </Suspense>
       ) : (
         <div

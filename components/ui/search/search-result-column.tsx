@@ -12,6 +12,7 @@ type Props = {
   searchResult: SearchResultCol;
 };
 export default function SearchResultColumn({ searchResult }: Props) {
+  console.log("searchResult:", searchResult);
   return (
     <Link
       href={`/note/${searchResult.id}`}
@@ -26,23 +27,24 @@ export default function SearchResultColumn({ searchResult }: Props) {
       )}
       <div className="col-span-3">
         <p className="text-sm">{searchResult.title}</p>
-        <p className="w-full line-clamp-1 mb-1 text-xs text-neutral-500">
-          {searchResult?.content &&
-            isContentArray(searchResult.content) &&
-            searchResult.content.length > 0 && (
-              <>{renderNoteDescription(searchResult.content[0] as BlockNode)}</>
-            )}
+        <p className="text-[10px] text-neutral-500 line-clamp-1 mb-2">
+          {searchResult.content_text}
         </p>
+        {/* {searchResult?.content &&
+          isContentArray(searchResult.content) &&
+          searchResult.content.length > 0 && (
+            <>{renderNoteDescription(searchResult.content[0] as BlockNode)}</>
+          )} */}
 
         <div
           className="flex gap-2 rounded-sm p-0.5  items-center"
           // onClick={handleProfileClick}
         >
-          <Avatar className="w-7 h-7">
+          <Avatar className="w-6 h-6">
             {searchResult.profiles?.avatar_url && (
               <AvatarImage src={searchResult.profiles.avatar_url} />
             )}
-            <AvatarFallback>
+            <AvatarFallback className="text-xs">
               {searchResult.profiles?.username.slice(0, 1).toUpperCase()}
             </AvatarFallback>
           </Avatar>

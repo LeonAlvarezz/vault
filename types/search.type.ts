@@ -8,7 +8,7 @@ export type SearchResultCol = {
   cover_url: string | null;
   // content: Json | null;
   content_text: string | null;
-  profiles: Profile | null;
+  profiles?: Profile | null;
   bookmarks?: Bookmark[] | null;
 };
 
@@ -17,6 +17,6 @@ export type SearchResult = {
   title: string;
   // content: Json | null;
   content_text: string | null;
-  profiles: Profile | null;
+  profiles?: Profile | null;
   published_at: string | null;
 };

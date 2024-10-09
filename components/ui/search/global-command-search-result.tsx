@@ -11,10 +11,12 @@ import Link from "next/link";
 type Props = {
   searchResult: SearchResult;
   onSelect: () => void;
+  isLast: boolean;
 };
 export default function GlobalCommandSearchResult({
   searchResult,
   onSelect,
+  isLast,
 }: Props) {
   return (
     <Link href={`/note/${searchResult.id}`}>
@@ -51,7 +53,7 @@ export default function GlobalCommandSearchResult({
           </p>
         </div>
       </CommandItem>
-      <Separator />
+      {!isLast && <Separator />}
     </Link>
   );
 }

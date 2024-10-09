@@ -32,10 +32,13 @@ import Link from "next/link";
 import { CommandLoading } from "cmdk";
 import Loading from "@/app/loading";
 import Spinner from "../spinner";
+import { IoSparklesSharp } from "react-icons/io5";
+import { vectorSearch } from "@/app/api/action";
 
 export default function CommandSearch() {
   const [open, setOpen] = useState(false);
   const [isGlobal, setIsGlobal] = useState(false);
+  const [isVectorSearch, setIsVectorSearch] = useState(false);
   const gestureRef = useRef<HTMLDivElement>(null);
   const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
   const [query, setQuery] = useState("");
@@ -96,6 +99,9 @@ export default function CommandSearch() {
   );
 
   const handlePressedChange = () => {
+    if (isVectorSearch) {
+      setIsVectorSearch(false);
+    }
     setIsGlobal(!isGlobal);
     setSearchLoading(true);
     try {
@@ -112,14 +118,31 @@ export default function CommandSearch() {
     }
   };
 
-  const debouncedGetSearch = useDebouncedCallback(async (query: string) => {
-    if (!query) return;
-    setSearchResult([]);
+  const handleVectorToggle = () => {
+    if (isGlobal) {
+      setIsGlobal(false);
+    }
+    setIsVectorSearch(!isVectorSearch);
+    setSearchLoading(true);
+    try {
+      setSearchResult([]);
+      getSearchResult(query);
+    } catch (error) {
+      toast({
+        title: "Unexpected Error!",
+        description: error instanceof Error ? error.message : String(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  const fullTextSearch = async (query: string) => {
     const searchQuery = constructSearchQuery(query, "|");
     setSearchLoading(true);
     try {
       const { data, error } = await commandSearch(searchQuery, isGlobal);
-      console.log("data:", data);
       if (error) {
         toast({
           title: "Error Fetching Search Col!",
@@ -143,6 +166,75 @@ export default function CommandSearch() {
     } finally {
       setSearchLoading(false);
     }
+  };
+
+  const AISearch = async (query: string) => {
+    setSearchLoading(true);
+    try {
+      const { notes, error } = await vectorSearch(query.trim());
+      if (error) {
+        toast({
+          title: "Error Fetching Search Col!",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        if (notes) {
+          setSearchResult(notes);
+          setEmpty(false);
+        } else {
+          setEmpty(true);
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Unexpected Error!",
+        description: error instanceof Error ? error.message : String(error),
+        variant: "destructive",
+      });
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  const debouncedGetSearch = useDebouncedCallback(async (query: string) => {
+    setSearchResult([]);
+    if (!query) {
+      setSearchResult([]);
+      return;
+    }
+    if (isVectorSearch) {
+      AISearch(query);
+    } else {
+      fullTextSearch(query);
+    }
+    // const searchQuery = constructSearchQuery(query, "|");
+    // setSearchLoading(true);
+    // try {
+    //   const { data, error } = await commandSearch(searchQuery, isGlobal);
+    //   if (error) {
+    //     toast({
+    //       title: "Error Fetching Search Col!",
+    //       description: error.message,
+    //       variant: "destructive",
+    //     });
+    //   } else {
+    //     if (data) {
+    //       setSearchResult(data);
+    //       setEmpty(false);
+    //     } else {
+    //       setEmpty(true);
+    //     }
+    //   }
+    // } catch (error) {
+    //   toast({
+    //     title: "Unexpected Error!",
+    //     description: error instanceof Error ? error.message : String(error),
+    //     variant: "destructive",
+    //   });
+    // } finally {
+    //   setSearchLoading(false);
+    // }
   }, 1000);
 
   const getSearchResult = React.useCallback(
@@ -166,23 +258,42 @@ export default function CommandSearch() {
         placeholder="Type a command or search..."
         onValueChange={handleInputChange}
       >
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="size-[24px]">
-              <Toggle
-                aria-label="Toggle global"
-                pressed={isGlobal}
-                onPressedChange={handlePressedChange}
-                className="w-6 h-6 p-1 group hover:bg-neutral-600"
-              >
-                <RiGlobalLine className="text-neutral-400" />
-              </Toggle>
-            </TooltipTrigger>
-            <TooltipContent side={"bottom"}>
-              <p className="capitalize">Global</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="flex gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="size-[24px]">
+                <Toggle
+                  aria-label="Toggle AI"
+                  pressed={isVectorSearch}
+                  onPressedChange={handleVectorToggle}
+                  className="w-6 h-6 p-1 group hover:bg-neutral-600"
+                >
+                  <IoSparklesSharp className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block bg-clip-text" />
+                </Toggle>
+              </TooltipTrigger>
+              <TooltipContent side={"bottom"}>
+                <p className="capitalize">AI Search</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="size-[24px]">
+                <Toggle
+                  aria-label="Toggle global"
+                  pressed={isGlobal}
+                  onPressedChange={handlePressedChange}
+                  className="w-6 h-6 p-1 group hover:bg-neutral-600"
+                >
+                  <RiGlobalLine className="text-neutral-400" />
+                </Toggle>
+              </TooltipTrigger>
+              <TooltipContent side={"bottom"}>
+                <p className="capitalize">Global</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CommandInput>
       <CommandList>
         {searchLoading && (
@@ -199,6 +310,7 @@ export default function CommandSearch() {
                     key={result.id}
                     searchResult={result}
                     onSelect={() => setOpen(false)}
+                    isLast={index === searchResult.length - 1}
                   />
                 ))}
               </CommandGroup>
@@ -213,6 +325,7 @@ export default function CommandSearch() {
                     key={result.id}
                     searchResult={result}
                     onSelect={() => setOpen(false)}
+                    isLast={index === searchResult.length - 1}
                   />
                 ))}
               </CommandGroup>

@@ -14,7 +14,7 @@ import { FaTags } from "react-icons/fa";
 import LinkModal from "@/components/ui/modal/link-modal";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
-import { getNoteContent, saveNote } from "@/data/client/note";
+import { getNoteContent } from "@/data/client/note";
 import BackButton from "@/components/ui/button/back-button";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
@@ -35,6 +35,7 @@ import { Note } from "@/types/note.type";
 import { ToastAction } from "@/components/ui/toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useDebouncedCallback } from "use-debounce";
+import { saveNote } from "@/app/api/action";
 type SelectOption = {
   value: string;
   label: string;
@@ -193,15 +194,38 @@ export default function Page() {
             return;
           }
 
-          const { error } = await saveNote({
+          const tags = Array.isArray(data.tags) ? [...data.tags] : [];
+          const category =
+            typeof data.category === "string"
+              ? data.category
+              : String(data.category);
+          const coverUrl = typeof data.cover === "string" ? data.cover : "";
+
+          const serializableContent = JSON.stringify(editorContent);
+
+          const noteData = {
             id: params.id,
             title: finalTitle,
-            content: editorContent,
-            category_id: data.category,
-            tags: data.tags,
-            cover_url: data.cover,
-            content_text: editorRef.current.editor.getText(),
-          });
+            content: JSON.parse(serializableContent), // Send stringified content
+            category_id: category,
+            tags: tags,
+            cover_url: coverUrl,
+            content_text: editorRef.current.editor.getText().trim(),
+          };
+
+          console.log(noteData);
+
+          const { error } = await saveNote(noteData);
+
+          // const { error } = await saveNote({
+          //   id: params.id,
+          //   title: finalTitle,
+          //   content: editorContent,
+          //   category_id: category,
+          //   tags: tags,
+          //   cover_url: coverUrl,
+          //   content_text: editorRef.current.editor.getText(),
+          // });
 
           if (error) {
             toast({
@@ -210,13 +234,6 @@ export default function Page() {
               variant: "destructive",
             });
           }
-          //  else {
-          //   toast({
-          //     title: "Note Saved",
-          //     description: "Your note has been successfully saved.",
-          //     variant: "default",
-          //   });
-          // }
         }
       } catch (error: unknown) {
         toast({

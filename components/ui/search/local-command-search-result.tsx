@@ -9,10 +9,12 @@ import Link from "next/link";
 type Props = {
   searchResult: SearchResult;
   onSelect: () => void;
+  isLast: boolean;
 };
 export default function LocalCommandSearchResulT({
   searchResult,
   onSelect,
+  isLast,
 }: Props) {
   return (
     <Link href={`/create/${searchResult.id}`}>
@@ -26,7 +28,7 @@ export default function LocalCommandSearchResulT({
           {searchResult.content_text}
         </p>
       </CommandItem>
-      <Separator />
+      {!isLast && <Separator />}
     </Link>
   );
 }

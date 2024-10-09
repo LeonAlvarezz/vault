@@ -5,20 +5,16 @@ import { revalidatePathClient } from "@/app/api/action";
 import OpenAI from "openai";
 
 import { env } from "@/utils/env";
-// import { openai } from "@/lib/openai";
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY || "",
-// });
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = createClient();
 
-  const result = await openai.embeddings.create({
-    input: payload.title + payload.content_text,
-    model: "text-embedding-3-small",
-  });
+  // const result = await openai.embeddings.create({
+  //   input: payload.title + payload.content_text,
+  //   model: "text-embedding-3-small",
+  // });
 
-  const [{ embedding }] = result.data;
+  // const [{ embedding }] = result.data;
 
   // 1. Update the note itself
   const { data: noteData, error: noteError } = await supabase
@@ -29,7 +25,7 @@ export async function saveNote(payload: SaveNotePayload) {
       category_id: +payload.category_id,
       cover_url: payload.cover_url,
       content_text: payload.content_text,
-      embedding: JSON.stringify(embedding),
+      // embedding: JSON.stringify(embedding),
     })
     .eq("id", payload.id)
     .select();

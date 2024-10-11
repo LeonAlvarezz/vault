@@ -86,7 +86,7 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
         });
       }
     },
-    [toast, router, onTagUpdate, isDataChanged]
+    [toast, onTagUpdate, isDataChanged]
   );
 
   const handleDeleteTag = async (e: React.MouseEvent<HTMLDivElement>) => {

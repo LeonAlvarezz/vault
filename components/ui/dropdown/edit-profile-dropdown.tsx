@@ -12,7 +12,7 @@ import {
 } from "../dropdown-menu";
 import { Button } from "../button";
 import { SlOptionsVertical } from "react-icons/sl";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { MdModeEdit } from "react-icons/md";
 import { IoShareSocial } from "react-icons/io5";
 import ShareModal from "../modal/share-modal";

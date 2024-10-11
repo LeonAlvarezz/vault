@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { startTransition, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ICON_COLOR, ICON_SIZE } from "./sidebar/sidebar";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,8 @@ import { useToast } from "./use-toast";
 import { createNote } from "@/data/client/note";
 import { User } from "@supabase/supabase-js";
 import { shouldShowFloatingButton } from "@/utils/route";
+import { useProgress } from "react-transition-progress";
+import useDetectKeyboardOpen from "use-detect-keyboard-open";
 type Props = {
   className?: string;
   user?: User | null;
@@ -23,6 +25,8 @@ export default function FloatingButton({ className }: Props) {
   const { setShowModal } = useQuickSnipStore();
   const router = useRouter();
   const pathname = usePathname();
+  const isKeyboardOpen = useDetectKeyboardOpen();
+  const startProgress = useProgress();
   const showFloatingButton = pathname
     ? shouldShowFloatingButton(pathname)
     : false;
@@ -30,27 +34,30 @@ export default function FloatingButton({ className }: Props) {
   const { toast } = useToast();
 
   const handleCreateNote = async () => {
-    try {
-      const { data, error } = await createNote();
-      if (data) {
-        router.push(`/create/${data.id}`);
-      }
-      if (error) {
+    startTransition(async () => {
+      startProgress();
+      try {
+        const { data, error } = await createNote();
+        if (data) {
+          router.push(`/create/${data.id}`);
+        }
+        if (error) {
+          toast({
+            title: "Error Creating Note",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
+      } catch (error: unknown) {
         toast({
           title: "Error Creating Note",
-          description: error.message,
+          description: error instanceof Error ? error.message : String(error),
           variant: "destructive",
         });
       }
-    } catch (error: unknown) {
-      toast({
-        title: "Error Creating Note",
-        description: error instanceof Error ? error.message : String(error),
-        variant: "destructive",
-      });
-    }
+    });
   };
-  if (!showFloatingButton) {
+  if (!showFloatingButton && isKeyboardOpen) {
     return null;
   }
   return (

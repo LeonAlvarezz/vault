@@ -51,6 +51,7 @@ export default function Page() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,23 +104,10 @@ export default function Page() {
           description: error?.message,
         });
       }
+
       router.push("/note");
     }
-    if (!data) {
-      toast({
-        title: "Unexpected Error",
-        action: (
-          <div className="flex gap-2">
-            <ToastAction altText="Try again" onClick={() => router.refresh}>
-              Try again
-            </ToastAction>
-            <ToastAction altText="Home" onClick={() => router.push("/note")}>
-              Go Home
-            </ToastAction>
-          </div>
-        ),
-      });
-    }
+
     setNote(data!);
     setValue("title", data?.title || "");
     if (data && data.category_id) {
@@ -162,7 +150,6 @@ export default function Page() {
           handleGetTags(),
         ]);
       } catch (error) {
-        console.error("Error fetching initial data:", error);
         toast({
           title: "Error",
           description: "Failed to load initial data. Please try again.",
@@ -186,11 +173,6 @@ export default function Page() {
           const editorContent = editorRef.current.editor.getJSON();
 
           if (editorRef.current.editor.isEmpty) {
-            toast({
-              title: "Note not saved",
-              description: "Cannot save an empty note.",
-              variant: "default",
-            });
             return;
           }
 
@@ -206,26 +188,14 @@ export default function Page() {
           const noteData = {
             id: params.id,
             title: finalTitle,
-            content: JSON.parse(serializableContent), // Send stringified content
+            content: JSON.parse(serializableContent),
             category_id: category,
             tags: tags,
             cover_url: coverUrl,
             content_text: editorRef.current.editor.getText().trim(),
           };
 
-          console.log(noteData);
-
           const { error } = await saveNote(noteData);
-
-          // const { error } = await saveNote({
-          //   id: params.id,
-          //   title: finalTitle,
-          //   content: editorContent,
-          //   category_id: category,
-          //   tags: tags,
-          //   cover_url: coverUrl,
-          //   content_text: editorRef.current.editor.getText(),
-          // });
 
           if (error) {
             toast({
@@ -268,15 +238,9 @@ export default function Page() {
     setImagePreviewUrl(publicUrl);
   };
 
-  const handleUserStoppedTyping = useDebouncedCallback(
-    () => {
-      handleAutoSave();
-      // console.log("User stopped typing for 5 seconds");
-      // Perform any action you want when the user stops typing
-      // For example, you could save the content or trigger an API call
-    },
-    5000 // 5000 milliseconds = 5 seconds
-  );
+  const handleUserStoppedTyping = useDebouncedCallback(() => {
+    handleAutoSave();
+  }, 3000);
 
   const handleUpdateTiptap = (props: EditorEvents["update"]) => {
     handleUserStoppedTyping();
@@ -291,8 +255,6 @@ export default function Page() {
   useEffect(() => {
     if (shouldUpdate) setShouldUpdate(false);
   }, [shouldUpdate]);
-
-  // TODO: When user type then when they stop for 5 secs save it to db?
 
   // TODO: Uncomment to enable auto save
   // // Save data every 10 seconds
@@ -427,8 +389,9 @@ export default function Page() {
 
         <Input
           {...register("title")}
-          className="bg-app_background hover:bg-transparent focus:outline-none text-white text-2xl px-0"
+          className="bg-app_background hover:bg-transparent focus:outline-none text-white text-xl px-0"
           placeholder="Untitled"
+          onChange={handleUserStoppedTyping}
         />
         {!imagePreviewUrl && (
           <UploadButton
@@ -502,6 +465,7 @@ export default function Page() {
           open={openConfirmDialog}
           setOpen={setOpenConfirmDialog}
           note={note}
+          category={selectedCategory}
           refresh={handleGetNoteContent}
         />
       </form>

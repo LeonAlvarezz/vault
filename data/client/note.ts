@@ -103,6 +103,14 @@ export async function unpublishNote(id: string) {
 
 export async function getNoteContent(id: string) {
   const supabase = createClient();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
   const { data, error } = await supabase
     .from("notes")
     .select(
@@ -114,6 +122,7 @@ export async function getNoteContent(id: string) {
   `
     )
     .eq("id", id)
+    .eq("profile_id", user!.id)
     .single();
 
   return { data, error };

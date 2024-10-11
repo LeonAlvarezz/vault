@@ -1,14 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { SIDEBAR_ITEM } from "./sidebar";
 import SidebarOptionalItemDropdownMenu from "../dropdown/sidebar-optional-item-dropdown";
 import SidebarItemMobile from "./sidebar-item-mobile";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
+import { useSettings } from "@/stores/setting";
 
 export default function SidebarMobile() {
   const visibleItems = SIDEBAR_ITEM.slice(0, 6);
   const remainingItems = SIDEBAR_ITEM.slice(6);
   const isKeyboardOpen = useDetectKeyboardOpen();
+  const { fetchSettings } = useSettings();
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
   if (!isKeyboardOpen) {
     return (

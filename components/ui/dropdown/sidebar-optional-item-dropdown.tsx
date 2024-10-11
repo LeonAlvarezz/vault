@@ -10,7 +10,7 @@ import { Button } from "../button";
 import { SlOptionsVertical } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 import { SidebarMobileProps } from "../sidebar/sidebar-item-mobile";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { IoLogOut } from "react-icons/io5";

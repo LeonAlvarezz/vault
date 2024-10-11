@@ -16,7 +16,7 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Link from "@tiptap/extension-link";
 import { common, createLowlight } from "lowlight";
 import { useEffect } from "react";
-import Loading from "@/app/loading";
+import Spinner from "../ui/spinner";
 type Props = {
   data?: any[] | null;
   // id: string;
@@ -76,7 +76,7 @@ export default async function RenderWithTiptap({ data, note }: Props) {
     editor?.commands.setContent(note.content as Content);
   }, [editor]);
   if (!editor) {
-    return <Loading />;
+    return <Spinner />;
   }
   return <EditorContent editor={editor} readOnly />;
 }

@@ -2,7 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Category } from "@/types/category.type";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { Suspense, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 type Props = {

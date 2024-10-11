@@ -32,6 +32,7 @@ import {
 import Tag from "../tag";
 import { useDebouncedCallback } from "use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useProgress } from "react-transition-progress";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -167,6 +168,7 @@ export const MultiFilterCombobox = React.forwardRef<
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const startProgress = useProgress();
     const inputRef = React.useRef<HTMLInputElement>(null);
     const selectedArray = Array.isArray(selectedValues)
       ? selectedValues
@@ -185,7 +187,10 @@ export const MultiFilterCombobox = React.forwardRef<
       tags.forEach((tag) => params.append(filterKey, tag));
 
       const newUrl = `${pathname}?${params.toString()}`;
-      router.push(newUrl);
+      React.startTransition(() => {
+        startProgress();
+        router.push(newUrl);
+      });
     }, 500);
 
     const navigateToTags = React.useCallback(

@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ContactButton from "@/components/ui/button/contact-button";
 import Tag from "@/components/ui/tag";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import React from "react";
 import { FaHeart, FaPen, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
@@ -18,17 +18,19 @@ import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
 import { revalidatePath } from "next/cache";
 import { formatDate } from "@/lib/date";
+import { notFound } from "next/navigation";
 type Props = {
   params: { id: string };
 };
 
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published
-  const { data: note } = await getNoteById(params.id);
   const { count, error } = await isNoteOwner(params.id);
   const isOwner = count && count > 1 ? true : false;
+  const { data: note } = await getNoteById(params.id);
+
   if (!note) {
-    return <div>No Note Available</div>;
+    notFound();
   }
 
   // TODO: Uncomment to enable increase view
@@ -57,11 +59,16 @@ export default async function NoteDetailPage({ params }: Props) {
   return (
     <div className="pb-10">
       <section className="flex gap-2 flex-col">
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center">
           <BackButton />
-          <Link href={`/create/${note.id}`} className="h-fit hover:text-second">
-            <FaPen size={14} />
-          </Link>
+          {isOwner && (
+            <Link
+              href={`/create/${note.id}`}
+              className="h-fit hover:text-second p-1"
+            >
+              <FaPen size={12} />
+            </Link>
+          )}
         </div>
         <h1 className="text-2xl">{note.title}</h1>
         {note?.categories && (

@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useProgress } from "react-transition-progress";
 
 type Options = {
   value: string;
@@ -54,6 +55,7 @@ export function FilterCombobox({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const startProgress = useProgress();
   const updateQueryParams = (value: string) => {
     const params = new URLSearchParams(searchParams);
 
@@ -63,7 +65,10 @@ export function FilterCombobox({
     // Convert the updated parameters to a string
     const queryString = params.toString();
     const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
-    router.push(newUrl);
+    React.startTransition(() => {
+      startProgress();
+      router.push(newUrl);
+    });
   };
 
   return (

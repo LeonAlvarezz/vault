@@ -11,7 +11,7 @@ export default function SettingNotification() {
         <div className="flex gap-4 justify-between items-center">
           <div>
             <h3 className="text-sm">Mobile Push Notification</h3>
-            <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
+            <p className="text-xs text-neutral-500 leading-normal sm:leading-loose">
               Receive push notifications through your mobile
             </p>
           </div>
@@ -20,7 +20,7 @@ export default function SettingNotification() {
         <div className="flex gap-4 justify-between items-center">
           <div>
             <h3 className="text-sm">Desktop Push Notification </h3>
-            <p className="text-xs text-neutral-600 leading-normal sm:leading-loose">
+            <p className="text-xs text-neutral-500 leading-normal sm:leading-loose">
               Receive push notifications through your desktop
             </p>
           </div>

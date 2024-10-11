@@ -2,7 +2,7 @@ import React, { MouseEvent } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { Button } from "../button";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import Tag from "../tag";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -29,7 +29,7 @@ export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
           <Tag color="orange" className="h-6">
             <p>React</p>
           </Tag>
-          <EditNoteDropdownMenu />
+          <EditNoteDropdownMenu note={note} />
         </div>
         <div className="flex justify-between items-center ">
           <div>
@@ -63,19 +63,17 @@ export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
           objectFit="cover"
         />
       )}
-      <div className="flex justify-between">
-        <div>
+      <div className="flex mt-1 flex-col">
+        <div className="flex justify-between">
           <h2 className="text-md font-semibold mb-1">
             {note?.title || "Untitled"}
           </h2>
-          {note?.content &&
-            isContentArray(note.content) &&
-            note.content.length > 0 && (
-              <>{renderNoteDescription(note.content[0] as BlockNode)}</>
-            )}
+          <EditNoteDropdownMenu className="left-3" note={note} />
         </div>
 
-        <EditNoteDropdownMenu className="left-3" />
+        <p className="text-xs text-neutral-500 line-clamp-2 w-[95%] ">
+          {note.content_text}
+        </p>
       </div>
       <div className="flex justify-between items-end mt-4">
         {note?.categories && (

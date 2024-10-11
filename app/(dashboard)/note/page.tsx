@@ -1,21 +1,13 @@
 import React, { Suspense } from "react";
-import NoteCard from "@/components/ui/note-card/note-card";
-import Link from "next/link";
-import SearchInput from "@/components/ui/search/search-input";
 import { getAllNotesByProfileId } from "@/data/server/note";
 import { getAllCategories } from "@/data/client/category";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { NoteFilter } from "@/types/note.type";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import { getTags } from "@/data/server/tag";
-import Loading from "@/app/loading";
-import ImageContainer from "@/components/ui/image-container";
 import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
-import NoteCardPublished from "@/components/ui/note-card/note-card-published";
-import NoNote from "@/components/ui/note-card/no-note";
+import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
 import NoteList from "./_component/note-list";
 const STATUS = [
@@ -78,16 +70,7 @@ export default async function NotePage({ searchParams }: Props) {
       </div>
       {notes && notes.length > 0 ? (
         <Suspense fallback={<NoteSkeleton />}>
-          <NoteList notes={notes} />
-          {/* <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6 align-super">
-            {notes?.map((note, index) =>
-              note.published_at ? (
-                <NoteCardPublished key={index} note={note} />
-              ) : (
-                <NoteCard key={index} note={note} />
-              )
-            )}
-          </section> */}
+          <NoteList notes={notes} optionButton />
         </Suspense>
       ) : (
         <div

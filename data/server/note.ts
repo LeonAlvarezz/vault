@@ -21,6 +21,7 @@ export async function getNoteById(id: string) {
     .eq("likes.profile_id", user!.id)
     .eq("bookmarks.profile_id", user!.id)
     .single();
+
   return { data, error };
 }
 

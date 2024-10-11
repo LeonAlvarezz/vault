@@ -15,6 +15,7 @@ import { createNote } from "@/data/client/note";
 import { User } from "@supabase/supabase-js";
 import { shouldShowFloatingButton } from "@/utils/route";
 import { useProgress } from "react-transition-progress";
+import useDetectKeyboardOpen from "use-detect-keyboard-open";
 type Props = {
   className?: string;
   user?: User | null;
@@ -24,6 +25,7 @@ export default function FloatingButton({ className }: Props) {
   const { setShowModal } = useQuickSnipStore();
   const router = useRouter();
   const pathname = usePathname();
+  const isKeyboardOpen = useDetectKeyboardOpen();
   const startProgress = useProgress();
   const showFloatingButton = pathname
     ? shouldShowFloatingButton(pathname)
@@ -55,7 +57,7 @@ export default function FloatingButton({ className }: Props) {
       }
     });
   };
-  if (!showFloatingButton) {
+  if (!showFloatingButton && isKeyboardOpen) {
     return null;
   }
   return (

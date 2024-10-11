@@ -28,7 +28,7 @@ export default function SearchResultColumn({ searchResult }: Props) {
       )}
       <div className="col-span-3">
         <p className="text-sm">{searchResult.title}</p>
-        <p className="text-[10px] text-neutral-500 line-clamp-1 mb-2">
+        <p className="text-[10px] text-neutral-500 line-clamp-1 mb-2 w-full">
           {searchResult.content_text}
         </p>
         {/* {searchResult?.content &&

@@ -23,7 +23,7 @@ import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoteList from "../note/_component/note-list";
-import NoNote from "@/components/ui/note-card/no-note";
+import NoNote from "@/components/ui/error/no-note";
 import { getAllCategories } from "@/data/client/category";
 import { NoteFilter } from "@/types/note.type";
 import { deleteSearch } from "@/app/api/action";

@@ -18,18 +18,19 @@ import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
 import { revalidatePath } from "next/cache";
 import { formatDate } from "@/lib/date";
+import { notFound } from "next/navigation";
 type Props = {
   params: { id: string };
 };
 
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published
-  const { data: note } = await getNoteById(params.id);
   const { count, error } = await isNoteOwner(params.id);
   const isOwner = count && count > 1 ? true : false;
+  const { data: note } = await getNoteById(params.id);
 
   if (!note) {
-    return <div>No Note Available</div>;
+    notFound();
   }
 
   // TODO: Uncomment to enable increase view
@@ -60,12 +61,14 @@ export default async function NoteDetailPage({ params }: Props) {
       <section className="flex gap-2 flex-col">
         <div className="flex justify-between items-center">
           <BackButton />
-          <Link
-            href={`/create/${note.id}`}
-            className="h-fit hover:text-second p-1"
-          >
-            <FaPen size={12} />
-          </Link>
+          {isOwner && (
+            <Link
+              href={`/create/${note.id}`}
+              className="h-fit hover:text-second p-1"
+            >
+              <FaPen size={12} />
+            </Link>
+          )}
         </div>
         <h1 className="text-2xl">{note.title}</h1>
         {note?.categories && (

@@ -14,7 +14,7 @@ export default function SidebarMobile() {
 
   useEffect(() => {
     fetchSettings();
-  }, []);
+  }, [fetchSettings]);
 
   if (!isKeyboardOpen) {
     return (

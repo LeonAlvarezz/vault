@@ -51,6 +51,7 @@ export default function Page() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,24 +104,10 @@ export default function Page() {
           description: error?.message,
         });
       }
+
       router.push("/note");
     }
 
-    if (!data) {
-      toast({
-        title: "Unexpected Error",
-        action: (
-          <div className="flex gap-2">
-            <ToastAction altText="Try again" onClick={() => router.refresh}>
-              Try again
-            </ToastAction>
-            <ToastAction altText="Home" onClick={() => router.push("/note")}>
-              Go Home
-            </ToastAction>
-          </div>
-        ),
-      });
-    }
     setNote(data!);
     setValue("title", data?.title || "");
     if (data && data.category_id) {
@@ -163,7 +150,6 @@ export default function Page() {
           handleGetTags(),
         ]);
       } catch (error) {
-        console.error("Error fetching initial data:", error);
         toast({
           title: "Error",
           description: "Failed to load initial data. Please try again.",

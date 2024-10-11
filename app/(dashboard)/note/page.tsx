@@ -7,7 +7,7 @@ import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combo
 import { getTags } from "@/data/server/tag";
 import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
-import NoNote from "@/components/ui/note-card/no-note";
+import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
 import NoteList from "./_component/note-list";
 const STATUS = [

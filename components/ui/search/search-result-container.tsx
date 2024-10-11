@@ -4,7 +4,7 @@ import Spinner from "../spinner";
 import SearchResultColumn from "./search-result-column";
 import { Link } from "react-transition-progress/next";
 import { FaArrowDown } from "react-icons/fa";
-import NoNote from "../note-card/no-note";
+import NoNote from "../error/no-note";
 type Props = {
   show: boolean;
   loading: boolean;

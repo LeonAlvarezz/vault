@@ -3,10 +3,18 @@ import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
+import { getProfile } from "@/data/server/profiles";
+import { getPublishedNotesByProfileId } from "@/data/server/note";
+import { NoteFilter } from "@/types/note.type";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default async function Page({ searchParams }: Props) {
+  const [{ data: profile, error }, { data: notes, error: noteError }] =
+    await Promise.all([
+      getProfile(),
+      getPublishedNotesByProfileId(searchParams as NoteFilter),
+    ]);
   return (
     <>
       <section>
@@ -14,18 +22,23 @@ export default async function Page({ searchParams }: Props) {
           src="/image/default-cover1.png"
           className="overflow-hidden h-[150px] w-full"
         />
-        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
+        <div className="flex flex-col sm:flex-row items-center gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
           <Avatar className="size-28">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
+            <AvatarFallback className="text-3xl">
+              {profile?.username.slice(0, 1).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
-          <div className="flex justify-between w-full">
-            <div>
-              <h1 className="text-lg">John Doe</h1>
-              <p className="text-sm text-neutral-400">Software Developer</p>
-              <p className="text-xs text-neutral-600 w-[90%]">
-                a passionate software developer hail from Cambodia - Live Laugh
-                Code
+          <div className="flex justify-between w-full relative sm:mb-0 mb-6">
+            <div className="flex flex-col">
+              <h1 className="text-lg">{profile?.username || "No Username"}</h1>
+              <p className="text-sm text-neutral-400">
+                {profile?.occupation || "Not Specified"}
+              </p>
+              <p className="text-xs mt-1 text-neutral-600 w-[90%] absolute top-[3.2rem] ">
+                {/* {profile?.bios || "No Bios~"} */}
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                assumenda corrupti modi quam laudantium hic expedita optio sit
               </p>
             </div>
 
@@ -34,7 +47,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
       </section>
       {/* <Suspense> */}
-      <TabView searchParams={searchParams} />
+      <TabView searchParams={searchParams} notes={notes} profile={profile} />
       {/* </Suspense> */}
     </>
   );

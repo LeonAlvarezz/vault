@@ -1,7 +1,6 @@
 import NoteCard from "@/components/ui/note-card/note-card";
 import NoteCardPublished from "@/components/ui/note-card/note-card-published";
 import { Note } from "@/types/note.type";
-import React from "react";
 type Props = {
   notes: Note[];
 };

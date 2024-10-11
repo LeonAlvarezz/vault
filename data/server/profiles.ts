@@ -1,5 +1,3 @@
-"use server";
-
 import { InsertUserPayload } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,4 +16,26 @@ const insertUser = async (id: string, payload: InsertUserPayload) => {
   }
 
   return data;
+};
+
+export const getProfile = async () => {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user!.id)
+    .single();
+
+  if (error) {
+    return { data: null, error };
+  }
+
+  return { data, error };
 };

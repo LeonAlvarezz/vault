@@ -1,4 +1,3 @@
-import React from "react";
 import ImageContainer from "../image-container";
 
 export default function NoNote() {

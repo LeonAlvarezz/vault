@@ -169,14 +169,14 @@ export async function vectorSearch(searchQuery: string) {
 
   const [{ embedding }] = result.data;
 
-  // const {
-  //   error: authErr,
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // if (authErr) {
-  //   return { data: null, error: authErr };
-  // }
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
 
   // let query = supabase.rpc("match_notes_global", {
   //   query_embedding: JSON.stringify(embedding),
@@ -196,6 +196,7 @@ export async function vectorSearch(searchQuery: string) {
       query_embedding: JSON.stringify(embedding),
       match_threshold: 0.4,
       match_count: 10,
+      user_id: user!.id,
     })
     .select("*");
 

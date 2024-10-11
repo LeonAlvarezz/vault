@@ -108,6 +108,7 @@ export default function NoteCardFooter({
             {note.profile?.username.slice(0, 1).toUpperCase()}
           </AvatarFallback>
         </Avatar>
+
         <div className="flex flex-col">
           <p className="text-sm text-neutral-200">{note.profile?.username}</p>
           <p className="text-xs text-neutral-500">

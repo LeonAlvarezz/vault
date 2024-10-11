@@ -109,7 +109,7 @@ export default async function NoteDetailPage({ params }: Props) {
             }
           />
         </div>
-        <Render note={note} />
+        <Render content={note.content} />
       </section>
       {/* <RelatedNoteCarousel /> */}
     </div>

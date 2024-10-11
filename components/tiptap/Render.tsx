@@ -15,18 +15,20 @@ import Link from "@tiptap/extension-link";
 import { common, createLowlight } from "lowlight";
 import Loading from "@/app/loading";
 import React from "react";
+import { Json } from "@/database.types";
+import NotAvailable from "../ui/not-availble";
 type Props = {
-  note: Note;
+  content: Json | null;
 };
-export default async function Render({ note }: Props) {
-  if (!note.content) {
-    return "No Content";
+export default async function Render({ content }: Props) {
+  if (!content) {
+    return <NotAvailable />;
   }
 
-  if (Array.isArray(note.content)) {
+  if (Array.isArray(content)) {
     return (
       <div className="tiptap text-sm">
-        {note.content.map((block, index) => {
+        {content.map((block, index) => {
           return (
             <React.Fragment key={index}>
               {renderNote(block as BlockNode)}
@@ -37,5 +39,5 @@ export default async function Render({ note }: Props) {
     );
   }
 
-  return <h1>Invalid Content Format {note.content.toString()}</h1>;
+  return <h1>Invalid Content Format {content?.toString()}</h1>;
 }

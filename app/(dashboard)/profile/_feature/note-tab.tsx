@@ -1,3 +1,4 @@
+import NoNote from "@/components/ui/note-card/no-note";
 import NoteCard from "@/components/ui/note-card/note-card";
 import {
   Select,
@@ -6,9 +7,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
-
-export default function NoteTab() {
+import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
+import { Note } from "@/types/note.type";
+import React, { Suspense } from "react";
+import NoteList from "../../note/_component/note-list";
+import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
+type Props = {
+  notes: Note[] | null;
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+export default function NoteTab({ notes, searchParams }: Props) {
   const ORDER = [
     {
       value: "recent",
@@ -30,23 +38,24 @@ export default function NoteTab() {
 
   return (
     <>
-      <Select defaultValue="recent">
-        <SelectTrigger className="w-[150px]">
-          <SelectValue placeholder="Order" />
-        </SelectTrigger>
-        <SelectContent>
-          {ORDER.map((order, index) => (
-            <SelectItem key={index} value={order.value}>
-              {order.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <div className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
-        {Array.from({ length: 10 }).map((_, index: number) => (
-          <NoteCard key={index} />
-        ))}
-      </div>
+      <FilterCombobox
+        filterKey={"sortBy"}
+        options={ORDER}
+        defaultValue={searchParams?.sortBy as string}
+        label="Sort By"
+      />
+      {notes && notes.length > 0 ? (
+        <Suspense fallback={<NoteSkeleton />}>
+          <NoteList notes={notes} />
+        </Suspense>
+      ) : (
+        <div
+          className="w-full flex justify-center items-center"
+          style={{ minHeight: "calc(100svh - 280px)" }}
+        >
+          <NoNote />
+        </div>
+      )}
     </>
   );
 }

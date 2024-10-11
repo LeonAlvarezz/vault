@@ -319,6 +319,88 @@ export type Database = {
           },
         ]
       }
+      searches: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: number
+          profile_id: string | null
+          query: string | null
+          search_count: number | null
+          search_source: Database["public"]["Enums"]["SEARCH_SOURCE"] | null
+          search_type: Database["public"]["Enums"]["SEARCH_TYPE"] | null
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          profile_id?: string | null
+          query?: string | null
+          search_count?: number | null
+          search_source?: Database["public"]["Enums"]["SEARCH_SOURCE"] | null
+          search_type?: Database["public"]["Enums"]["SEARCH_TYPE"] | null
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          profile_id?: string | null
+          query?: string | null
+          search_count?: number | null
+          search_source?: Database["public"]["Enums"]["SEARCH_SOURCE"] | null
+          search_type?: Database["public"]["Enums"]["SEARCH_TYPE"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "searches_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      settings: {
+        Row: {
+          created_at: string
+          disable_command_search: boolean | null
+          id: number
+          keyboard_shortcuts: Json | null
+          language: string | null
+          notification: Json | null
+          profile_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          disable_command_search?: boolean | null
+          id?: number
+          keyboard_shortcuts?: Json | null
+          language?: string | null
+          notification?: Json | null
+          profile_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          disable_command_search?: boolean | null
+          id?: number
+          keyboard_shortcuts?: Json | null
+          language?: string | null
+          notification?: Json | null
+          profile_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "settings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tags: {
         Row: {
           color: string | null
@@ -362,10 +444,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_recent_search_log: {
+        Args: {
+          limitcount: number
+          user_id: string
+        }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          id: number
+          profile_id: string | null
+          query: string | null
+          search_count: number | null
+          search_source: Database["public"]["Enums"]["SEARCH_SOURCE"] | null
+          search_type: Database["public"]["Enums"]["SEARCH_TYPE"] | null
+        }[]
+      }
       increment: {
         Args: {
           table_name: string
           row_id: string
+          x: number
+          field_name: string
+        }
+        Returns: undefined
+      }
+      increment_int_id: {
+        Args: {
+          table_name: string
+          row_id: number
           x: number
           field_name: string
         }
@@ -402,6 +509,7 @@ export type Database = {
           query_embedding: string
           match_threshold: number
           match_count: number
+          user_id: string
         }
         Returns: {
           bookmark: number | null
@@ -424,7 +532,8 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      SEARCH_SOURCE: "command_search" | "search_bar"
+      SEARCH_TYPE: "note" | "profile"
     }
     CompositeTypes: {
       [_ in never]: never

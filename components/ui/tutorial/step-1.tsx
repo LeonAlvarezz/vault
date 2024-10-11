@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdPinch, MdKeyboardCommandKey } from "react-icons/md";
 import { Button } from "../button";
 import { isMobile, deviceDetect } from "react-device-detect";
-import Loading from "@/app/loading";
+import Spinner from "../spinner";
 type TutorialStepProps = {
   nextStep: () => void;
 };
@@ -21,7 +21,7 @@ export default function TutorialStep1({ nextStep }: TutorialStepProps) {
   }, []);
 
   if (loading) {
-    return <Loading />;
+    return <Spinner />;
   }
   return (
     <div className="flex flex-col items-center justify-between">

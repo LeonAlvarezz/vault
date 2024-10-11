@@ -9,7 +9,6 @@ import {
   CommandItem,
   CommandList,
 } from "../command";
-import { Button } from "../button";
 import { RiGlobalLine } from "react-icons/ri";
 import { Toggle } from "../toggle";
 import { useGesture, usePinch } from "@use-gesture/react";
@@ -18,23 +17,55 @@ import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "../use-toast";
 import { SearchResult } from "@/types/search.type";
 import { commandSearch } from "@/data/client/search";
-import { Avatar, AvatarFallback } from "../avatar";
 import GlobalCommandSearchResult from "./global-command-search-result";
 import LocalCommandSearchResult from "./local-command-search-result";
-import { Separator } from "../separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../tooltip";
-import Link from "next/link";
-import { CommandLoading } from "cmdk";
-import Loading from "@/app/loading";
 import Spinner from "../spinner";
 import { IoSparklesSharp } from "react-icons/io5";
 import { vectorSearch } from "@/app/api/action";
+import { useSettings } from "@/stores/setting";
+import { getKeyboardValue } from "@/utils/json";
 
+const normalizeKey = (key: string) => {
+  switch (key) {
+    case "⌘":
+      return "meta";
+    case "⇧":
+      return "shift";
+    case "⌥":
+      return "alt";
+    case "⌃":
+      return "ctrl";
+    default:
+      return key.toLowerCase();
+  }
+};
+
+const constructShortcutCond = (keys: string) => {
+  const keyArray = keys
+    .split("+")
+    .map((key) => normalizeKey(key.trim().toLowerCase()));
+
+  return (e: KeyboardEvent) => {
+    const pressedKeys = new Set<string>();
+
+    if (e.ctrlKey) pressedKeys.add("ctrl");
+    if (e.altKey) pressedKeys.add("alt");
+    if (e.shiftKey) pressedKeys.add("shift");
+    if (e.metaKey) pressedKeys.add("meta");
+    pressedKeys.add(e.key.toLowerCase());
+
+    return (
+      keyArray.every((key) => pressedKeys.has(key)) &&
+      keyArray.length === pressedKeys.size
+    );
+  };
+};
 export default function CommandSearch() {
   const [open, setOpen] = useState(false);
   const [isGlobal, setIsGlobal] = useState(false);
@@ -45,17 +76,30 @@ export default function CommandSearch() {
   const [empty, setEmpty] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const { toast } = useToast();
+  const { disable_command_search, keyboard_shortcuts, isKeyRecording } =
+    useSettings();
+
+  //TODO: Rate Limit Vector Search
+  //TODO: Navigate
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (disable_command_search) return;
+
+      // Fetch the user's shortcut from settings (defaults to ⌘+K or Ctrl+K)
+      const shortcut =
+        getKeyboardValue(keyboard_shortcuts).openCommandSearch || "⌘+K";
+      const isShortcutPressed = constructShortcutCond(shortcut)(e);
+
+      if (isShortcutPressed && !isKeyRecording) {
         e.preventDefault();
         setOpen((open) => !open);
       }
     };
+
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [disable_command_search, keyboard_shortcuts, isKeyRecording]);
 
   // useGesture(
   //   {
@@ -92,6 +136,7 @@ export default function CommandSearch() {
 
   usePinch(
     ({ direction: [d], event, cancel }) => {
+      if (disable_command_search) return;
       setOpen(true);
       cancel();
     },

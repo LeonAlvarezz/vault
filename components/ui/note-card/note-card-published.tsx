@@ -12,12 +12,13 @@ import { bookmarkNote } from "@/data/server/bookmark";
 type Props = {
   note: Note;
   bookmark?: boolean;
+  optionButton?: boolean;
 };
-export default function NoteCardPublished({ note, bookmark = false }: Props) {
-  const isContentArray = (content: any): content is Array<any> => {
-    return Array.isArray(content);
-  };
-
+export default function NoteCardPublished({
+  note,
+  bookmark = false,
+  optionButton = false,
+}: Props) {
   const toggleLike = async () => {
     "use server";
     const { error } = await likeNote(note.id);
@@ -41,7 +42,6 @@ export default function NoteCardPublished({ note, bookmark = false }: Props) {
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform"
     >
       {note?.cover_url && (
-        //TODO Find a way to better render image cover
         <ImageContainerBlur
           className="h-[200px] overflow-hidden rounded-sm bg-neutral-900 aspect-video "
           src={note.cover_url}
@@ -57,19 +57,19 @@ export default function NoteCardPublished({ note, bookmark = false }: Props) {
           </Tag>
         )}
       </div>
-      <div className="flex justify-between mt-1">
-        <div>
+      <div className="flex mt-1 flex-col">
+        <div className="flex justify-between">
           <h2 className="text-md font-semibold mb-1">
             {note?.title || "Untitled"}
           </h2>
-          {note?.content &&
-            isContentArray(note.content) &&
-            note.content.length > 0 && (
-              <>{renderNoteDescription(note.content[0] as BlockNode)}</>
-            )}
+          {optionButton && (
+            <EditNoteDropdownMenu className="left-3" note={note} />
+          )}
         </div>
 
-        <EditNoteDropdownMenu className="left-3" />
+        <p className="text-xs text-neutral-500 line-clamp-2 w-[95%]">
+          {note.content_text}
+        </p>
       </div>
       <NoteCardFooter
         note={note}
@@ -85,29 +85,6 @@ export default function NoteCardPublished({ note, bookmark = false }: Props) {
             : false
         }
       />
-
-      {/* <div className="flex flex-col flex-grow p-1">
-        <div className="flex-grow flex flex-col gap-2 mt-1">
-          <Tag color="orange" className="h-6">
-            <p>React</p>
-          </Tag>
-          <div>
-            <div className="w-full justify-between items-center flex">
-              <h2 className="text-md font-semibold">What is React</h2>
-              <EditNoteDropdownMenu className="left-3" />
-            </div>
-
-            <p className="w-full line-clamp-2 mt-2 text-xs text-neutral-500">
-              As we delve into 2024, the landscape of web development continues
-              to evolve at a rapid pace. React, one of the most popular
-              JavaScript libraries for building user interfaces, has maintained
-              its position at the forefront of frontend development. With its
-              component-based architecture and virtual DOM, React offers
-            </p>
-          </div>
-        </div>
-        <NoteCardFooter />
-      </div> */}
     </Link>
   );
 }

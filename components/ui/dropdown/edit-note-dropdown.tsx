@@ -12,17 +12,33 @@ import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { useToast } from "../use-toast";
 import { cn } from "@/lib/utils";
+import { Note } from "@/types/note.type";
+import { deleteNote } from "@/app/api/action";
 type Props = {
   className?: string;
+  note?: Note;
 };
-export default function EditNoteDropdownMenu({ className }: Props) {
+export default function EditNoteDropdownMenu({ className, note }: Props) {
   const { toast } = useToast();
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    toast({
-      title: "Note Deleted",
-      variant: "success",
-    });
+    e.preventDefault();
+    if (note) {
+      const { error } = await deleteNote(note.id);
+      console.log("error:", error);
+      if (error) {
+        toast({
+          title: "Error Deleting Note",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+      toast({
+        title: "Note Deleted",
+        variant: "success",
+      });
+    }
+
     setOpen(false);
   };
   const [open, setOpen] = useState(false);
@@ -41,16 +57,23 @@ export default function EditNoteDropdownMenu({ className }: Props) {
           <SlOptionsVertical />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-32">
-        <DropdownMenuItem className=" cursor-pointer group text-red-400 group-hover:text-red-500">
-          <MdDelete className="mr-2 h-4 w-4  text-red-400" />
+      <DropdownMenuContent
+        className="w-32"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <DropdownMenuItem className="p-0" onSelect={(e) => e.preventDefault()}>
           <Button
-            onClick={(e) => handleDelete(e)}
+            onClick={handleDelete}
             variant={"icon"}
             size={"icon"}
-            className="text-red-400 h-fit"
+            className="py-2 px-2 w-full flex items-center justify-start  font-normal text-red-400 h-fit hover:bg-neutral-700/50 "
+            type="button"
           >
-            Delete
+            <MdDelete className="mr-2 h-4 w-4  text-red-400" />
+            <p className="whitespace-nowrap">Delete</p>
           </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>

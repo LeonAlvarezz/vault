@@ -76,6 +76,12 @@ export async function signup(formData: unknown) {
     if (profileError) {
       return { error: profileError.message };
     }
+    const { error: settingError } = await supabase
+      .from("settings")
+      .insert([{ profile_id: userId }]);
+    if (settingError) {
+      return { error: settingError.message };
+    }
   }
 
   if (!error) {
@@ -118,7 +124,7 @@ export async function saveNote(payload: SaveNotePayload) {
     .update({
       title: payload.title,
       content: payload.content as BlockNode[],
-      category_id: +payload.category_id,
+      category_id: +payload.category_id || null,
       cover_url: payload.cover_url,
       content_text: payload.content_text,
       embedding: JSON.stringify(embedding),
@@ -169,14 +175,14 @@ export async function vectorSearch(searchQuery: string) {
 
   const [{ embedding }] = result.data;
 
-  // const {
-  //   error: authErr,
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // if (authErr) {
-  //   return { data: null, error: authErr };
-  // }
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
 
   // let query = supabase.rpc("match_notes_global", {
   //   query_embedding: JSON.stringify(embedding),
@@ -196,8 +202,31 @@ export async function vectorSearch(searchQuery: string) {
       query_embedding: JSON.stringify(embedding),
       match_threshold: 0.4,
       match_count: 10,
+      user_id: user!.id,
     })
     .select("*");
 
   return { notes, error };
+}
+
+export async function deleteSearch(id: number) {
+  const supabase = createClient();
+
+  const { error } = await supabase.from("searches").delete().match({ id });
+  if (error) {
+    return { error };
+  }
+  revalidatePath("/search");
+  return { error: null };
+}
+
+export async function deleteNote(id: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase.from("notes").delete().match({ id });
+  if (error) {
+    return { error };
+  }
+  revalidatePath("/");
+  return { error: null };
 }

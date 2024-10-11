@@ -27,6 +27,7 @@ export default async function NoteDetailPage({ params }: Props) {
   const { data: note } = await getNoteById(params.id);
   const { count, error } = await isNoteOwner(params.id);
   const isOwner = count && count > 1 ? true : false;
+
   if (!note) {
     return <div>No Note Available</div>;
   }
@@ -57,10 +58,13 @@ export default async function NoteDetailPage({ params }: Props) {
   return (
     <div className="pb-10">
       <section className="flex gap-2 flex-col">
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center">
           <BackButton />
-          <Link href={`/create/${note.id}`} className="h-fit hover:text-second">
-            <FaPen size={14} />
+          <Link
+            href={`/create/${note.id}`}
+            className="h-fit hover:text-second p-1"
+          >
+            <FaPen size={12} />
           </Link>
         </div>
         <h1 className="text-2xl">{note.title}</h1>

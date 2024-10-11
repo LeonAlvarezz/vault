@@ -19,3 +19,17 @@ const insertUser = async (id: string, payload: InsertUserPayload) => {
 
   return data;
 };
+
+export const getProfilesById = async (id: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) {
+    return { data: null, error };
+  }
+
+  return { data, error };
+};

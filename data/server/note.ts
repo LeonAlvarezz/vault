@@ -33,16 +33,33 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   if (authErr) {
     return { data: null, error: authErr };
   }
+
+  // Determine the categories selection based on filter
+  const categoriesSelection =
+    filter && filter?.category !== "all"
+      ? "categories!inner(*)"
+      : "categories(*)";
+
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+      `
+      *, 
+      content: content->content, 
+      ${categoriesSelection}, 
+      profile:profiles!notes_profile_id_fkey!inner(*), 
+      tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), 
+      likes(*), 
+      bookmarks(*)
+    `
     )
     .eq("profile_id", user!.id)
     .eq("likes.profile_id", user!.id);
 
   if (filter?.category && filter?.category !== "all") {
-    query = query.eq("categories.name", filter.category);
+    query = query
+      .not("categories.name", "is", null)
+      .eq("categories.name", filter.category);
   }
 
   if (filter?.status && filter?.status !== "all") {
@@ -50,7 +67,6 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
       case "published":
         query = query.not("published_at", "is", null);
         break;
-
       case "unpublished":
         query = query.is("published_at", null);
         break;
@@ -65,12 +81,13 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   }
 
   if (filter?.query) {
-    const query = constructSearchQuery(filter.query, "|");
-    const { data, error } = await searchUserNote(query);
+    const searchQuery = constructSearchQuery(filter.query, "|");
+    const { data, error } = await searchUserNote(searchQuery);
     return { data, error };
   }
 
   const { data, error } = await query;
+
   return { data, error };
 }
 
@@ -96,7 +113,9 @@ export async function getNoteExplore(filter?: NoteFilter) {
   }
 
   if (filter?.category && filter?.category !== "all") {
-    query = query.eq("categories.name", filter.category);
+    query = query
+      .eq("categories.name", filter.category)
+      .not("categories.name", "is", "NULL");
   }
 
   if (filter?.status && filter?.status !== "all") {
@@ -142,7 +161,6 @@ export async function getNoteExplore(filter?: NoteFilter) {
   }
 
   const { data, error } = await query;
-  //
 
   return { data, error };
 }

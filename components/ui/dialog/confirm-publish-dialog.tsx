@@ -17,21 +17,25 @@ import { Note } from "@/types/note.type";
 import CopyButton from "../button/copy-button";
 import { FaSpinner } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useFormContext } from "react-hook-form";
 type Props = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   note: Note | undefined;
   refresh: () => Promise<void>;
+  category: string;
 };
 export default function ConfirmPublishDialog({
   open,
   setOpen,
   note,
+  category,
   refresh,
 }: Props) {
   const [notePath, setNotePath] = useState("");
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     setNotePath(window.location.href.replace("create", "note"));
@@ -44,6 +48,17 @@ export default function ConfirmPublishDialog({
         description: "No Note ID provided",
         variant: "destructive",
       });
+      setLoading(false);
+      return;
+    }
+
+    if (!category) {
+      toast({
+        title: "Error Publishing Note!",
+        description: "Note cannot be published without Category",
+        variant: "destructive",
+      });
+      setLoading(false);
       return;
     }
     try {

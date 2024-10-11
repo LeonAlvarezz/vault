@@ -4,9 +4,6 @@ import { IoClose, IoSearch } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { Button } from "../button";
 import { usePathname, useRouter } from "next/navigation";
-import { constructSearchQuery, sanitizeSearchInput } from "@/utils/string";
-import SearchResultColumn from "./search-result-column";
-import { useDebouncedCallback } from "use-debounce";
 import {
   CreateSearch,
   SEARCH_SOURCE,
@@ -14,14 +11,8 @@ import {
   SearchResultCol,
 } from "@/types/search.type";
 import { useToast } from "../use-toast";
-import { searchNoteCol } from "@/data/client/search";
-import NoNote from "../note-card/no-note";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaArrowDown } from "react-icons/fa";
-import Link from "next/link";
-import SearchResultContainer from "./search-result-container";
-import { Skeleton } from "../skeleton";
 import { logSearch } from "@/data/client/search";
+import { sanitizeSearchInput } from "@/utils/string";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchKey?: string;
@@ -35,11 +26,7 @@ export default function SearchInput({
   const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
-  const [focus, setFocus] = useState(false);
   const { toast } = useToast();
-  const [searchCols, setSearchCols] = useState<SearchResultCol[]>([]);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [empty, setEmpty] = useState(false);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (!query) return;
@@ -72,7 +59,7 @@ export default function SearchInput({
     const query = searchParams?.query?.toString();
     const searchQuery = query?.replace(/_/g, " ");
     setQuery(searchQuery || "");
-  }, [searchParams && searchParams.query]);
+  }, [searchParams?.query]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

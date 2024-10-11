@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import {
   Command,
   CommandDialog,
@@ -30,6 +30,8 @@ import { IoSparklesSharp } from "react-icons/io5";
 import { vectorSearch } from "@/app/api/action";
 import { useSettings } from "@/stores/setting";
 import { getKeyboardValue } from "@/utils/json";
+import { useRouter } from "next/navigation";
+import { useProgress } from "react-transition-progress";
 
 const normalizeKey = (key: string) => {
   switch (key) {
@@ -76,6 +78,8 @@ export default function CommandSearch() {
   const [empty, setEmpty] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
+  const startProgress = useProgress();
   const { disable_command_search, keyboard_shortcuts, isKeyRecording } =
     useSettings();
 
@@ -86,7 +90,6 @@ export default function CommandSearch() {
     const down = (e: KeyboardEvent) => {
       if (disable_command_search) return;
 
-      // Fetch the user's shortcut from settings (defaults to ⌘+K or Ctrl+K)
       const shortcut =
         getKeyboardValue(keyboard_shortcuts).openCommandSearch || "⌘+K";
       const isShortcutPressed = constructShortcutCond(shortcut)(e);
@@ -354,7 +357,13 @@ export default function CommandSearch() {
                   <GlobalCommandSearchResult
                     key={result.id}
                     searchResult={result}
-                    onSelect={() => setOpen(false)}
+                    onSelect={() => {
+                      setOpen(false);
+                      startTransition(async () => {
+                        startProgress();
+                        router.push(`/note/${result.id}`);
+                      });
+                    }}
                     isLast={index === searchResult.length - 1}
                   />
                 ))}
@@ -369,7 +378,13 @@ export default function CommandSearch() {
                   <LocalCommandSearchResult
                     key={result.id}
                     searchResult={result}
-                    onSelect={() => setOpen(false)}
+                    onSelect={() => {
+                      setOpen(false);
+                      startTransition(async () => {
+                        startProgress();
+                        router.push(`/create/${result.id}`);
+                      });
+                    }}
                     isLast={index === searchResult.length - 1}
                   />
                 ))}

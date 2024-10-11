@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "../button";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdOutlineWebAsset } from "react-icons/md";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 type LayoutOptions = "default" | "alternative" | "mobile";
 const layoutClasses: Record<
   LayoutOptions,
@@ -24,7 +24,6 @@ const layoutClasses: Record<
     linkedin: "translate(-320%, -50%)",
     website: "translate(-275%, -190%)",
   },
-  // Add more layouts here if needed
 };
 
 type Props = {

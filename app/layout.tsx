@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import CommandSearch from "@/components/ui/search/command-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {} from "@/context/categorization-context";
+import { ProgressBar, ProgressBarProvider } from "react-transition-progress";
 
 // const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
@@ -41,10 +42,14 @@ export default function RootLayout({
           font.className
         )}
       >
-        <ThemeProviders>{children}</ThemeProviders>
+        <ThemeProviders>
+          <ProgressBarProvider>
+            <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 bg-main top-0" />
+            {children}
+            <CommandSearch />
+          </ProgressBarProvider>
+        </ThemeProviders>
         <Toaster />
-        <CommandSearch />
-
         <SpeedInsights />
       </body>
     </html>

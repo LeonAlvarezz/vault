@@ -3,7 +3,7 @@ import GithubButton from "@/components/ui/button/github-button";
 import GoogleButton from "@/components/ui/button/google-button";
 import SignupForm from "@/components/ui/form/signup-form";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import React from "react";
 
 export default function LoginPage() {

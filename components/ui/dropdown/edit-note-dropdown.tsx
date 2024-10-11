@@ -8,7 +8,6 @@ import {
 } from "../dropdown-menu";
 import { Button } from "../button";
 import { SlOptionsVertical } from "react-icons/sl";
-import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { useToast } from "../use-toast";
 import { cn } from "@/lib/utils";

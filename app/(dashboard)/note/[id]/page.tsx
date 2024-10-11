@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import ContactButton from "@/components/ui/button/contact-button";
 import Tag from "@/components/ui/tag";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import React from "react";
 import { FaHeart, FaPen, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";

@@ -2,7 +2,7 @@ import React from "react";
 import ImageContainerBlur from "../image-container-blur";
 import Tag from "../tag";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import NoteCardFooter from "./note-card-footer";
 import { BlockNode, Note } from "@/types/note.type";
 import { renderNoteDescription } from "@/lib/renderNote";

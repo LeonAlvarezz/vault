@@ -7,7 +7,7 @@ import { BlockNode } from "@/types/note.type";
 import { renderNoteDescription } from "@/lib/renderNote";
 import { isContentArray } from "@/utils/string";
 import { formatDate } from "@/lib/date";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 type Props = {
   searchResult: SearchResult;
   onSelect: () => void;
@@ -19,7 +19,7 @@ export default function GlobalCommandSearchResult({
   isLast,
 }: Props) {
   return (
-    <Link href={`/note/${searchResult.id}`}>
+    <>
       <CommandItem
         className="flex flex-col gap-1 items-start !px-6 my-1"
         onSelect={onSelect}
@@ -54,6 +54,6 @@ export default function GlobalCommandSearchResult({
         </div>
       </CommandItem>
       {!isLast && <Separator />}
-    </Link>
+    </>
   );
 }

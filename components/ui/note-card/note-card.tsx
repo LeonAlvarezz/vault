@@ -2,7 +2,7 @@ import React, { MouseEvent } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { Button } from "../button";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import Tag from "../tag";
 import { SlOptionsVertical } from "react-icons/sl";

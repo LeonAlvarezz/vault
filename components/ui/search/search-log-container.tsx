@@ -5,7 +5,7 @@ import { Button } from "../button";
 import { IoClose } from "react-icons/io5";
 import { deleteSearch } from "@/app/api/action";
 import { toast } from "../use-toast";
-import Link from "next/link";
+import { Link } from "react-transition-progress/next";
 import { sanitizeSearchInput } from "@/utils/string";
 type Props = {
   search: Search;

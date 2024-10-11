@@ -38,7 +38,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { createLowlight, common } from "lowlight";
 import Heading from "@tiptap/extension-heading";
 import { cn } from "@/lib/utils";
-import Loading from "@/app/loading";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import LinkModal from "./modal/link-modal";
 type Props = {

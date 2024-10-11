@@ -8,7 +8,6 @@ import FloatingButton from "@/components/ui/floating-button";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import Tutorial from "@/components/ui/tutorial/tutorial";
-import Loading from "@/app/loading";
 
 export default async function DashboardLayout({
   children,

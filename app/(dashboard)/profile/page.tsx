@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
 import { getProfile } from "@/data/server/profiles";
-import { getPublishedNotesByProfileId } from "@/data/server/note";
+import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -13,7 +13,7 @@ export default async function Page({ searchParams }: Props) {
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([
       getProfile(),
-      getPublishedNotesByProfileId(searchParams as NoteFilter),
+      getUserPublishedNotes(searchParams as NoteFilter),
     ]);
   return (
     <>
@@ -35,10 +35,10 @@ export default async function Page({ searchParams }: Props) {
               <p className="text-sm text-neutral-400">
                 {profile?.occupation || "Not Specified"}
               </p>
-              <p className="text-xs mt-1 text-neutral-600 w-[90%] absolute top-[3.2rem] ">
-                {/* {profile?.bios || "No Bios~"} */}
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                assumenda corrupti modi quam laudantium hic expedita optio sit
+              <p className="text-xs mt-1 text-neutral-600 w-[50%] absolute top-[3.2rem] ">
+                {profile?.bios || "No Bios~"}
+                {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                assumenda corrupti modi quam laudantium hic expedita optio sit */}
               </p>
             </div>
 

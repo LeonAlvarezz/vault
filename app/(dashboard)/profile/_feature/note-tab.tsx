@@ -1,4 +1,3 @@
-import NoNote from "@/components/ui/note-card/no-note";
 import NoteCard from "@/components/ui/note-card/note-card";
 import {
   Select,
@@ -12,6 +11,7 @@ import { Note } from "@/types/note.type";
 import React, { Suspense } from "react";
 import NoteList from "../../note/_component/note-list";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
+import NoNote from "@/components/ui/error/no-note";
 type Props = {
   notes: Note[] | null;
   searchParams?: { [key: string]: string | string[] | undefined };

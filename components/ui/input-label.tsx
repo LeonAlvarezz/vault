@@ -20,12 +20,15 @@ type Props = {
   type?: string;
   name?: string;
   value?: string;
+  showCount?: boolean;
+  maxLength?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 type SelectWithLabelProps = {
   label: string;
   defaultValue?: string;
   placeholder?: string;
+  name?: string;
   options: SelectOption[];
 };
 export function InputWithLabel({
@@ -78,17 +81,24 @@ export function InputWithLabel({
 //     </div>
 //   );
 // }
+type ZodErrorFormatted = {
+  _errors: string[];
+};
 
 type IconInputWithLabelProps = {
   label: string;
   placeholder?: string;
+  name?: string;
   icon: React.ReactNode;
+  errors?: ZodErrorFormatted;
 };
 
 export function IconInputWithLabel({
   label,
+  name,
   placeholder,
   icon,
+  errors,
 }: IconInputWithLabelProps) {
   return (
     <div className="flex flex-col gap-3 w-full">
@@ -96,20 +106,41 @@ export function IconInputWithLabel({
         {icon}
         <Label>{label}</Label>
       </div>
-      <Input variant={"outline"} placeholder={placeholder} />
+      <Input name={name} variant={"outline"} placeholder={placeholder} />
+      {errors && <p className="text-red-500 text-xs">{errors._errors}</p>}
     </div>
   );
 }
 
-export function TextAreaWithLabel({ label, placeholder }: Props) {
+export function TextAreaWithLabel({
+  label,
+  placeholder,
+  showCount = false,
+  maxLength = 100,
+}: Props) {
+  const [text, setText] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= maxLength) {
+      setText(newText);
+    }
+  };
   return (
-    <div className="flex flex-col gap-3 h-full">
+    <div className="flex flex-col gap-3 h-full relative">
       <Label>{label}</Label>
       <Textarea
+        value={text}
+        onChange={handleChange}
         placeholder={placeholder}
         variant={"outline"}
         className="h-full"
       />
+      {showCount && (
+        <p className="absolute bottom-1 right-5 text-[12px] text-neutral-500">
+          {text.length}/{maxLength}
+        </p>
+      )}
     </div>
   );
 }
@@ -119,12 +150,13 @@ export function SelectWithLabel({
   options,
   defaultValue,
   placeholder,
+  name,
 }: SelectWithLabelProps) {
   return (
     <div className="flex flex-col gap-3">
       <Label>{label}</Label>
 
-      <Select defaultValue={defaultValue}>
+      <Select defaultValue={defaultValue} name={name}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

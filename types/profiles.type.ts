@@ -38,5 +38,63 @@ export const SignupSchema = z.object({
     message: "Password must be at least 8 characters",
   }),
 });
+
+export const EditProfileSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .max(20, {
+      message: "Username must not exceeed 20 characters",
+    })
+    .optional(),
+  avatar_url: z.string().optional(),
+  occupation: z.string().optional(),
+  bios: z
+    .string()
+    .trim()
+    .max(150, {
+      message: "Bios must not exceeed 150 characters",
+    })
+    .optional(),
+  githubLink: z
+    .string()
+    .trim()
+    .url({ message: "Invalid URL format" })
+    .regex(/^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+$/, {
+      message: "Must be a valid GitHub URL",
+    })
+    .optional(),
+  linkedinLink: z
+    .string()
+    .trim()
+    .url({ message: "Invalid URL format" })
+    .regex(/^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+$/, {
+      message: "Must be a valid LinkedIn URL",
+    })
+    .optional(),
+  websiteLink: z
+    .string()
+    .trim()
+    .url({ message: "Invalid URL format" })
+    .optional(),
+  aboutMe: z
+    .string()
+    .trim()
+    .refine(
+      (value) => {
+        try {
+          JSON.parse(value);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      },
+      {
+        message: "aboutMe must be a valid JSON",
+      }
+    )
+    .optional(),
+});
 export type Login = z.infer<typeof LoginSchema>;
 export type Signup = z.infer<typeof SignupSchema>;
+export type EditProfile = z.infer<typeof EditProfileSchema>;

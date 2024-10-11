@@ -6,7 +6,7 @@ export default function NotAvailable() {
   return (
     <div className="flex flex-col gap-4 items-center ">
       <ImageContainer
-        src="/image/empty-note.svg"
+        src="/image/not-available.svg"
         alt="empty"
         className="size-[200px] opacity-80"
         preview={false}

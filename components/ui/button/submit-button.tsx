@@ -14,6 +14,7 @@ export default function SubmitButton({ label, className }: SubmitButtonProps) {
   return (
     <Button
       variant={"main"}
+      disabled={pending}
       className={cn("mt-6 w-full flex gap-2", className)}
     >
       {label}

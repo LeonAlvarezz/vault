@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { Dispatch, SetStateAction, useRef } from "react";
 
 import { FaCamera } from "react-icons/fa6";
 import {
@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { Profile } from "@/types/profiles.type";
+import UploadButton from "@/components/ui/button/upload-button";
 
 const OCCUPATION = [
   {
@@ -33,7 +35,16 @@ const OCCUPATION = [
     value: "frontend_developer",
   },
 ];
-export default function UserInformationSection() {
+type Props = {
+  profile: Profile;
+  setImage: Dispatch<SetStateAction<File | null>>;
+  imagePreview: string | null;
+};
+export default function UserInformationSection({
+  profile,
+  setImage,
+  imagePreview,
+}: Props) {
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
@@ -45,10 +56,18 @@ export default function UserInformationSection() {
     <section className="flex flex-col sm:flex-row items-center sm:items-stretch justify-between gap-4">
       <div className="size-[150px] relative flex-shrink-0 ">
         <Avatar className="size-full flex-shrink-0">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          {imagePreview ? (
+            <AvatarImage src={imagePreview} />
+          ) : (
+            <AvatarFallback className="text-3xl">
+              {profile.username.slice(0, 1).toUpperCase()}
+            </AvatarFallback>
+          )}
         </Avatar>
-        <Button
+        <UploadButton setImage={setImage}>
+          <FaCamera size={20} />
+        </UploadButton>
+        {/* <Button
           onClick={handleUploadClick}
           variant={"icon"}
           size={"icon"}
@@ -56,12 +75,22 @@ export default function UserInformationSection() {
         >
           <FaCamera size={20} />
         </Button>
-        <Input ref={uploadRef} className="hidden" type="file" />
+        <Input
+          name="avatar_url"
+          ref={uploadRef}
+          className="hidden"
+          type="file"
+        /> */}
       </div>
 
       <div className="basis-2/5 w-full flex flex-col gap-4 justify-between">
-        <InputWithLabel placeholder="Enter username..." label="Username" />
+        <InputWithLabel
+          name="username"
+          placeholder="Enter username..."
+          label="Username"
+        />
         <SelectWithLabel
+          name="occupation"
           placeholder="Occupation"
           label="Occupation"
           options={OCCUPATION}
@@ -69,8 +98,11 @@ export default function UserInformationSection() {
       </div>
       <div className="basis-2/5 w-full">
         <TextAreaWithLabel
+          name="bios"
           placeholder="Enter something interesting about yourself..."
           label="Bios"
+          showCount
+          maxLength={150}
         />
       </div>
     </section>

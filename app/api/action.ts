@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  EditProfileSchema,
   InsertUserPayload,
   LoginSchema,
   SignupSchema,
@@ -228,5 +229,49 @@ export async function deleteNote(id: string) {
     return { error };
   }
   revalidatePath("/");
+  return { error: null };
+}
+
+export async function editProfile(formData: unknown) {
+  const supabase = createClient();
+  const result = EditProfileSchema.safeParse(formData);
+  if (!result.success) {
+    // result.error.issues.forEach((issue) => {
+    //   errorMessage = result.error.issues
+    //     .map((issue) => `${issue.path[0]}: ${issue.message}`)
+    //     .join(", ");
+    // });
+    console.log();
+
+    return {
+      error: result.error.format(),
+    };
+  }
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { error: authErr.message };
+  }
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      aboutMe: result.data.aboutMe,
+      username: result.data.username,
+      avatar_url: result.data.avatar_url,
+      githubLink: result.data.githubLink,
+      linkedinLink: result.data.linkedinLink,
+      websiteLink: result.data.websiteLink,
+      occupation: result.data.occupation,
+      updated_at: new Date().toISOString(),
+    })
+    .match({ id: user!.id });
+  if (error) {
+    return {
+      error: error.message,
+    };
+  }
   return { error: null };
 }

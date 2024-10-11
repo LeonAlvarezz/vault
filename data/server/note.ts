@@ -294,7 +294,48 @@ export const isNoteOwner = async (noteId: string) => {
   return { count, error };
 };
 
-export async function getPublishedNotesByProfileId(filter?: NoteFilter) {
+export async function getPublishedNotesByProfileId(
+  id: string,
+  filter?: NoteFilter
+) {
+  const supabase = createClient();
+  let query = supabase
+    .from("notes")
+    .select(
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+    )
+    .eq("profile_id", id)
+    .eq("likes.profile_id", id)
+    .not("published_at", "is", null);
+
+  if (filter?.sortBy) {
+    switch (filter.sortBy) {
+      case "recent":
+        query = query.order("created_at", { ascending: false }); // Assuming you're sorting by creation date
+        break;
+
+      case "most_liked":
+        query = query.order("like", { ascending: false });
+        break;
+
+      case "most_popular":
+        query = query.order("view", { ascending: true });
+        break;
+
+      case "trending":
+        query = query
+          .order("like", { ascending: false })
+          .order("view", { ascending: false })
+          .order("created_at", { ascending: false });
+        break;
+    }
+  }
+
+  const { data, error } = await query;
+  return { data, error };
+}
+
+export async function getUserPublishedNotes(filter?: NoteFilter) {
   const supabase = createClient();
   const {
     data: { user },

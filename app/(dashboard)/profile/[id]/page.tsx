@@ -5,13 +5,19 @@ import React from "react";
 import TabView from "../_component/tab-view";
 import ContactButton from "@/components/ui/button/contact-button";
 import { getProfilesById } from "@/data/server/profiles";
+import { getPublishedNotesByProfileId } from "@/data/server/note";
+import { NoteFilter } from "@/types/note.type";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
   params: { id: string };
 };
 export default async function AccountPage({ searchParams, params }: Props) {
-  const [{ data: profile, error: profileError }] = await Promise.all([
+  const [
+    { data: profile, error: profileError },
+    { data: notes, error: noteError },
+  ] = await Promise.all([
     getProfilesById(params.id),
+    getPublishedNotesByProfileId(params.id, searchParams as NoteFilter),
   ]);
   return (
     <>
@@ -20,28 +26,32 @@ export default async function AccountPage({ searchParams, params }: Props) {
           src="/image/default-cover1.png"
           className="h-[150px] w-full overflow-hidden"
         />
-        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 relative sm:bottom-6 bottom-10 px-2 sm:mb-6 mb-3">
+        <div className="flex flex-col sm:flex-row items-center gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
           <Avatar className="size-28">
             {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
             <AvatarFallback className="text-3xl">
               {profile?.username.slice(0, 1).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col sm:flex-row gap-y-4 text-center sm:text-start justify-between w-full">
-            <div>
-              <h1 className="text-lg">{profile?.username}</h1>
+
+          <div className="flex justify-between w-full relative sm:mb-0 mb-6">
+            <div className="flex flex-col">
+              <h1 className="text-lg">{profile?.username || "No Username"}</h1>
               <p className="text-sm text-neutral-400">
-                {profile?.occupation || "Intern"}
+                {profile?.occupation || "Not Specified"}
               </p>
-              <p className="text-xs text-neutral-600 text-center sm:text-start w-[70%] sm:mx-0 mx-auto sm:w-[90%]">
-                {profile?.bios || "No bios"}
+              <p className="text-xs mt-1 text-neutral-600 w-[50%] absolute top-[3.2rem] ">
+                {profile?.bios || "No Bios~"}
+                {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
+                assumenda corrupti modi quam laudantium hic expedita optio sit */}
               </p>
             </div>
+
             <ContactButton />
           </div>
         </div>
       </section>
-      <TabView searchParams={searchParams} />
+      <TabView searchParams={searchParams} notes={notes} profile={profile} />
     </>
   );
 }

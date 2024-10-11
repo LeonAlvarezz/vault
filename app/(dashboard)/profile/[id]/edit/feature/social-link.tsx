@@ -1,9 +1,14 @@
 import { IconInputWithLabel } from "@/components/ui/input-label";
+import { EditProfile } from "@/types/profiles.type";
 import React from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdOutlineWebAsset } from "react-icons/md";
-
-export default function SocialLinkSection() {
+import { ZodFormattedError } from "zod";
+type Props = {
+  errors: ZodFormattedError<EditProfile> | null;
+};
+export default function SocialLinkSection({ errors }: Props) {
+  const err = errors?.githubLink;
   return (
     <section className="flex gap-10 flex-col sm:flex-row justify-between items-center">
       <div className="basis-2/5">
@@ -15,10 +20,13 @@ export default function SocialLinkSection() {
       </div>
       <div className="basis-1/2 w-full flex gap-10 flex-col">
         <IconInputWithLabel
+          name="githubLink"
           label={"Github"}
           placeholder="Github"
           icon={<FaGithub size={20} />}
+          errors={errors?.githubLink}
         />
+
         <IconInputWithLabel
           label={"Linkedin"}
           placeholder="Linkedin"

@@ -57,7 +57,7 @@ export default function FloatingButton({ className }: Props) {
       }
     });
   };
-  if (!showFloatingButton && isKeyboardOpen) {
+  if (!showFloatingButton || isKeyboardOpen) {
     return null;
   }
   return (

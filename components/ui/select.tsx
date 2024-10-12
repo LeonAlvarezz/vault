@@ -23,7 +23,7 @@ const SelectTrigger = React.forwardRef<
       e.stopPropagation();
     }}
     className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-neutral-700  px-3 py-2 text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-10 w-full items-center gap-4 justify-between rounded-md border border-neutral-700  px-3 py-2 text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
     {...props}

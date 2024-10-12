@@ -6,11 +6,11 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Highlight from "@tiptap/extension-highlight";
-import { common, createLowlight } from "lowlight";
+import { all, common, createLowlight } from "lowlight";
 
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -23,6 +23,8 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { CustomImageExtension } from "./TipTapImage";
 import { uploadImage } from "@/data/client/image";
+import { CodeBlockExtension } from "./CustomCodeBlock";
+import CodeBlock from "@tiptap/extension-code-block";
 
 export interface TiptapEditorRef {
   editor: ReturnType<typeof useEditor> | null;
@@ -39,6 +41,11 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
     const { onUpdate, onFocus, onBlur } = props;
     const editorRef = useRef<HTMLDivElement>(null);
     const [hasScrolledUp, setHasScrolledUp] = useState(false);
+
+    const codeBlockLowLight = CodeBlockExtension.configure({
+      lowlight: createLowlight(all),
+      defaultLanguage: "ts",
+    });
 
     const editor = useEditor({
       immediatelyRender: false,
@@ -78,11 +85,12 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
             ];
           },
         }),
-        CodeBlockLowlight.configure({
-          lowlight: createLowlight(common),
-          defaultLanguage: "ts",
-          languageClassPrefix: "ts",
-        }),
+        // CodeBlockLowlight.configure({
+        //   lowlight: createLowlight(all),
+        //   defaultLanguage: "ts",
+        // }),
+        // CodeBlockExtension,
+        codeBlockLowLight,
         Link.configure({
           openOnClick: true,
           linkOnPaste: true,

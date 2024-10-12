@@ -4,7 +4,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { JSONContent, mergeAttributes } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { createLowlight, common } from "lowlight";
+import { createLowlight, all } from "lowlight";
 import { json } from "stream/consumers";
 import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
@@ -46,7 +46,7 @@ export default function RenderHTML({ note }: Props) {
         }),
 
         CodeBlockLowlight.configure({
-          lowlight: createLowlight(common),
+          lowlight: createLowlight(all),
           defaultLanguage: "ts",
           languageClassPrefix: "ts",
         }),

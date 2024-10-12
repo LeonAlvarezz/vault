@@ -43,6 +43,7 @@ type CodeBlockNode = {
   type: NOTE_CONTENT_TYPE.CODE_BLOCK;
   attrs: {
     language?: string;
+    title?: string;
   };
   content: TextNode[];
 };

@@ -90,7 +90,12 @@ export function FilterCombobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={`${sizeClasses[size]} p-0`}>
-        <Command>
+        <Command
+          filter={(value, search) => {
+            if (value.toLowerCase().includes(search.toLowerCase())) return 1;
+            return 0;
+          }}
+        >
           <CommandInput placeholder="Search option..." />
           <CommandList>
             <CommandEmpty>No option found.</CommandEmpty>

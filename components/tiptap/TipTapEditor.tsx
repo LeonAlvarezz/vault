@@ -85,11 +85,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
             ];
           },
         }),
-        // CodeBlockLowlight.configure({
-        //   lowlight: createLowlight(all),
-        //   defaultLanguage: "ts",
-        // }),
-        // CodeBlockExtension,
+
         codeBlockLowLight,
         Link.configure({
           openOnClick: true,

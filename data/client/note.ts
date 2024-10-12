@@ -90,6 +90,7 @@ export async function publishNote(id: string) {
     .from("notes")
     .update({ published_at: now.toISOString() })
     .match({ id });
+  revalidatePathClient("/explore");
   return { error };
 }
 export async function unpublishNote(id: string) {
@@ -98,6 +99,7 @@ export async function unpublishNote(id: string) {
     .from("notes")
     .update({ published_at: null })
     .match({ id });
+  revalidatePathClient("/explore");
   return { error };
 }
 

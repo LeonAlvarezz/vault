@@ -30,6 +30,7 @@ type ComboboxProps = {
   label?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  onChange?: (value: string) => void;
 };
 
 const sizeClasses = {
@@ -43,6 +44,7 @@ export function Combobox({
   options,
   className,
   label = "Select option...",
+  onChange,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -55,13 +57,15 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            `${sizeClasses[size]} justify-between rounded-sm font-normal`,
+            `${sizeClasses[size]} w-full justify-between rounded-sm font-normal`,
             className
           )}
         >
-          {value
-            ? options.find((option) => option.value === value)?.label
-            : label}
+          <p className="w-2/3">
+            {value
+              ? options.find((option) => option.value === value)?.label
+              : label}
+          </p>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -76,6 +80,7 @@ export function Combobox({
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
+                    onChange && onChange(currentValue);
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}

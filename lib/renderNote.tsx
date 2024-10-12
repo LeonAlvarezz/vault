@@ -9,6 +9,8 @@ import hljs from "highlight.js";
 import Image from "next/image";
 import React from "react";
 import CodeBlock from "@/components/tiptap/CodeBlock";
+import CopyButton from "@/components/ui/button/copy-button";
+import { LANGUAGE } from "@/constant/language";
 
 export function renderNote(node: BlockNode): JSX.Element {
   switch (node.type) {
@@ -28,13 +30,31 @@ export function renderNote(node: BlockNode): JSX.Element {
 
     case NOTE_CONTENT_TYPE.CODE_BLOCK:
       const language = node.attrs?.language || "ts";
+      const title = node.attrs?.title || "index";
+      const text = node.content.map((data) => {
+        return data.text;
+      });
       const highlightedCode = hljs.highlight(node.content[0].text, {
         language: language,
       }).value;
       return (
-        <pre className={`language-${language}`}>
-          <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
-        </pre>
+        <div>
+          <div className="w-full bg-neutral-800 flex justify-between px-2 rounded-tr-sm rounded-tl-sm">
+            <div className="flex gap-10">
+              <p className="text-[10px] text-neutral-500">
+                {LANGUAGE.find((lang) => lang.value === language)?.label}
+              </p>
+              <p className="text-[10px] text-neutral-500">{title}</p>
+            </div>
+            <CopyButton
+              text={text.toString()}
+              className="h-6 rounded-md p-1 w-fit bg-transparent hover:bg-neutral-700/50 text-neutral-400"
+            />
+          </div>
+          <pre className={`language-${language} mt-0`}>
+            <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+          </pre>
+        </div>
       );
 
     case NOTE_CONTENT_TYPE.BULLET_LIST:

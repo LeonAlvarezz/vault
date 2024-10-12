@@ -8,7 +8,6 @@ type Props = {
   errors: ZodFormattedError<EditProfile> | null;
 };
 export default function SocialLinkSection({ errors }: Props) {
-  const err = errors?.githubLink;
   return (
     <section className="flex gap-10 flex-col sm:flex-row justify-between items-center">
       <div className="basis-2/5">

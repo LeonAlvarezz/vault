@@ -1,3 +1,4 @@
+"use client";
 import React, { MouseEventHandler } from "react";
 import { Button, ButtonProps } from "../button";
 import { IoCopy } from "react-icons/io5";
@@ -34,6 +35,7 @@ export default function CopyButton({
     <Button
       variant="icon"
       size="icon"
+      type="button"
       className={cn(
         "bg-main py-5 flex-shrink-0 rounded-l-none hover:bg-main/70",
         className

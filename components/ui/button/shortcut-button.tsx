@@ -6,6 +6,7 @@ import { Json } from "@/database.types";
 import { cn } from "@/lib/utils";
 import { getKeyboardValue } from "@/utils/json";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
+import { Skeleton } from "../skeleton";
 type Props = {
   disabled?: boolean;
 };
@@ -21,7 +22,7 @@ export default function ShortcutButton({ disabled = false }: Props) {
     .map(convertKeyNotation)
     .join("+");
 
-  const [currentShortcut, setCurrentShortcut] = useState(normalizedShortcut);
+  const [currentShortcut, setCurrentShortcut] = useState("");
 
   useEffect(() => {
     setCurrentShortcut(normalizedShortcut);
@@ -115,7 +116,7 @@ export default function ShortcutButton({ disabled = false }: Props) {
           </p>
         )}
 
-        {currentShortcut}
+        {currentShortcut ? currentShortcut : <Skeleton className="w-6 h-3" />}
         {/* <KeyboardKey keys={curr}/> */}
       </Button>
     </>

@@ -24,7 +24,6 @@ export default function EditNoteDropdownMenu({ className, note }: Props) {
     e.preventDefault();
     if (note) {
       const { error } = await deleteNote(note.id);
-      console.log("error:", error);
       if (error) {
         toast({
           title: "Error Deleting Note",

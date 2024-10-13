@@ -35,10 +35,8 @@ export default function EditProfileForm({ profile }: Props) {
       avatar_url: imagePreview || undefined,
     };
 
-    console.log("data:", data);
     const response = await editProfile(data);
     if (response?.error) {
-      console.log(response.error);
       setErrors(response.error as ZodFormattedError<EditProfile>);
       //   toast({
       //     title: "Login Error!",
@@ -87,6 +85,7 @@ export default function EditProfileForm({ profile }: Props) {
         profile={profile}
         setImage={setImage}
         imagePreview={imagePreview}
+        errors={errors}
       />
       <Separator className="my-10 " />
       <SocialLinkSection errors={errors} />

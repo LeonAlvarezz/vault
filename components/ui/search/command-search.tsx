@@ -32,7 +32,7 @@ import { useSettings } from "@/stores/setting";
 import { getKeyboardValue } from "@/utils/json";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
-
+import { convertKeyNotation } from "@/utils/keyboard-shortcut";
 const normalizeKey = (key: string) => {
   switch (key) {
     case "⌘":
@@ -47,11 +47,14 @@ const normalizeKey = (key: string) => {
       return key.toLowerCase();
   }
 };
-
 const constructShortcutCond = (keys: string) => {
+  if (!keys || typeof keys !== "string") {
+    throw new Error("Invalid keys string provided");
+  }
+
   const keyArray = keys
     .split("+")
-    .map((key) => normalizeKey(key.trim().toLowerCase()));
+    .map((key) => convertKeyNotation(key.trim().toLowerCase()));
 
   return (e: KeyboardEvent) => {
     const pressedKeys = new Set<string>();
@@ -60,14 +63,17 @@ const constructShortcutCond = (keys: string) => {
     if (e.altKey) pressedKeys.add("alt");
     if (e.shiftKey) pressedKeys.add("shift");
     if (e.metaKey) pressedKeys.add("meta");
-    pressedKeys.add(e.key.toLowerCase());
 
+    if (e.key) {
+      pressedKeys.add(convertKeyNotation(e.key));
+    }
     return (
       keyArray.every((key) => pressedKeys.has(key)) &&
       keyArray.length === pressedKeys.size
     );
   };
 };
+
 export default function CommandSearch() {
   const [open, setOpen] = useState(false);
   const [isGlobal, setIsGlobal] = useState(false);
@@ -92,7 +98,13 @@ export default function CommandSearch() {
 
       const shortcut =
         getKeyboardValue(keyboard_shortcuts).openCommandSearch || "⌘+K";
-      const isShortcutPressed = constructShortcutCond(shortcut)(e);
+
+      const normalizedShortcut = shortcut
+        .split("+")
+        .map(convertKeyNotation)
+        .join("+");
+      console.log("normalizedShortcut:", normalizedShortcut);
+      const isShortcutPressed = constructShortcutCond(normalizedShortcut)(e);
 
       if (isShortcutPressed && !isKeyRecording) {
         e.preventDefault();

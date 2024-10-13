@@ -18,7 +18,6 @@ import { Heading } from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import { EditorEvents, mergeAttributes } from "@tiptap/core";
-import { isMobile } from "react-device-detect";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { CustomImageExtension } from "./TipTapImage";

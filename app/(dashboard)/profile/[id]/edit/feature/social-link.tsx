@@ -30,11 +30,13 @@ export default function SocialLinkSection({ errors }: Props) {
           label={"Linkedin"}
           placeholder="Linkedin"
           icon={<FaLinkedin size={20} color="#0E76A8" />}
+          errors={errors?.linkedinLink}
         />
         <IconInputWithLabel
           label={"Personal Website"}
           placeholder="Personal Website"
           icon={<MdOutlineWebAsset size={20} color="#971181" />}
+          errors={errors?.websiteLink}
         />
       </div>
     </section>

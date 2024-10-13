@@ -12,7 +12,6 @@ type Props = {
   searchResult: SearchResultCol;
 };
 export default function SearchResultColumn({ searchResult }: Props) {
-  console.log("searchResult:", searchResult);
   return (
     <Link
       href={`/note/${searchResult.id}`}

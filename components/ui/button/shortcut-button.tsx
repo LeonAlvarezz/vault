@@ -5,6 +5,7 @@ import { KeyboardShortcut } from "@/types/setting.type";
 import { Json } from "@/database.types";
 import { cn } from "@/lib/utils";
 import { getKeyboardValue } from "@/utils/json";
+import { convertKeyNotation } from "@/utils/keyboard-shortcut";
 type Props = {
   disabled?: boolean;
 };
@@ -15,18 +16,20 @@ export default function ShortcutButton({ disabled = false }: Props) {
     setIsKeyRecording,
     isKeyRecording,
   } = useSettings();
-  //   const [recording, setRecording] = useState(false);
+  const normalizedShortcut = getKeyboardValue(keyboard_shortcuts)
+    .openCommandSearch.split("+")
+    .map(convertKeyNotation)
+    .join("+");
 
-  const [currentShortcut, setCurrentShortcut] = useState(
-    getKeyboardValue(keyboard_shortcuts).openCommandSearch
-  );
+  const [currentShortcut, setCurrentShortcut] = useState(normalizedShortcut);
 
   useEffect(() => {
-    setCurrentShortcut(getKeyboardValue(keyboard_shortcuts).openCommandSearch);
+    setCurrentShortcut(normalizedShortcut);
   }, [keyboard_shortcuts]);
 
   const formatShortcut = useCallback((event: KeyboardEvent) => {
     const keys: string[] = [];
+
     if (event.metaKey) keys.push("⌘");
     if (event.ctrlKey) keys.push("Ctrl");
     if (event.altKey) keys.push("Alt");
@@ -97,7 +100,7 @@ export default function ShortcutButton({ disabled = false }: Props) {
         variant="outline"
         disabled={disabled}
         className={cn(
-          "font-normal text-xs focus-visible:ring-0",
+          "font-normal text-xs focus-visible:ring-0 focus-visible:ring-offset-0",
           isKeyRecording && "border-main"
         )}
         size="sm"

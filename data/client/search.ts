@@ -13,7 +13,6 @@ export async function searchNoteCol(query: string) {
   if (error) {
     return { data: null, error };
   }
-  console.log("error", error);
 
   return { data, error };
 }

@@ -148,7 +148,6 @@ export async function getNoteExplore(filter?: NoteFilter) {
         break;
     }
   }
-  console.log(query);
 
   const { data, error } = await query;
 

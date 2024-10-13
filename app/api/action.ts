@@ -241,7 +241,6 @@ export async function editProfile(formData: unknown) {
     //     .map((issue) => `${issue.path[0]}: ${issue.message}`)
     //     .join(", ");
     // });
-    console.log();
 
     return {
       error: result.error.format(),

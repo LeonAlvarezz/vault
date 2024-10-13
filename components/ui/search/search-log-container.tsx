@@ -13,7 +13,6 @@ type Props = {
 export default function SearchLogContainer({ search }: Props) {
   const handleDelete = async (id: number) => {
     const { error } = await deleteSearch(id);
-    console.log("error:", error);
     if (error) {
       toast({
         title: "Error Deleting Search",

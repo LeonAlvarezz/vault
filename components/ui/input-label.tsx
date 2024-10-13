@@ -23,6 +23,7 @@ type Props = {
   showCount?: boolean;
   maxLength?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errors?: ZodErrorFormatted | null;
 };
 type SelectWithLabelProps = {
   label: string;
@@ -38,6 +39,7 @@ export function InputWithLabel({
   placeholder,
   onChange,
   value,
+  errors,
 }: Props) {
   return (
     <div className="flex flex-col gap-3">
@@ -50,6 +52,16 @@ export function InputWithLabel({
         value={value}
         onChange={onChange}
       />
+      {errors && (
+        <p className="text-red-400 text-xs">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
+        </p>
+      )}
     </div>
   );
 }
@@ -107,7 +119,16 @@ export function IconInputWithLabel({
         <Label>{label}</Label>
       </div>
       <Input name={name} variant={"outline"} placeholder={placeholder} />
-      {errors && <p className="text-red-500 text-xs">{errors._errors}</p>}
+      {errors && (
+        <p className="text-red-400 text-xs">
+          {errors._errors.map((error, index) => (
+            <span key={index}>
+              {error}
+              <br />
+            </span>
+          ))}
+        </p>
+      )}
     </div>
   );
 }

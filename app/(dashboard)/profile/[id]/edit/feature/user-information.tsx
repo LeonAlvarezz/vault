@@ -10,8 +10,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Profile } from "@/types/profiles.type";
+import { EditProfile, Profile } from "@/types/profiles.type";
 import UploadButton from "@/components/ui/button/upload-button";
+import { ZodFormattedError } from "zod";
 
 const OCCUPATION = [
   {
@@ -39,11 +40,13 @@ type Props = {
   profile: Profile;
   setImage: Dispatch<SetStateAction<File | null>>;
   imagePreview: string | null;
+  errors: ZodFormattedError<EditProfile> | null;
 };
 export default function UserInformationSection({
   profile,
   setImage,
   imagePreview,
+  errors,
 }: Props) {
   const uploadRef = useRef<HTMLInputElement>(null);
 
@@ -88,6 +91,7 @@ export default function UserInformationSection({
           name="username"
           placeholder="Enter username..."
           label="Username"
+          errors={errors?.username}
         />
         <SelectWithLabel
           name="occupation"
@@ -103,6 +107,7 @@ export default function UserInformationSection({
           label="Bios"
           showCount
           maxLength={150}
+          errors={errors?.bios}
         />
       </div>
     </section>

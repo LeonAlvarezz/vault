@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { getKeyboardValue } from "@/utils/json";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
 import { Skeleton } from "../skeleton";
+import { useDebouncedCallback } from "use-debounce";
+import { toast } from "../use-toast";
 type Props = {
   disabled?: boolean;
 };
@@ -45,55 +47,45 @@ export default function ShortcutButton({ disabled = false }: Props) {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      //   setCurrentShortcut("");
       if (isKeyRecording) {
         event.preventDefault();
 
         if (event.key === "Enter") {
-          //   setRecording(false);
           setIsKeyRecording(false);
         } else {
           const shortcut = formatShortcut(event);
+
+          console.log("New shortcut:", shortcut);
           setCurrentShortcut(shortcut);
-          setKeyboardShortcut({
-            openCommandSearch: shortcut,
-          });
         }
       }
     },
-    [isKeyRecording, formatShortcut]
+    [isKeyRecording, formatShortcut, currentShortcut, setKeyboardShortcut]
   );
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined")
       return;
 
-    // const formatShortcut = (event: KeyboardEvent) => {
-    //   let keys = [];
-    //   if (event.metaKey) keys.push("⌘");
-    //   if (event.ctrlKey) keys.push("Ctrl");
-    //   if (event.altKey) keys.push("Alt");
-    //   if (event.shiftKey) keys.push("Shift");
-    //   keys.push(event.key.toUpperCase());
-    //   return keys.join("+");
-    // };
-
-    // const handleKeyUp = (event: KeyboardEvent) => {
-    //   if (recording) {
-    // const shortcut = formatShortcut(event);
-    // setKeyboardShortcut({ openCommandSearch: shortcut });
-    // setRecording(false);
-    //   }
-    // };
-
     window.addEventListener("keydown", handleKeyDown);
-    // window.addEventListener("keyup", handleKeyUp);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      //   window.removeEventListener("keyup", handleKeyUp);
     };
   }, [isKeyRecording, setKeyboardShortcut]);
+
+  useEffect(() => {
+    if (!isKeyRecording && currentShortcut) {
+      console.log("Setting keyboard shortcut:", currentShortcut);
+      setKeyboardShortcut({
+        openCommandSearch: currentShortcut,
+      });
+      toast({
+        title: "Shortcut Set",
+        description: `New shortcut: ${currentShortcut}`,
+      });
+    }
+  }, [isKeyRecording, currentShortcut, setKeyboardShortcut]);
 
   return (
     <>
@@ -116,7 +108,11 @@ export default function ShortcutButton({ disabled = false }: Props) {
           </p>
         )}
 
-        {currentShortcut ? currentShortcut : <Skeleton className="w-6 h-3" />}
+        {currentShortcut.length == 0 && !isKeyRecording ? (
+          <Skeleton className="w-6 h-3" />
+        ) : (
+          currentShortcut
+        )}
         {/* <KeyboardKey keys={curr}/> */}
       </Button>
     </>

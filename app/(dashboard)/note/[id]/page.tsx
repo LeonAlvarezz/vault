@@ -34,10 +34,10 @@ export default async function NoteDetailPage({ params }: Props) {
   }
 
   // TODO: Uncomment to enable increase view
-  // const { error: viewError } = await increaseView(params.id);
-  // if (viewError) {
-  //   console.error("Failed to increase view count:", viewError);
-  // }
+  const { error: viewError } = await increaseView(params.id);
+  if (viewError) {
+    console.error("Failed to increase view count:", viewError);
+  }
 
   const toggleLike = async () => {
     "use server";

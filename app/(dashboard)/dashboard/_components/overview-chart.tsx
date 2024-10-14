@@ -16,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { NoteChartData, NoteMetric } from "@/types/note-metric.type";
 
 export const description = "An interactive bar chart";
 
@@ -96,11 +97,12 @@ const chartConfig = {
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
-
-export function OverviewChart() {
+type Props = {
+  metrics: NoteChartData[] | null;
+};
+export function OverviewChart({ metrics }: Props) {
   const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>("desktop");
-
+    React.useState<keyof typeof chartConfig>("views");
   const total = React.useMemo(
     () => ({
       desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
@@ -146,7 +148,7 @@ export function OverviewChart() {
         >
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={metrics!}
             margin={{
               left: 12,
               right: 12,

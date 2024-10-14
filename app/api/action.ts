@@ -129,6 +129,7 @@ export async function saveNote(payload: SaveNotePayload) {
       cover_url: payload.cover_url,
       content_text: payload.content_text,
       embedding: JSON.stringify(embedding),
+      updated_at: new Date().toISOString(),
     })
     .eq("id", payload.id)
     .select();

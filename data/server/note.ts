@@ -367,3 +367,24 @@ export async function getUserPublishedNotes(filter?: NoteFilter) {
   const { data, error } = await query;
   return { data, error };
 }
+
+export async function getRecentNote(count: number) {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { data, error } = await supabase
+    .from("notes")
+    .select("*")
+    .eq("profile_id", user!.id)
+    .order("updated_at", { ascending: false })
+    .limit(count);
+  if (error) {
+    return { data: null, error };
+  }
+  return { data, error };
+}

@@ -13,20 +13,22 @@ import {
   getNoteMetricLast3Months,
   getNoteSummary,
 } from "@/data/server/note-metric";
+import { getRecentNote } from "@/data/server/note";
 
 export default async function page() {
-  const [{ data: noteSummary }, { data: noteMetrics }] = await Promise.all([
-    getNoteSummary(),
-    getNoteMetricLast3Months(),
-  ]);
-  console.log("noteSummary:", noteMetrics);
+  const [{ data: noteSummary }, { data: noteMetrics }, { data: recentNotes }] =
+    await Promise.all([
+      getNoteSummary(),
+      getNoteMetricLast3Months(),
+      getRecentNote(3),
+    ]);
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 ">Dashboard</h1>
       <div className="flex flex-col gap-2">
         <OverallStatistic summary={noteSummary} />
         <OverviewChart metrics={noteMetrics} />
-        <RecentNoteCard />
+        {recentNotes && <RecentNoteCard notes={recentNotes} />}
       </div>
     </div>
   );

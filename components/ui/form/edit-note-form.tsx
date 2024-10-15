@@ -157,12 +157,12 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     setImagePreviewUrl(publicUrl);
   };
 
-  const handleUserStoppedTyping = useDebouncedCallback(() => {
+  const handleUserDebounceSave = useDebouncedCallback(() => {
     handleAutoSave();
   }, 3000);
 
   const handleUpdateTiptap = (props: EditorEvents["update"]) => {
-    handleUserStoppedTyping();
+    handleUserDebounceSave();
   };
 
   useEffect(() => {
@@ -196,7 +196,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
       }
     };
     handleSetContent();
-  }, [editorRef]);
+  }, [editorRef, note, tags, categories, setValue]);
 
   useEffect(() => {
     const setEditorContent = () => {
@@ -248,31 +248,31 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
   //     );
   //   }
 
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof document === "undefined")
-      return;
+  // useEffect(() => {
+  //   if (typeof window === "undefined" || typeof document === "undefined")
+  //     return;
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        handleAutoSave();
-        revalidatePathClient("/create");
-        revalidatePathClient("/note");
-      }
-    };
+  //   const handleVisibilityChange = () => {
+  //     if (document.visibilityState === "hidden") {
+  //       handleAutoSave();
+  //       revalidatePathClient("/create");
+  //       revalidatePathClient("/note");
+  //     }
+  //   };
 
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      handleAutoSave();
-      revalidatePathClient("/note");
-      revalidatePathClient("/create");
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload, false);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [handleAutoSave]);
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     event.preventDefault();
+  //     handleAutoSave();
+  //     revalidatePathClient("/note");
+  //     revalidatePathClient("/create");
+  //   };
+  //   window.addEventListener("beforeunload", handleBeforeUnload, false);
+  //   document.addEventListener("visibilitychange", handleVisibilityChange);
+  //   return () => {
+  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [handleAutoSave]);
 
   return (
     <>
@@ -317,7 +317,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           {...register("title")}
           className="bg-app_background hover:bg-transparent focus:outline-none text-white text-xl px-0"
           placeholder="Untitled"
-          onChange={handleUserStoppedTyping}
+          onChange={handleUserDebounceSave}
         />
         {!imagePreviewUrl && (
           <UploadButton
@@ -376,6 +376,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           categories={formattedCategories}
           selectedCategory={selectedCategory}
           setValue={setValue}
+          debounceSave={handleUserDebounceSave}
         />
         <Separator className="my-6" />
         <div className="pb-20" ref={inputRef}>

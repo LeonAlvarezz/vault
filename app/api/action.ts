@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { BlockNode, SaveNotePayload } from "@/types/note.type";
 import OpenAI from "openai";
+import { CreateTag } from "@/types/tag.type";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -297,3 +298,40 @@ export const getProfile = async () => {
 
   return { data, error };
 };
+
+export async function deleteTag(id: number) {
+  const supabase = createClient();
+  const { error: authErr } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { error } = await supabase.from("tags").delete().match({ id: id });
+  if (error) {
+    return { data: null, error };
+  }
+  revalidatePath("/create");
+  return { error };
+}
+
+export async function createTags(payload: CreateTag) {
+  const supabase = createClient();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { data, error } = await supabase
+    .from("tags")
+    .insert({ name: payload.name, profile_id: user!.id })
+    .select();
+  if (error) {
+    return { data: null, error };
+  }
+  revalidatePath("/");
+
+  return { data, error };
+}

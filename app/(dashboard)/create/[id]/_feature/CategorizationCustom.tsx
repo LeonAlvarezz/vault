@@ -6,6 +6,7 @@ import { UseFormSetValue } from "react-hook-form";
 import { BiSolidCategory } from "react-icons/bi";
 import { FaTags } from "react-icons/fa";
 import { CreateNoteFormValues } from "../page";
+import { DebouncedState } from "use-debounce";
 type Props = {
   categories: SelectOption[];
   selectedCategory: string;
@@ -13,6 +14,7 @@ type Props = {
   selectedTags: string[];
   handleGetTags?: () => Promise<void>;
   setValue: UseFormSetValue<CreateNoteFormValues>;
+  debounceSave: DebouncedState<() => void>;
 };
 export default function CategorizationCustom({
   categories,
@@ -21,6 +23,7 @@ export default function CategorizationCustom({
   selectedTags,
   handleGetTags,
   setValue,
+  debounceSave,
 }: Props) {
   return (
     <div className="flex gap-2 flex-col mt-4">
@@ -41,7 +44,10 @@ export default function CategorizationCustom({
           className="w-full border-0 hover:bg-neutral-700/50 px-1"
           icon={false}
           value={selectedCategory}
-          onChange={(value) => setValue("category", value)}
+          onChange={(value) => {
+            setValue("category", value);
+            debounceSave();
+          }}
         />
       </div>
       <div className="flex sm:items-center items-start flex-col sm:flex-row sm:gap-0 gap-2">
@@ -56,7 +62,10 @@ export default function CategorizationCustom({
         <TagMultiSelect
           options={tags}
           placeholder="Click to select tags"
-          onValueChange={(value) => setValue("tags", value)}
+          onValueChange={(value) => {
+            setValue("tags", value);
+            debounceSave();
+          }}
           defaultValue={selectedTags}
           maxCount={3}
           onTagUpdate={handleGetTags}

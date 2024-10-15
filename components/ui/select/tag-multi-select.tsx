@@ -31,11 +31,12 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import Tag from "../tag";
-import { createTags } from "@/data/client/tag";
+// import { createTags } from "@/data/client/tag";
 import { useToast } from "../use-toast";
 import { IoIosOptions } from "react-icons/io";
 import { SlOptionsVertical } from "react-icons/sl";
 import TagEditDropdown from "../dropdown/tag-edit-dropdown";
+import { createTags, revalidatePathClient } from "@/app/api/action";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -204,7 +205,7 @@ export const TagMultiSelect = React.forwardRef<
                 variant: "success",
               });
               setInputValue("");
-
+              revalidatePathClient("/create");
               if (onTagUpdate) {
                 onTagUpdate();
               }
@@ -423,14 +424,8 @@ export const TagMultiSelect = React.forwardRef<
                         // orientation=""
                         className="w-full block"
                       />
-                      <CommandItem
-                        onSelect={handleClear}
-                        className="w-full flex justify-center mt-1"
-                      >
-                        Clear
-                      </CommandItem>
 
-                      <div className="pb-2 flex justify-center items-center">
+                      <div className="py-2 flex justify-center items-center">
                         <p className="text-xs text-neutral-400 pr-4 pl-2">
                           Type and enter to create new tag +
                         </p>

@@ -13,9 +13,9 @@ import { MdDelete } from "react-icons/md";
 import { Input } from "../input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { deleteTag, updateTag } from "@/data/client/tag";
+import { updateTag } from "@/data/client/tag";
 import { useToast } from "../use-toast";
-import { revalidatePathClient } from "@/app/api/action";
+import { deleteTag, revalidatePathClient } from "@/app/api/action";
 import { useRouter } from "next/navigation";
 type Props = {
   tag: {
@@ -78,6 +78,7 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
         if (onTagUpdate) {
           onTagUpdate();
         }
+        revalidatePathClient("/create");
       } catch (error: unknown) {
         toast({
           title: "Error Updating Tag!",
@@ -109,6 +110,7 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
       if (onTagUpdate) {
         onTagUpdate();
       }
+      revalidatePathClient("/create");
     } catch (error: unknown) {
       toast({
         title: "Error Updating Tag!",

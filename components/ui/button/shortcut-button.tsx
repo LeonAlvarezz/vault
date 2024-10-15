@@ -22,15 +22,7 @@ export default function ShortcutButton({ disabled = false }: Props) {
   const normalizedShortcut = getKeyboardValue(keyboard_shortcuts)
     .openCommandSearch.split("+")
     .map((key) => {
-      switch (key) {
-        case "Ctrl":
-        case "Shift":
-        case "Meta":
-        case "Alt":
-          return convertKeyNotation(key.toLowerCase());
-        default:
-          return convertKeyNotation(key);
-      }
+      return convertKeyNotation(key);
     })
     .join("+");
 

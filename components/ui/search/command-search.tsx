@@ -39,20 +39,18 @@ const constructShortcutCond = (keys: string) => {
     throw new Error("Invalid keys string provided");
   }
 
-  const keyArray = keys
-    .split("+")
-    .map((key) => convertKeyNotation(key.trim().toLowerCase()));
+  const keyArray = keys.split("+").map((key) => convertKeyNotation(key.trim()));
 
   return (e: KeyboardEvent) => {
     const pressedKeys = new Set<string>();
 
-    if (e.ctrlKey) pressedKeys.add(convertKeyNotation("ctrl"));
-    if (e.altKey) pressedKeys.add(convertKeyNotation("alt"));
-    if (e.shiftKey) pressedKeys.add(convertKeyNotation("shift"));
-    if (e.metaKey) pressedKeys.add(convertKeyNotation("meta"));
+    if (e.ctrlKey) pressedKeys.add(convertKeyNotation("Ctrl"));
+    if (e.altKey) pressedKeys.add(convertKeyNotation("Alt"));
+    if (e.shiftKey) pressedKeys.add(convertKeyNotation("Shift"));
+    if (e.metaKey) pressedKeys.add(convertKeyNotation("Meta"));
 
     if (e.key) {
-      pressedKeys.add(convertKeyNotation(e.key));
+      pressedKeys.add(convertKeyNotation(e.key.toUpperCase()));
     }
 
     // console.log("keyArray:", keyArray);

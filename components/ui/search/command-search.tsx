@@ -95,7 +95,6 @@ export default function CommandSearch() {
         .map(convertKeyNotation)
         .join("+");
       const isShortcutPressed = constructShortcutCond(normalizedShortcut)(e);
-      console.log("isShortcutPressed:", isShortcutPressed);
 
       if (isShortcutPressed && !isKeyRecording) {
         e.preventDefault();

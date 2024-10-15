@@ -51,7 +51,6 @@ export default function Page() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const { height, keyboardHeight } = useViewport();
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

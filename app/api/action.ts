@@ -261,6 +261,7 @@ export async function editProfile(formData: unknown) {
       aboutMe: result.data.aboutMe,
       username: result.data.username,
       avatar_url: result.data.avatar_url,
+      bios: result.data.bios,
       githubLink: result.data.githubLink,
       linkedinLink: result.data.linkedinLink,
       websiteLink: result.data.websiteLink,
@@ -268,6 +269,7 @@ export async function editProfile(formData: unknown) {
       updated_at: new Date().toISOString(),
     })
     .match({ id: user!.id });
+  console.log(error);
   if (error) {
     return {
       error: error.message,

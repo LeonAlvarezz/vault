@@ -1,4 +1,5 @@
 import { Json } from "@/database.types";
+import { JSONContent } from "@tiptap/react";
 import { z } from "zod";
 
 export type Profile = {
@@ -15,6 +16,7 @@ export type Profile = {
   updated_at: string | null;
   username: string;
   websiteLink: string | null;
+  content?: Json | null;
 };
 
 export type InsertUserPayload = {
@@ -78,19 +80,12 @@ export const EditProfileSchema = z.object({
     .url({ message: "Invalid URL format" })
     .optional(),
   aboutMe: z
-    .string()
-    .trim()
-    .refine(
+    .custom<JSONContent>(
       (value) => {
-        try {
-          JSON.parse(value);
-          return true;
-        } catch (e) {
-          return false;
-        }
+        return value !== null && typeof value === "object";
       },
       {
-        message: "aboutMe must be a valid JSON",
+        message: "aboutMe must be a valid JSONContent object",
       }
     )
     .optional(),

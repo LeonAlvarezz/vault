@@ -43,12 +43,12 @@ export const getProfile = async () => {
   }
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*, content: aboutMe->content")
     .eq("id", user!.id)
     .single();
   if (error) {
     return { data: null, error };
   }
-
+  console.log("data:", data);
   return { data, error };
 };

@@ -55,6 +55,8 @@ export default function UserInformationSection({
       uploadRef.current.click();
     }
   };
+  profile;
+  console.log("profile:", profile);
   return (
     <section className="flex flex-col sm:flex-row items-center sm:items-stretch justify-between gap-4">
       <div className="size-[150px] relative flex-shrink-0 ">
@@ -91,12 +93,14 @@ export default function UserInformationSection({
           name="username"
           placeholder="Enter username..."
           label="Username"
+          defaultValue={profile.username}
           errors={errors?.username}
         />
         <SelectWithLabel
           name="occupation"
           placeholder="Occupation"
           label="Occupation"
+          defaultValue={profile.occupation || undefined}
           options={OCCUPATION}
         />
       </div>
@@ -107,6 +111,7 @@ export default function UserInformationSection({
           label="Bios"
           showCount
           maxLength={150}
+          defaultValue={profile.bios || undefined}
           errors={errors?.bios}
         />
       </div>

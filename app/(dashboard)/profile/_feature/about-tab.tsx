@@ -11,7 +11,7 @@ export default function AccountTab({ profile }: Props) {
   return (
     <div className="mb-6">
       {profile?.aboutMe ? (
-        <Render content={profile.aboutMe} />
+        <Render content={profile.content || { undefined }} />
       ) : (
         <div
           style={{ minHeight: "calc(100svh - 480px)" }}

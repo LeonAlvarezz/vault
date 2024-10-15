@@ -22,6 +22,7 @@ type Props = {
   value?: string;
   showCount?: boolean;
   maxLength?: number;
+  defaultValue?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errors?: ZodErrorFormatted | null;
 };
@@ -39,6 +40,7 @@ export function InputWithLabel({
   placeholder,
   onChange,
   value,
+  defaultValue,
   errors,
 }: Props) {
   return (
@@ -50,6 +52,7 @@ export function InputWithLabel({
         variant={"outline"}
         placeholder={placeholder}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
       />
       {errors && (
@@ -101,6 +104,7 @@ type IconInputWithLabelProps = {
   label: string;
   placeholder?: string;
   name?: string;
+  defaultValue?: string;
   icon: React.ReactNode;
   errors?: ZodErrorFormatted;
 };
@@ -111,6 +115,7 @@ export function IconInputWithLabel({
   placeholder,
   icon,
   errors,
+  defaultValue,
 }: IconInputWithLabelProps) {
   return (
     <div className="flex flex-col gap-3 w-full">
@@ -118,7 +123,12 @@ export function IconInputWithLabel({
         {icon}
         <Label>{label}</Label>
       </div>
-      <Input name={name} variant={"outline"} placeholder={placeholder} />
+      <Input
+        name={name}
+        variant={"outline"}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+      />
       {errors && (
         <p className="text-red-400 text-xs">
           {errors._errors.map((error, index) => (
@@ -138,8 +148,10 @@ export function TextAreaWithLabel({
   placeholder,
   showCount = false,
   maxLength = 100,
+  name,
+  defaultValue,
 }: Props) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(defaultValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -151,15 +163,17 @@ export function TextAreaWithLabel({
     <div className="flex flex-col gap-3 h-full relative">
       <Label>{label}</Label>
       <Textarea
+        name={name}
         value={text}
         onChange={handleChange}
         placeholder={placeholder}
         variant={"outline"}
+        // defaultValue={defaultValue}
         className="h-full"
       />
       {showCount && (
         <p className="absolute bottom-1 right-5 text-[12px] text-neutral-500">
-          {text.length}/{maxLength}
+          {text?.length}/{maxLength}
         </p>
       )}
     </div>

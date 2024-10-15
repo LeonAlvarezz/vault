@@ -1,9 +1,9 @@
 "use client";
-import UserInformationSection from "@/app/(dashboard)/profile/[id]/edit/feature/user-information";
-import React, { useEffect, useState } from "react";
+import UserInformationSection from "@/app/(dashboard)/profile/edit/feature/user-information";
+import React, { useEffect, useRef, useState } from "react";
 import { Separator } from "../separator";
-import SocialLinkSection from "@/app/(dashboard)/profile/[id]/edit/feature/social-link";
-import EditAboutMeSection from "@/app/(dashboard)/profile/[id]/edit/feature/edit-about-me";
+import SocialLinkSection from "@/app/(dashboard)/profile/edit/feature/social-link";
+import EditAboutMeSection from "@/app/(dashboard)/profile/edit/feature/edit-about-me";
 import { EditProfile, Profile } from "@/types/profiles.type";
 import { FaCheck } from "react-icons/fa";
 import { Button } from "../button";
@@ -13,11 +13,14 @@ import { uploadImage } from "@/data/client/image";
 import { toast } from "../use-toast";
 import { editProfile } from "@/app/api/action";
 import { ZodFormattedError } from "zod";
+import { TiptapEditorRef } from "@/components/tiptap/TipTapEditor";
 type Props = {
   profile: Profile;
 };
 export default function EditProfileForm({ profile }: Props) {
   const [image, setImage] = useState<File | null>(null);
+  const editorRef = useRef<TiptapEditorRef>(null);
+
   const [errors, setErrors] = useState<ZodFormattedError<EditProfile> | null>(
     null
   );
@@ -27,14 +30,14 @@ export default function EditProfileForm({ profile }: Props) {
   const handleSubmit = async (formData: FormData) => {
     const data: EditProfile = {
       username: formData.get("username")?.toString() || undefined,
-      githubLink: formData.get("githubLink")?.toString(),
+      githubLink: formData.get("githubLink")?.toString() || undefined,
       websiteLink: formData.get("websiteLink")?.toString(),
       linkedinLink: formData.get("linkedinLink")?.toString(),
       bios: formData.get("bios")?.toString(),
       occupation: formData.get("occupation")?.toString(),
       avatar_url: imagePreview || undefined,
+      aboutMe: editorRef.current?.editor?.getJSON(),
     };
-
     const response = await editProfile(data);
     if (response?.error) {
       setErrors(response.error as ZodFormattedError<EditProfile>);
@@ -46,7 +49,7 @@ export default function EditProfileForm({ profile }: Props) {
       //   });
     } else {
       toast({
-        title: "Login Successful",
+        title: "Successfully Edit Profile",
         variant: "success",
         duration: 1500,
       });
@@ -88,9 +91,9 @@ export default function EditProfileForm({ profile }: Props) {
         errors={errors}
       />
       <Separator className="my-10 " />
-      <SocialLinkSection errors={errors} />
+      <SocialLinkSection errors={errors} profile={profile} />
       <Separator className="my-10 " />
-      <EditAboutMeSection />
+      <EditAboutMeSection editorRef={editorRef} profile={profile} />
       <Button
         variant={"icon"}
         className="fixed sm:bottom-4 right-5 bottom-20 xl:right-64 bg-green-800 size-12 rounded-full p-0 hover:bg-green-900"

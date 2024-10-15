@@ -31,7 +31,7 @@ export default function EditProfileDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuItem>
-          <Link href="/profile/1/edit" className="flex items-center">
+          <Link href="/profile/edit" className="flex items-center">
             <MdModeEdit className="mr-2 h-4 w-4" />
             <p className="whitespace-nowrap">Edit Profile</p>
           </Link>

@@ -2,7 +2,7 @@ import { isMacOs, isWindows } from "react-device-detect";
 
 export const convertKeyNotation = (key: string): string => {
   const macToWin: { [key: string]: string } = {
-    "⌘": "Ctrl",
+    "⌘": "Meta",
     "⌥": "Alt",
     "⇧": "Shift",
     "⌃": "Ctrl",

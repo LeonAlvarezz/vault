@@ -33,20 +33,7 @@ import { getKeyboardValue } from "@/utils/json";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
-const normalizeKey = (key: string) => {
-  switch (key) {
-    case "⌘":
-      return "meta";
-    case "⇧":
-      return "shift";
-    case "⌥":
-      return "alt";
-    case "⌃":
-      return "ctrl";
-    default:
-      return key.toLowerCase();
-  }
-};
+
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {
     throw new Error("Invalid keys string provided");
@@ -59,21 +46,22 @@ const constructShortcutCond = (keys: string) => {
   return (e: KeyboardEvent) => {
     const pressedKeys = new Set<string>();
 
-    if (e.ctrlKey) pressedKeys.add("ctrl");
-    if (e.altKey) pressedKeys.add("alt");
-    if (e.shiftKey) pressedKeys.add("shift");
-    if (e.metaKey) pressedKeys.add("meta");
+    if (e.ctrlKey) pressedKeys.add(convertKeyNotation("Ctrl"));
+    if (e.altKey) pressedKeys.add(convertKeyNotation("Alt"));
+    if (e.shiftKey) pressedKeys.add(convertKeyNotation("Shift"));
+    if (e.metaKey) pressedKeys.add(convertKeyNotation("Meta"));
 
     if (e.key) {
       pressedKeys.add(convertKeyNotation(e.key));
     }
-    keyArray.every((key) => {
-      pressedKeys.has(key);
-    });
-    return (
-      keyArray.every((key) => pressedKeys.has(key)) &&
-      keyArray.length === pressedKeys.size
-    );
+
+    // console.log("keyArray:", keyArray);
+    // keyArray.every((key) => {
+    //   console.log("pressedKeys:", pressedKeys);
+    //   console.log("key", key);
+    //   console.log(pressedKeys.has(key));
+    // });
+    return keyArray.every((key) => pressedKeys.has(key));
   };
 };
 

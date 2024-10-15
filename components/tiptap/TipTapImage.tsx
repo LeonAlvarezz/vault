@@ -5,34 +5,14 @@ import { cn } from "@/lib/utils";
 import NextImage from "next/image";
 import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";
 import ImageContainer from "../ui/image-container";
+import { useEffect, useState } from "react";
 
 // Define a React component to handle image rendering
 const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
   const { src, alt } = node.attrs;
-  if (!src) {
-    return (
-      <NodeViewWrapper>
-        <div className="w-full h-56 bg-neutral-600 animate-pulse"></div>
-      </NodeViewWrapper>
-    );
-  }
+
   return (
     <NodeViewWrapper>
-      {/* <div className={cn("relative")}>
-        <NextImage
-          src={src}
-          alt={alt}
-          width={0}
-          height={0}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            marginBlock: "10px",
-          }}
-          sizes="(max-width: 1250px) 100vw, 1250px"
-        />
-      </div> */}
       <ImageContainer src={src} alt={alt} blur />
     </NodeViewWrapper>
   );
@@ -60,6 +40,7 @@ export const CustomImageExtension = (uploadFn: UploadFn) => {
     group: "inline",
     draggable: true,
     inline: true,
+    allowBase64: false,
     addAttributes: () => ({
       src: {},
       alt: { default: null },

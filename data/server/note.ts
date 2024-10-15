@@ -290,7 +290,7 @@ export async function getPublishedNotesByProfileId(
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id, created_at)), likes(*), bookmarks(*)"
     )
     .eq("profile_id", id)
     .eq("likes.profile_id", id)
@@ -386,5 +386,32 @@ export async function getRecentNote(count: number) {
   if (error) {
     return { data: null, error };
   }
+  return { data, error };
+}
+
+export async function getNoteContent(id: string) {
+  const supabase = createClient();
+  const {
+    error: authErr,
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (authErr) {
+    return { data: null, error: authErr };
+  }
+  const { data, error } = await supabase
+    .from("notes")
+    .select(
+      `
+    *,
+    tags:rel_notes_tags(
+     tags(id, name, profile_id, color, created_at)
+    )
+  `
+    )
+    .eq("id", id)
+    .eq("profile_id", user!.id)
+    .single();
+
   return { data, error };
 }

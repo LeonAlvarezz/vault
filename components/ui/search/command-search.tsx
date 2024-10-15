@@ -67,6 +67,9 @@ const constructShortcutCond = (keys: string) => {
     if (e.key) {
       pressedKeys.add(convertKeyNotation(e.key));
     }
+    keyArray.every((key) => {
+      pressedKeys.has(key);
+    });
     return (
       keyArray.every((key) => pressedKeys.has(key)) &&
       keyArray.length === pressedKeys.size
@@ -103,8 +106,8 @@ export default function CommandSearch() {
         .split("+")
         .map(convertKeyNotation)
         .join("+");
-      console.log("normalizedShortcut:", normalizedShortcut);
       const isShortcutPressed = constructShortcutCond(normalizedShortcut)(e);
+      console.log("isShortcutPressed:", isShortcutPressed);
 
       if (isShortcutPressed && !isKeyRecording) {
         e.preventDefault();

@@ -21,8 +21,8 @@ import { useFormContext } from "react-hook-form";
 type Props = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  note: Note | undefined;
-  refresh: () => Promise<void>;
+  note?: Note | null;
+  refresh?: () => Promise<void>;
   category: string;
 };
 export default function ConfirmPublishDialog({
@@ -83,7 +83,7 @@ export default function ConfirmPublishDialog({
         variant: "destructive",
       });
     } finally {
-      refresh();
+      // refresh();
       setLoading(false);
     }
   };
@@ -120,7 +120,7 @@ export default function ConfirmPublishDialog({
       });
     } finally {
       setLoading(false);
-      refresh();
+      // refresh();
     }
   };
   return (

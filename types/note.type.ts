@@ -4,6 +4,7 @@ import { Category } from "./category.type";
 import { Profile } from "./profiles.type";
 import { Like } from "./like.type";
 import { Bookmark } from "./bookmark.type";
+import { NoteTag, Tag } from "./tag.type";
 
 export enum NOTE_CONTENT_TYPE {
   PARAGRAPH = "paragraph",
@@ -128,6 +129,9 @@ export type Note = {
   profile?: Profile | null;
   likes?: Like[] | null;
   bookmarks?: Bookmark[] | null;
+  tags?: {
+    tags: NoteTag | null;
+  }[];
   embedding?: string | null;
 };
 

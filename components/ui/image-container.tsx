@@ -2,6 +2,7 @@
 import { getPlaceholderImage } from "@/lib/placeholder";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { env } from "process";
 import React, { useEffect, useState } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 
@@ -55,6 +56,7 @@ export default function ImageContainer({
       ? { placeholder: "blur" as const, blurDataURL: blurPlaceholder }
       : {}),
   };
+
   return (
     <div className={cn("relative", className)}>
       {preview ? (

@@ -1,16 +1,20 @@
 export type Tag = {
+  tags: any;
   color: string | null;
   created_at: string;
-  description: string | null;
+  deleted_at: string | null;
   id: number;
   name: string;
+  profile_id: string;
   updated_at: string | null;
 };
+
 export type NoteTag = {
-  created_at: string;
   id: number;
-  note_id: string;
-  tag_id: number;
+  name: string;
+  profile_id: string;
+  color: string | null;
+  created_at: string;
 };
 
 export type CreateTag = {

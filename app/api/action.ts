@@ -162,7 +162,7 @@ export async function saveNote(payload: SaveNotePayload) {
     return { data: null, error: insertError };
   }
 
-  revalidatePathClient("/note");
+  // revalidatePathClient("/note");
 
   return { data: noteData, error: null };
 }
@@ -269,7 +269,6 @@ export async function editProfile(formData: unknown) {
       updated_at: new Date().toISOString(),
     })
     .match({ id: user!.id });
-  console.log(error);
   if (error) {
     return {
       error: error.message,

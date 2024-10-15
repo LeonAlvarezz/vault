@@ -25,6 +25,7 @@ export default function ShortcutButton({ disabled = false }: Props) {
     .join("+");
 
   const [currentShortcut, setCurrentShortcut] = useState("");
+  const [pressedEnter, setPressedEnter] = useState(false);
 
   useEffect(() => {
     setCurrentShortcut(normalizedShortcut);
@@ -52,15 +53,14 @@ export default function ShortcutButton({ disabled = false }: Props) {
 
         if (event.key === "Enter") {
           setIsKeyRecording(false);
+          setPressedEnter(true);
         } else {
           const shortcut = formatShortcut(event);
-
-          console.log("New shortcut:", shortcut);
           setCurrentShortcut(shortcut);
         }
       }
     },
-    [isKeyRecording, formatShortcut, currentShortcut, setKeyboardShortcut]
+    [isKeyRecording, formatShortcut, setIsKeyRecording]
   );
 
   useEffect(() => {
@@ -72,11 +72,10 @@ export default function ShortcutButton({ disabled = false }: Props) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isKeyRecording, setKeyboardShortcut]);
+  }, [handleKeyDown]);
 
   useEffect(() => {
-    if (!isKeyRecording && currentShortcut) {
-      console.log("Setting keyboard shortcut:", currentShortcut);
+    if (!isKeyRecording && pressedEnter) {
       setKeyboardShortcut({
         openCommandSearch: currentShortcut,
       });
@@ -84,8 +83,9 @@ export default function ShortcutButton({ disabled = false }: Props) {
         title: "Shortcut Set",
         description: `New shortcut: ${currentShortcut}`,
       });
+      setPressedEnter(false);
     }
-  }, [isKeyRecording, currentShortcut, setKeyboardShortcut]);
+  }, [isKeyRecording, currentShortcut, pressedEnter, setKeyboardShortcut]);
 
   return (
     <>

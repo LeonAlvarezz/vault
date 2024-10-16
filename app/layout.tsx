@@ -44,7 +44,7 @@ export default function RootLayout({
       >
         <ThemeProviders>
           <ProgressBarProvider>
-            <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 bg-main top-0" />
+            <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 bg-main top-0 z-[999]" />
             {children}
             <CommandSearch />
           </ProgressBarProvider>

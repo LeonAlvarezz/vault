@@ -2,6 +2,7 @@ import EditNoteForm from "@/components/ui/form/edit-note-form";
 import { getAllCategories } from "@/data/client/category";
 import { getNoteContent } from "@/data/server/note";
 import { getTags } from "@/data/server/tag";
+import { notFound } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 export type CreateNoteFormValues = {
@@ -15,12 +16,19 @@ type Props = {
   params: { id: string };
 };
 export default async function Page({ params }: Props) {
-  const [{ data: note }, { data: tags }, { data: categories }] =
-    await Promise.all([
-      getNoteContent(params.id),
-      getTags(),
-      getAllCategories(),
-    ]);
+  const [
+    { data: note, error: noteError },
+    { data: tags },
+    { data: categories },
+  ] = await Promise.all([
+    getNoteContent(params.id),
+    getTags(),
+    getAllCategories(),
+  ]);
+
+  if (noteError) {
+    notFound();
+  }
   // const [isLoading, setIsLoading] = useState(false);
   // const [shouldUpdate, setShouldUpdate] = useState(true);
   // const [note, setNote] = useState<Note>();

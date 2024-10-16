@@ -79,13 +79,15 @@ export default function CommandSearch() {
     const down = (e: KeyboardEvent) => {
       if (disable_command_search) return;
 
-      const shortcut =
-        getKeyboardValue(keyboard_shortcuts).openCommandSearch || "⌘+K";
+      const shortcut = keyboard_shortcuts
+        ? getKeyboardValue(keyboard_shortcuts).openCommandSearch
+        : "⌘+K";
 
       const normalizedShortcut = shortcut
         .split("+")
         .map(convertKeyNotation)
         .join("+");
+
       const isShortcutPressed = constructShortcutCond(normalizedShortcut)(e);
 
       if (isShortcutPressed && !isKeyRecording) {

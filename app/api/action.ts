@@ -355,3 +355,23 @@ export const updateUserCover = async (cover_url: string) => {
   revalidatePath("/profile");
   return { error };
 };
+
+export const isUserAuthenticated = async (checkAnon: boolean) => {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (checkAnon) {
+    console.log("user:", user);
+    if (!user || user.is_anonymous) {
+      return { data: false, error: authErr };
+    }
+
+    // Return true if user is signed in and not anonymous
+    return { data: true, error: authErr };
+  }
+
+  return { data: user ? true : false, error: authErr };
+};

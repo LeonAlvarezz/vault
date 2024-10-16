@@ -55,6 +55,10 @@ export async function logSearch(payload: CreateSearch) {
   if (authErr) {
     return { data: null, error: authErr };
   }
+  if (user?.is_anonymous)
+    return {
+      error: null,
+    };
 
   const { data: search, error: countError } = await supabase
     .from("searches")

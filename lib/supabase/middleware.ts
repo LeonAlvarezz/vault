@@ -1,6 +1,6 @@
 import { env } from "@/utils/env";
 import { CookieOptions, createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextFetchEvent, NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -33,9 +33,17 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) {
+    const { data: signInResult, error } =
+      await supabase.auth.signInAnonymously();
+    if (error) {
+      console.error("Failed to sign in anonymously:", error);
+      return NextResponse.next(); // You can handle this better, perhaps showing an error page
+    }
+  }
   const protectedPaths = [
     "/dashboard",
-    "/explore",
+    // "/explore",
     "/note", // This will protect `/note`, but we need to exclude `/note/[id]`
     "/create",
     "/settings",
@@ -50,7 +58,12 @@ export async function updateSession(request: NextRequest) {
       !(path === "/note" && request.nextUrl.pathname.match(/^\/note\/[^\/]+$/)) // Exclude `/note/[id]`
   );
 
-  if (!user && isProtectedPath && !request.url.startsWith("/auth")) {
+  if (
+    (user?.is_anonymous &&
+      isProtectedPath &&
+      !request.url.startsWith("/auth")) ||
+    (!user && isProtectedPath && !request.url.startsWith("/auth"))
+  ) {
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }

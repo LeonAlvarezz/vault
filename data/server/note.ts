@@ -7,20 +7,21 @@ export async function getNoteById(id: string) {
   const supabase = createClient();
   const {
     data: { user },
-    error: authErr,
   } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("notes")
     .select(
       "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
     )
-    .eq("id", id)
-    .eq("likes.profile_id", user!.id)
-    .eq("bookmarks.profile_id", user!.id)
-    .single();
+    .eq("id", id);
+
+  if (user) {
+    query = query
+      .eq("likes.profile_id", user!.id)
+      .eq("bookmarks.profile_id", user!.id);
+  }
+  const { data, error } = await query.single();
 
   return { data, error };
 }

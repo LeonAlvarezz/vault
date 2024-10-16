@@ -63,6 +63,7 @@ export default function SearchInput({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    console.log("value:", value);
 
     if (value.length === 0) {
       setTimeout(() => {

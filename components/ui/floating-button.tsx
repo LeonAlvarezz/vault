@@ -1,7 +1,7 @@
 "use client";
 import { Link } from "react-transition-progress/next";
 import Image from "next/image";
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ICON_COLOR, ICON_SIZE } from "./sidebar/sidebar";
 import { cn } from "@/lib/utils";
@@ -16,11 +16,16 @@ import { User } from "@supabase/supabase-js";
 import { shouldShowFloatingButton } from "@/utils/route";
 import { useProgress } from "react-transition-progress";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
+import { isUserAuthenticated } from "@/app/api/action";
 type Props = {
   className?: string;
   user?: User | null;
+  isAuthenticatedAsAnon: boolean;
 };
-export default function FloatingButton({ className }: Props) {
+export default function FloatingButton({
+  className,
+  isAuthenticatedAsAnon,
+}: Props) {
   const [isActive, setIsActive] = useState(false);
   const { setShowModal } = useQuickSnipStore();
   const router = useRouter();
@@ -32,7 +37,6 @@ export default function FloatingButton({ className }: Props) {
     : false;
 
   const { toast } = useToast();
-
   const handleCreateNote = async () => {
     startTransition(async () => {
       startProgress();
@@ -57,7 +61,7 @@ export default function FloatingButton({ className }: Props) {
       }
     });
   };
-  if (!showFloatingButton || isKeyboardOpen) {
+  if (!showFloatingButton || isKeyboardOpen || !isAuthenticatedAsAnon) {
     return null;
   }
   return (

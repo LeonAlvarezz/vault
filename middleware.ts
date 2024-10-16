@@ -1,5 +1,5 @@
 // middleware.js
-import { NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 
 export async function middleware(req: NextRequest) {

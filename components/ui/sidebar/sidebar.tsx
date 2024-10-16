@@ -7,7 +7,7 @@ import { IoLogOut } from "react-icons/io5";
 
 import SidebarItem from "./sidebar-item";
 import { cn } from "@/lib/utils";
-import { getProfile, signout } from "@/app/api/action";
+import { getProfile, isUserAuthenticated, signout } from "@/app/api/action";
 import { Button } from "../button";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent } from "../tooltip";
@@ -59,8 +59,13 @@ export const SIDEBAR_ITEM = [
     link: "/settings",
   },
 ];
-
-export default async function Sidebar() {
+type Props = {
+  isAuthenticatedAsAnon: boolean;
+};
+export default async function Sidebar({ isAuthenticatedAsAnon }: Props) {
+  if (!isAuthenticatedAsAnon) {
+    return null;
+  }
   const { data: profile, error } = await getProfile();
   // const [profileAvatar, setProfileAvatar] = useState("");
   // useEffect(() => {

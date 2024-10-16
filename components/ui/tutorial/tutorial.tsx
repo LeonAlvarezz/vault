@@ -13,8 +13,10 @@ const tutorialSteps = [
     component: TutorialStep2,
   },
 ];
-
-export default function Tutorial() {
+type Props = {
+  isAuthenticatedAsAnon: boolean;
+};
+export default function Tutorial({ isAuthenticatedAsAnon }: Props) {
   const [currentStep, setCurrentStep] = useState(0);
   const [open, setOpen] = useState(false);
   const nextStep = () => {
@@ -38,6 +40,9 @@ export default function Tutorial() {
       setCurrentStep(currentStep - 1);
     }
   };
+  if (!isAuthenticatedAsAnon) {
+    return null;
+  }
 
   const CurrentStepComponent = tutorialSteps[currentStep].component;
 

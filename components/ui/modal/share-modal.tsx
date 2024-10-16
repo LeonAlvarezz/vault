@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,12 +19,20 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import { Separator } from "../separator";
+import { Note } from "@/types/note.type";
+import CopyButton from "../button/copy-button";
 
 interface ShareModalProps {
   children: React.ReactNode;
+  note?: Note | null;
 }
 
-export default function ShareModal({ children }: ShareModalProps) {
+export default function ShareModal({ children, note }: ShareModalProps) {
+  const [notePath, setNotePath] = useState("");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setNotePath(window.location.href);
+  }, []);
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -41,15 +50,9 @@ export default function ShareModal({ children }: ShareModalProps) {
             <Input
               variant={"outline"}
               className="w-full rounded-r-none"
-              value={"https://www.vault.note.dev/john-doe"}
+              value={notePath}
             />
-            <Button
-              variant={"icon"}
-              size={"icon"}
-              className="bg-main py-5 flex-shrink-0 rounded-l-none hover:bg-main/70"
-            >
-              <IoCopy />
-            </Button>
+            <CopyButton text={notePath} />
           </div>
           <Separator className="bg-neutral-700 my-2" />
           <div className="flex flex-col gap-4">

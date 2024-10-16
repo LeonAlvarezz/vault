@@ -19,9 +19,28 @@ import { bookmarkNote } from "@/data/server/bookmark";
 import { revalidatePath } from "next/cache";
 import { formatDate } from "@/lib/date";
 import { notFound } from "next/navigation";
+import { description } from "../../dashboard/_components/overview-chart";
+import { Metadata } from "next";
 type Props = {
   params: { id: string };
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { data: note } = await getNoteById(params.id);
+  return {
+    title: note ? note.title : "Vault Note",
+    description: note?.content_text,
+    openGraph: {
+      images: [
+        {
+          url:
+            note?.cover_url ||
+            "https://wymuicbyisnovfjqtfjc.supabase.co/storage/v1/object/public/note-images/image/Vault%20Planning%20Logo.png",
+        },
+      ],
+    },
+  };
+}
 
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published

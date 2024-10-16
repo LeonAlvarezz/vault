@@ -1,13 +1,20 @@
 "use client";
 import React, { useTransition } from "react";
 import { FaRegHeart } from "react-icons/fa";
-import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
+import {
+  IoBookmark,
+  IoBookmarkOutline,
+  IoShare,
+  IoShareOutline,
+  IoShareSocialOutline,
+} from "react-icons/io5";
 import { Button } from "../button";
 import { Note } from "@/types/note.type";
 import { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { toast } from "../use-toast";
 import { cn } from "@/lib/utils";
+import ShareModal from "../modal/share-modal";
 type Props = {
   note: Note;
   toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
@@ -120,6 +127,20 @@ export default function InteractionButton({
           <IoBookmarkOutline size={20} className="group-hover:text-blue-500" />
         )}
       </Button>
+      <ShareModal>
+        <Button
+          // onClick={handleToggleBookmark}
+          variant={"icon"}
+          className={cn(
+            "group size-9 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full",
+
+            (isBookmarkPending || bookmark) &&
+              "border-0 bg-blue-500 hover:opacity-80 hover:bg-blue-500"
+          )}
+        >
+          <IoShareSocialOutline size={20} />
+        </Button>
+      </ShareModal>
     </div>
   );
 }

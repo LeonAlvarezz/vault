@@ -53,12 +53,6 @@ const constructShortcutCond = (keys: string) => {
       pressedKeys.add(convertKeyNotation(e.key.toUpperCase()));
     }
 
-    // console.log("keyArray:", keyArray);
-    // keyArray.every((key) => {
-    //   console.log("pressedKeys:", pressedKeys);
-    //   console.log("key", key);
-    //   console.log(pressedKeys.has(key));
-    // });
     return keyArray.every((key) => pressedKeys.has(key));
   };
 };

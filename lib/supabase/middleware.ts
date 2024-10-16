@@ -36,15 +36,18 @@ export async function updateSession(request: NextRequest) {
   const protectedPaths = [
     "/dashboard",
     "/explore",
-    "/note",
+    "/note", // This will protect `/note`, but we need to exclude `/note/[id]`
     "/create",
     "/settings",
     "/profile",
     "/bookmark",
   ];
 
-  const isProtectedPath = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
+  // Custom condition to exclude `/note/[id]` but protect `/note`
+  const isProtectedPath = protectedPaths.some(
+    (path) =>
+      request.nextUrl.pathname.startsWith(path) &&
+      !(path === "/note" && request.nextUrl.pathname.match(/^\/note\/[^\/]+$/)) // Exclude `/note/[id]`
   );
 
   if (!user && isProtectedPath && !request.url.startsWith("/auth")) {

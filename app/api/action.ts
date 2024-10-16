@@ -335,3 +335,23 @@ export async function createTags(payload: CreateTag) {
 
   return { data, error };
 }
+
+export const updateUserCover = async (cover_url: string) => {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { error: authErr };
+  }
+  const { error } = await supabase
+    .from("profiles")
+    .update({ cover_url: cover_url })
+    .eq("id", user!.id);
+  if (error) {
+    return { error };
+  }
+  revalidatePath("/profile");
+  return { error };
+};

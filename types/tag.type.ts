@@ -14,7 +14,7 @@ export type NoteTag = {
   name: string;
   profile_id: string;
   color: string | null;
-  created_at: string;
+  created_at?: string;
 };
 
 export type CreateTag = {

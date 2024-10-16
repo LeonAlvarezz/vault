@@ -7,6 +7,7 @@ import ContactButton from "@/components/ui/button/contact-button";
 import { getProfilesById } from "@/data/server/profiles";
 import { getPublishedNotesByProfileId } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
+import { getOccupationLabel } from "@/constant/occupation";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
   params: { id: string };
@@ -38,7 +39,9 @@ export default async function AccountPage({ searchParams, params }: Props) {
             <div className="flex flex-col">
               <h1 className="text-lg">{profile?.username || "No Username"}</h1>
               <p className="text-sm text-neutral-400">
-                {profile?.occupation || "Not Specified"}
+                {profile?.occupation
+                  ? getOccupationLabel(profile?.occupation)
+                  : "Intern"}
               </p>
               <p className="text-xs mt-1 text-neutral-600 w-[50%] absolute top-[3.2rem] ">
                 {profile?.bios || "No Bios~"}

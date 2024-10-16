@@ -6,6 +6,8 @@ import TabView from "./_component/tab-view";
 import { getProfile } from "@/data/server/profiles";
 import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
+import { getOccupationLabel } from "@/constant/occupation";
+import CoverImage from "./edit/feature/cover_image";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
@@ -18,10 +20,7 @@ export default async function Page({ searchParams }: Props) {
   return (
     <>
       <section>
-        <ImageContainerBlur
-          src="/image/default-cover1.png"
-          className="overflow-hidden h-[150px] w-full"
-        />
+        <CoverImage profile={profile} />
         <div className="flex flex-col sm:flex-row items-center gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
           <Avatar className="size-28">
             {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
@@ -33,7 +32,9 @@ export default async function Page({ searchParams }: Props) {
             <div className="flex flex-col">
               <h1 className="text-lg">{profile?.username || "No Username"}</h1>
               <p className="text-sm text-neutral-400">
-                {profile?.occupation || "Not Specified"}
+                {profile?.occupation
+                  ? getOccupationLabel(profile?.occupation)
+                  : "Intern"}
               </p>
               <p className="text-xs mt-1 text-neutral-600 w-[50%] absolute top-[3.2rem] ">
                 {profile?.bios || "No Bios~"}

@@ -248,31 +248,31 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
   //     );
   //   }
 
-  // useEffect(() => {
-  //   if (typeof window === "undefined" || typeof document === "undefined")
-  //     return;
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return;
 
-  //   const handleVisibilityChange = () => {
-  //     if (document.visibilityState === "hidden") {
-  //       handleAutoSave();
-  //       revalidatePathClient("/create");
-  //       revalidatePathClient("/note");
-  //     }
-  //   };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        handleAutoSave();
+        revalidatePathClient("/create");
+        revalidatePathClient("/note");
+      }
+    };
 
-  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  //     event.preventDefault();
-  //     handleAutoSave();
-  //     revalidatePathClient("/note");
-  //     revalidatePathClient("/create");
-  //   };
-  //   window.addEventListener("beforeunload", handleBeforeUnload, false);
-  //   document.addEventListener("visibilitychange", handleVisibilityChange);
-  //   return () => {
-  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, [handleAutoSave]);
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      handleAutoSave();
+      revalidatePathClient("/note");
+      revalidatePathClient("/create");
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload, false);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [handleAutoSave]);
 
   return (
     <>

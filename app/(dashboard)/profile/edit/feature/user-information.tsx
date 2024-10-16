@@ -13,29 +13,8 @@ import { Input } from "@/components/ui/input";
 import { EditProfile, Profile } from "@/types/profiles.type";
 import UploadButton from "@/components/ui/button/upload-button";
 import { ZodFormattedError } from "zod";
+import { OCCUPATION } from "@/constant/occupation";
 
-const OCCUPATION = [
-  {
-    label: "Software Engineer",
-    value: "software_engineer",
-  },
-  {
-    label: "Designer",
-    value: "designer",
-  },
-  {
-    label: "Cyber Security",
-    value: "cyber_security",
-  },
-  {
-    label: "Backend Developer",
-    value: "backend_developer",
-  },
-  {
-    label: "Frontend Developer",
-    value: "frontend_developer",
-  },
-];
 type Props = {
   profile: Profile;
   setImage: Dispatch<SetStateAction<File | null>>;
@@ -55,8 +34,6 @@ export default function UserInformationSection({
       uploadRef.current.click();
     }
   };
-  profile;
-  console.log("profile:", profile);
   return (
     <section className="flex flex-col sm:flex-row items-center sm:items-stretch justify-between gap-4">
       <div className="size-[150px] relative flex-shrink-0 ">

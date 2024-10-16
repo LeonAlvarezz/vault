@@ -49,6 +49,5 @@ export const getProfile = async () => {
   if (error) {
     return { data: null, error };
   }
-  console.log("data:", data);
   return { data, error };
 };

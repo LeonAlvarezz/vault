@@ -7,6 +7,7 @@ export type Profile = {
   auth_id: string;
   avatar_url: string | null;
   bios: string | null;
+  cover_url: string | null;
   created_at: string;
   email: string;
   githubLink: string | null;

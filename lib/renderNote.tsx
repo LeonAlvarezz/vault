@@ -40,7 +40,7 @@ export function renderNote(node: BlockNode): JSX.Element {
       return (
         <div>
           <div className="w-full bg-neutral-800 flex justify-between px-2 rounded-tr-sm rounded-tl-sm">
-            <div className="flex gap-10">
+            <div className="flex gap-10 items-center">
               <p className="text-[10px] text-neutral-500">
                 {LANGUAGE.find((lang) => lang.value === language)?.label}
               </p>

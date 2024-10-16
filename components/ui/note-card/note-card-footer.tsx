@@ -1,5 +1,10 @@
 "use client";
-import React, { useEffect, useState, useTransition } from "react";
+import React, {
+  startTransition,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { FaRegHeart } from "react-icons/fa";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
@@ -13,6 +18,7 @@ import { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "../use-toast";
 import { revalidatePathClient } from "@/app/api/action";
 import { BotMessageSquare } from "lucide-react";
+import { useProgress } from "react-transition-progress";
 type Props = {
   note: Note;
   toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
@@ -29,6 +35,7 @@ export default function NoteCardFooter({
   const router = useRouter();
   const [isLikePending, startLikeTransition] = useTransition();
   const [isBookmarkPending, startBookmarkTransition] = useTransition();
+  const startProgress = useProgress();
   const handleToggleBookmark = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -42,11 +49,6 @@ export default function NoteCardFooter({
             title: "Error Bookmark Post",
             description: error.message,
             variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Add Note to Bookmark",
-            variant: "success",
           });
         }
       });
@@ -73,11 +75,6 @@ export default function NoteCardFooter({
             description: error.message,
             variant: "destructive",
           });
-        } else {
-          toast({
-            title: "Successfully Like Post",
-            variant: "success",
-          });
         }
       });
     } catch (error) {
@@ -92,7 +89,10 @@ export default function NoteCardFooter({
   const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     event.preventDefault();
-    router.push(`/profile/${note.profile?.id}`);
+    startTransition(() => {
+      startProgress();
+      router.push(`/profile/${note.profile?.id}`);
+    });
   };
   return (
     <div className="flex justify-between w-full items-center mt-4">

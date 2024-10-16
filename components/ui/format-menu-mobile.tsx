@@ -159,10 +159,9 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
 
   useEffect(() => {
     if (editor) {
-      editor.on("update", updateActiveFormats);
-      updateActiveFormats(); // Initial update
+      editor.on("transaction", updateActiveFormats);
       return () => {
-        editor.off("update", updateActiveFormats);
+        editor.off("transaction", updateActiveFormats);
       };
     }
   }, [editor, updateActiveFormats]);
@@ -176,11 +175,15 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
         } else {
           (editor.chain().focus() as any)[command]().run();
         }
-        updateActiveFormats();
+
+        // Let the editor finish applying the command, then update formats.
       }
     },
     [editor, updateActiveFormats]
   );
+  // useEffect(() => {
+  //   console.log("activeFormats:", activeFormats);
+  // }, [activeFormats]);
 
   if (!editor) {
     return (
@@ -193,18 +196,28 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
   return (
     <div className="bottom-1 absolute left-1/2 -translate-x-1/2 overflow-x-auto w-full sm:w-fit flex gap-4 bg-popover pt-2 pb-3 px-4 rounded-sm">
       <ToggleGroup variant="outline" type="multiple">
-        {formatOptions.map((option) => (
-          <ToggleGroupItem
-            key={option.value}
-            value={option.value}
-            aria-label={`Toggle ${option.value}`}
-            onMouseDown={(e) => e.preventDefault()}
-            className={cn(activeFormats[option.value] ? "is-active" : "")}
-            onClick={() => handleFormatToggle(option)}
-          >
-            <option.icon size={16} />
-          </ToggleGroupItem>
-        ))}
+        {formatOptions.map((option) => {
+          console.log("option:", option);
+          console.log(
+            "activeFormats[option.value]:",
+            activeFormats[option.value]
+          );
+          return (
+            <ToggleGroupItem
+              key={option.value}
+              value={option.value}
+              aria-label={`Toggle ${option.value}`}
+              onMouseDown={(e) => e.preventDefault()}
+              className={cn(
+                "data-[state=on]:bg-tranparent",
+                activeFormats[option.value] ? "is-active" : ""
+              )}
+              onClick={() => handleFormatToggle(option)}
+            >
+              <option.icon size={16} />
+            </ToggleGroupItem>
+          );
+        })}
       </ToggleGroup>
       <Button
         variant="outline"

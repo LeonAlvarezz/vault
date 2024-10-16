@@ -335,7 +335,7 @@ export async function getUserPublishedNotes(filter?: NoteFilter) {
   let query = supabase
     .from("notes")
     .select(
-      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id)), likes(*), bookmarks(*)"
+      "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id, created_at)), likes(*), bookmarks(*)"
     )
     .eq("profile_id", user!.id)
     .eq("likes.profile_id", user!.id)

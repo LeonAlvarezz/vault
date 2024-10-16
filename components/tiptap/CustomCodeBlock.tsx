@@ -42,8 +42,9 @@ const CustomCodeBlock = (props: NodeViewProps) => {
             <Combobox
               options={LANGUAGE}
               className="min-w-[100px] w-fit px-2 h-6 border-0 bg-transparent hover:bg-neutral-700/50 text-[10px] text-neutral-400"
-              label=""
+              label="Select a language"
               onChange={onChange}
+              defaultValue={selectedLanguage}
             />
 
             <Input

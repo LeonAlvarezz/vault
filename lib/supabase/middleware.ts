@@ -30,7 +30,7 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const createAnonymousUserRoute = ["/note", "/profile", "/explore"];
+  const createAnonymousUserRoute = ["/note", "/explore"];
 
   const {
     data: { user },
@@ -39,7 +39,8 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = url;
   if (
     !user &&
-    createAnonymousUserRoute.some((path) => pathname.startsWith(path))
+    (createAnonymousUserRoute.some((path) => pathname.startsWith(path)) ||
+      pathname.match(/^\/profile\/[^\/]+$/))
   ) {
     const { data: signInResult, error } =
       await supabase.auth.signInAnonymously();

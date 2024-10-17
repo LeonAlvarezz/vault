@@ -29,11 +29,17 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
+  const createAnonymousUserRoute = ["/note", "/profile", "/explore"];
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
+
+  const { pathname } = url;
+  if (
+    !user &&
+    createAnonymousUserRoute.some((path) => pathname.startsWith(path))
+  ) {
     const { data: signInResult, error } =
       await supabase.auth.signInAnonymously();
     if (error) {

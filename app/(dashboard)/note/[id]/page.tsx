@@ -33,9 +33,11 @@ const getNote = cache(async (noteId: string) => {
 
 export async function generateStaticParams() {
   const { data: notes } = await getAllAvailableNoteForParams();
-  return notes!.map(({ id }) => ({
-    id,
-  }));
+  return notes!
+    .map(({ id }) => ({
+      id,
+    }))
+    .slice(0, 100);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

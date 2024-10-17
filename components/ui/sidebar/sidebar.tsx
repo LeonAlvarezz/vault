@@ -11,6 +11,7 @@ import { getProfile, isUserAuthenticated, signout } from "@/app/api/action";
 import { Button } from "../button";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent } from "../tooltip";
+import LogoutButton from "../button/logout-button";
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
 export const SIDEBAR_ITEM = [
@@ -67,6 +68,9 @@ export default async function Sidebar({ isAuthenticatedAsAnon }: Props) {
     return null;
   }
   const { data: profile, error } = await getProfile();
+  const handleSignout = () => {
+    signout();
+  };
   // const [profileAvatar, setProfileAvatar] = useState("");
   // useEffect(() => {
   //   const handleGetAvatar = async () => {
@@ -109,26 +113,7 @@ export default async function Sidebar({ isAuthenticatedAsAnon }: Props) {
           </div>
         </div>
         <div className="w-full flex justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <form>
-                  <Button variant={"icon"} size={"icon"} formAction={signout}>
-                    <div
-                      className={cn(
-                        "flex justify-center p-2 m-auto w-fit  hover:bg-neutral-700/50 rounded-sm my-4"
-                      )}
-                    >
-                      <IoLogOut color={ICON_COLOR} size={ICON_SIZE} />
-                    </div>
-                  </Button>
-                </form>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="capitalize text-[#FF8080]">Logout</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <LogoutButton />
         </div>
       </div>
     </aside>

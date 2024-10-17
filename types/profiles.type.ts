@@ -42,6 +42,12 @@ export const SignupSchema = z.object({
   }),
 });
 
+export const RegisterUsernameSchema = z.object({
+  username: z.string().trim().max(20, {
+    message: "Username must not exceeed 20 characters",
+  }),
+});
+
 export const EditProfileSchema = z.object({
   username: z
     .string()
@@ -94,3 +100,4 @@ export const EditProfileSchema = z.object({
 export type Login = z.infer<typeof LoginSchema>;
 export type Signup = z.infer<typeof SignupSchema>;
 export type EditProfile = z.infer<typeof EditProfileSchema>;
+export type RegisterUsername = z.infer<typeof RegisterUsernameSchema>;

@@ -4,6 +4,7 @@ import {
   EditProfileSchema,
   InsertUserPayload,
   LoginSchema,
+  RegisterUsernameSchema,
   SignupSchema,
 } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
@@ -13,6 +14,7 @@ import { redirect } from "next/navigation";
 import { BlockNode, SaveNotePayload } from "@/types/note.type";
 import OpenAI from "openai";
 import { CreateTag } from "@/types/tag.type";
+import { headers } from "next/headers";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -411,4 +413,61 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
   }
 
   return { data: user ? true : false, error: authErr };
+};
+
+export const signInWithGoogle = async () => {
+  const origin = headers().get("origin");
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+      queryParams: {
+        access_type: "offline",
+        prompt: "consent",
+      },
+    },
+  });
+
+  if (error) {
+    return { data: null, error };
+  }
+  console.log("data:", data);
+  if (data.url) {
+    redirect(data.url); // use the redirect API for your server framework
+  }
+};
+
+export const registerUsername = async (formData: unknown) => {
+  const supabase = createClient();
+  const result = RegisterUsernameSchema.safeParse(formData);
+  if (!result.success) {
+    return {
+      error: result.error.format(),
+    };
+  }
+  const {
+    data: { user },
+    error: authErr,
+  } = await supabase.auth.getUser();
+  if (authErr) {
+    return { error: authErr.message };
+  }
+  const { error } = await supabase.from("profiles").insert([
+    {
+      email: user!.email!,
+      username: result.data.username,
+      auth_id: user!.id,
+      id: user!.id,
+    },
+  ]);
+
+  if (!error) {
+    revalidatePath("/", "layout");
+    redirect("/dashboard");
+  } else {
+    return {
+      error: error.message,
+    };
+  }
 };

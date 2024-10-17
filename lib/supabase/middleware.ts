@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     (createAnonymousUserRoute.some((path) => pathname.startsWith(path)) ||
-      pathname.match(/^\/profile\/[^\/]+$/))
+      pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/))
   ) {
     const { data: signInResult, error } =
       await supabase.auth.signInAnonymously();
@@ -64,11 +64,12 @@ export async function updateSession(request: NextRequest) {
     (path) =>
       request.nextUrl.pathname.startsWith(path) &&
       !(
-        path === "/note" && request.nextUrl.pathname.match(/^\/note\/[^\/]+$/)
+        path === "/note" &&
+        request.nextUrl.pathname.match(/^\/note\/[0-9a-fA-F\-]{36}$/)
       ) &&
       !(
         path === "/profile" &&
-        request.nextUrl.pathname.match(/^\/profile\/[^\/]+$/)
+        request.nextUrl.pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/)
       ) &&
       !(path === "/profile" && request.nextUrl.pathname === "/profile/edit")
   );

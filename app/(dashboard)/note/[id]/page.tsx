@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: note } = await getNote(params.id);
   return {
     title: note ? note.title : "Vault Note",
-    description: note?.content_text,
+    description: note?.content_text?.slice(0, 150),
     openGraph: {
       images: [
         {

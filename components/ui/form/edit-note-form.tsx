@@ -80,6 +80,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           const editorContent = editorRef.current.editor.getJSON();
 
           if (editorRef.current.editor.isEmpty) {
+            setSaveLoading(false);
             return;
           }
 
@@ -99,7 +100,10 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
             category_id: category,
             tags: tags,
             cover_url: coverUrl,
-            content_text: editorRef.current.editor.getText().trim(),
+            content_text: editorRef.current.editor
+              .getText()
+              .trim()
+              .replace(/(\r\n|\n|\r){2,}/g, "\n"),
           };
 
           const { error } = await saveNote(noteData);

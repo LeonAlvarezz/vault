@@ -2,8 +2,9 @@ import EditNoteForm from "@/components/ui/form/edit-note-form";
 import { getAllCategories } from "@/data/client/category";
 import { getNoteContent } from "@/data/server/note";
 import { getTags } from "@/data/server/tag";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { cache, useCallback, useEffect, useRef, useState } from "react";
 
 export type CreateNoteFormValues = {
   title: string;
@@ -15,16 +16,24 @@ export type CreateNoteFormValues = {
 type Props = {
   params: { id: string };
 };
+
+const getNote = cache(async (noteId: string) => {
+  const { data, error } = await getNoteContent(noteId);
+  return { data, error };
+});
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { data: note } = await getNote(params.id);
+  return {
+    title: note ? `Vault - ${note.title}` : "Vault",
+  };
+}
 export default async function Page({ params }: Props) {
   const [
     { data: note, error: noteError },
     { data: tags },
     { data: categories },
-  ] = await Promise.all([
-    getNoteContent(params.id),
-    getTags(),
-    getAllCategories(),
-  ]);
+  ] = await Promise.all([getNote(params.id), getTags(), getAllCategories()]);
 
   if (noteError) {
     notFound();

@@ -10,6 +10,7 @@ import CommandSearch from "@/components/ui/search/command-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {} from "@/context/categorization-context";
 import { ProgressBar, ProgressBarProvider } from "react-transition-progress";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 // const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
@@ -51,6 +52,7 @@ export default function RootLayout({
         </ThemeProviders>
         <Toaster />
         <SpeedInsights />
+        <GoogleAnalytics gaId="G-3MYVYZ3JNY" />
       </body>
     </html>
   );

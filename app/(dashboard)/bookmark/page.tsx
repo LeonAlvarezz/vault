@@ -13,7 +13,13 @@ import { NoteFilter } from "@/types/note.type";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import { getTags } from "@/data/server/tag";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Vault - Bookmark",
+  description:
+    "Manage and organize your saved bookmarks for quick access to important notes and resources.",
+};
 const STATUS = [
   {
     value: "all_note",

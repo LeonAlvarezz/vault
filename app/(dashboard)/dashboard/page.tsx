@@ -14,6 +14,13 @@ import {
   getNoteSummary,
 } from "@/data/server/note-metric";
 import { getRecentNote } from "@/data/server/note";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Vault - Dashboard",
+  description:
+    "Your personal dashboard to view your note traffic, jump right back into your most recent note.",
+};
 
 export default async function page() {
   const [{ data: noteSummary }, { data: noteMetrics }, { data: recentNotes }] =

@@ -8,9 +8,16 @@ import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
 import CoverImage from "./edit/feature/cover_image";
+import { Metadata } from "next";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
+
+export const metadata: Metadata = {
+  title: "Vault - Profile",
+  description: "View and manage your personal developer profile on Vault.",
+};
+
 export default async function Page({ searchParams }: Props) {
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([

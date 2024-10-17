@@ -10,6 +10,7 @@ import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
 import NoteList from "./_component/note-list";
+import { Metadata } from "next";
 const STATUS = [
   {
     value: "all",
@@ -28,6 +29,12 @@ const STATUS = [
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
+
+export const metadata: Metadata = {
+  title: "Vault - Note",
+  description: "Create, edit, and publish your developer notes on Vault.",
+};
+
 export default async function NotePage({ searchParams }: Props) {
   const [{ data: notes }, { data: categories }, { data: tags }] =
     await Promise.all([

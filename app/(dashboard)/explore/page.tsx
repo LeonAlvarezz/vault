@@ -24,6 +24,7 @@ import { getTags } from "@/data/server/tag";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import NoteList from "../note/_component/note-list";
+import { Metadata } from "next";
 
 const STATUS = [
   {
@@ -76,6 +77,12 @@ const ORDER = [
 
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+export const metadata: Metadata = {
+  title: "Vault - Explore",
+  description:
+    "Discover community-shared notes, ideas, and knowledge in Vault's Explore section.",
 };
 
 export default async function NotePage({ searchParams }: Props) {

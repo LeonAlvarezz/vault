@@ -28,6 +28,7 @@ import { getAllCategories } from "@/data/client/category";
 import { NoteFilter } from "@/types/note.type";
 import { deleteSearch } from "@/app/api/action";
 import SearchLogContainer from "@/components/ui/search/search-log-container";
+import { Metadata } from "next";
 
 const STATUS = [
   {
@@ -78,20 +79,12 @@ const ORDER = [
   },
 ];
 
-const RECENT_SEARCH = [
-  {
-    value: "What's react",
-  },
-  {
-    value: "What's Javascript",
-  },
-  {
-    value: "What's Golang",
-  },
-  {
-    value: "What's Lua",
-  },
-];
+export const metadata: Metadata = {
+  title: "Vault - Search",
+  description:
+    "Advanced search to find notes, bookmarks, and shared knowledge across the Vault platform.",
+};
+
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };

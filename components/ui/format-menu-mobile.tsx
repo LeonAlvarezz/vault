@@ -197,11 +197,6 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
     <div className="bottom-1 absolute left-1/2 -translate-x-1/2 overflow-x-auto w-full sm:w-fit flex gap-4 bg-popover pt-2 pb-3 px-4 rounded-sm">
       <ToggleGroup variant="outline" type="multiple">
         {formatOptions.map((option) => {
-          console.log("option:", option);
-          console.log(
-            "activeFormats[option.value]:",
-            activeFormats[option.value]
-          );
           return (
             <ToggleGroupItem
               key={option.value}

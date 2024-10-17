@@ -417,27 +417,49 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
 };
 
 export const signInWithGoogle = async () => {
-  const origin =
-    process.env.NODE_ENV === "development"
-      ? headers().get("origin")
-      : env.NEXT_PUBLIC_SITE_URL;
+  const origin = headers().get("origin");
   const supabase = createClient();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${origin}/auth/callback`,
-      queryParams: {
-        access_type: "offline",
-        prompt: "consent",
-      },
-    },
-  });
 
-  if (error) {
-    return { data: null, error };
-  }
-  if (data.url) {
-    redirect(data.url); // use the redirect API for your server framework
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.is_anonymous) {
+    const { data, error } = await supabase.auth.linkIdentity({
+      provider: "google",
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+
+    if (error) {
+      return { data: null, error: error.message };
+    }
+    if (data.url) {
+      redirect(data.url); // use the redirect API for your server framework
+    }
+  } else {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    });
+
+    if (error) {
+      return { data: null, error: error.message };
+    }
+    if (data.url) {
+      redirect(data.url); // use the redirect API for your server framework
+    }
   }
 };
 

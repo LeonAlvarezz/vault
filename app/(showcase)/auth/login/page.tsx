@@ -26,7 +26,7 @@ export default function LoginPage() {
       </div>
       <div className="flex flex-col gap-2 mt-6 w-full ">
         <GoogleButton />
-        <GithubButton />
+        {/* <GithubButton /> */}
       </div>
       <Separator className="my-6" />
       <LoginForm />

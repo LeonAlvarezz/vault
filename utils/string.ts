@@ -15,3 +15,12 @@ export const constructSearchQuery = (query: string, searchOption: string) => {
 export const isContentArray = (content: any): content is Array<any> => {
   return Array.isArray(content);
 };
+
+export function getCorrectOrigin(origin: string): string {
+  if (origin.includes("localhost")) {
+    return origin.replace(/^https?:\/\//, "http://");
+  } else if (origin.startsWith("http://") && !origin.includes("localhost")) {
+    return origin.replace("http://", "https://");
+  }
+  return origin;
+}

@@ -12,7 +12,6 @@ type Props = {
 };
 const Tiptap = ({ editor, inputRef }: Props) => {
   const onSubmit = async (content: any) => {
-    console.log(content);
     // const { data, error } = await sendNote(content);
     // if (error) {
     //   console.log(error);

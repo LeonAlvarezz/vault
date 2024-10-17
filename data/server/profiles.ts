@@ -22,7 +22,7 @@ export const getProfilesById = async (id: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*,  content: aboutMe->content")
     .eq("id", id)
     .single();
   if (error) {

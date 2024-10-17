@@ -50,7 +50,7 @@ export default async function AccountPage({ searchParams, params }: Props) {
               </p>
             </div>
 
-            <ContactButton />
+            <ContactButton profile={profile} />
           </div>
         </div>
       </section>

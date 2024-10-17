@@ -131,10 +131,10 @@ export default async function NoteDetailPage({ params }: Props) {
               </div>
             </Link>
             <div className="block sm:hidden">
-              <ContactButton layout="mobile" />
+              <ContactButton layout="mobile" profile={note.profile} />
             </div>
             <div className="hidden sm:block">
-              <ContactButton layout="alternative" />
+              <ContactButton layout="alternative" profile={note.profile} />
             </div>
           </div>
           <InteractionButton

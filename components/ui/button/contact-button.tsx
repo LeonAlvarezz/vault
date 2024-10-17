@@ -4,6 +4,7 @@ import { Button } from "../button";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdOutlineWebAsset } from "react-icons/md";
 import { Link } from "react-transition-progress/next";
+import { Profile } from "@/types/profiles.type";
 type LayoutOptions = "default" | "alternative" | "mobile";
 const layoutClasses: Record<
   LayoutOptions,
@@ -28,13 +29,17 @@ const layoutClasses: Record<
 
 type Props = {
   layout?: LayoutOptions;
+  profile: Profile | null;
 };
 
-export default function ContactButton({ layout = "default" }: Props) {
+export default function ContactButton({ layout = "default", profile }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
+  if (profile?.websiteLink && profile.linkedinLink && profile.githubLink) {
+    return null;
+  }
 
   return (
     <div className="relative contact-button-main h-fit">
@@ -46,39 +51,45 @@ export default function ContactButton({ layout = "default" }: Props) {
       >
         Contact
       </Button>
-      <Link
-        href={"https://github.com"}
-        className={`p-0 contact-button rounded-sm hover:text-second ${
-          isOpen ? "visible" : ""
-        }`}
-        style={{
-          transform: isOpen ? layoutClasses[layout].github : "",
-        }}
-      >
-        <FaGithub size={20} />
-      </Link>
-      <Link
-        href={"https://linkedin.com"}
-        className={`p-0 contact-button rounded-sm hover:text-second ${
-          isOpen ? "visible" : ""
-        }`}
-        style={{
-          transform: isOpen ? layoutClasses[layout].linkedin : "",
-        }}
-      >
-        <FaLinkedin size={20} />
-      </Link>
-      <Link
-        href={"https://mywebsite.com"}
-        className={`p-0 contact-button rounded-sm hover:text-second ${
-          isOpen ? "visible" : ""
-        }`}
-        style={{
-          transform: isOpen ? layoutClasses[layout].website : "",
-        }}
-      >
-        <MdOutlineWebAsset size={24} />
-      </Link>
+      {profile?.githubLink && (
+        <Link
+          href={profile.githubLink}
+          className={`p-0 contact-button rounded-sm hover:text-second ${
+            isOpen ? "visible" : ""
+          }`}
+          style={{
+            transform: isOpen ? layoutClasses[layout].github : "",
+          }}
+        >
+          <FaGithub size={20} />
+        </Link>
+      )}
+      {profile?.linkedinLink && (
+        <Link
+          href={profile.linkedinLink}
+          className={`p-0 contact-button rounded-sm hover:text-second ${
+            isOpen ? "visible" : ""
+          }`}
+          style={{
+            transform: isOpen ? layoutClasses[layout].linkedin : "",
+          }}
+        >
+          <FaLinkedin size={20} />
+        </Link>
+      )}
+      {profile?.websiteLink && (
+        <Link
+          href={profile.websiteLink}
+          className={`p-0 contact-button rounded-sm hover:text-second ${
+            isOpen ? "visible" : ""
+          }`}
+          style={{
+            transform: isOpen ? layoutClasses[layout].website : "",
+          }}
+        >
+          <MdOutlineWebAsset size={24} />
+        </Link>
+      )}
     </div>
   );
 }

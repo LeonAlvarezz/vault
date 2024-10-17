@@ -15,6 +15,7 @@ import { BlockNode, SaveNotePayload } from "@/types/note.type";
 import OpenAI from "openai";
 import { CreateTag } from "@/types/tag.type";
 import { headers } from "next/headers";
+import { env } from "@/utils/env";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -416,7 +417,10 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
 };
 
 export const signInWithGoogle = async () => {
-  const origin = headers().get("origin");
+  const origin =
+    env.NODE_ENV === "developement"
+      ? headers().get("origin")
+      : env.NEXT_PUBLIC_SITE_URL;
   const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -432,7 +436,6 @@ export const signInWithGoogle = async () => {
   if (error) {
     return { data: null, error };
   }
-  console.log("data:", data);
   if (data.url) {
     redirect(data.url); // use the redirect API for your server framework
   }

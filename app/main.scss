@@ -37,6 +37,10 @@ body {
     font-size: 1.3rem;
   }
 
+  p {
+    color: rgb(225, 225, 225);
+  }
+
   a {
     color: hsl(var(--second));
     cursor: pointer;
@@ -123,7 +127,7 @@ body {
     padding: 0 0.6rem;
     margin: 0.3rem 0.5rem 0.5rem 0.4rem;
 
-    li p {
+    li {
       margin-block: 1em;
     }
   }
@@ -132,7 +136,7 @@ body {
     padding: 0 0.6rem;
     margin: 0.3rem 0.5rem 0.5rem 0.4rem;
 
-    li p {
+    li {
       margin-block: 1em;
     }
   }

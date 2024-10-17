@@ -36,11 +36,11 @@ export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
         {items.map((item) => {
           if (item.separator) return undefined;
           return (
-            <DropdownMenuItem key={item.id} asChild>
-              <Link href={item.link || "/"}>
+            <DropdownMenuItem key={item.id} className="p-0">
+              <Link href={item.link || "/"} className=" w-full">
                 <div
                   className={cn(
-                    "grid grid-cols-3 text-sm gap-2 capitalize p-2 w-full hover:bg-neutral-800 rounded-sm",
+                    "grid grid-cols-3 text-sm capitalize p-2 w-full rounded-sm hover:bg-neutral-700/50",
                     pathname === `/${item.id}` && "bg-neutral-700/50"
                   )}
                 >
@@ -51,21 +51,23 @@ export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
             </DropdownMenuItem>
           );
         })}
-        <DropdownMenuItem>
+        <DropdownMenuItem className="p-0">
           <form className="w-full">
             <Button
               variant={"icon"}
               size={"icon"}
               formAction={signout}
-              className="w-full"
+              className="w-full hover:bg-neutral-700/50 rounded-sm  p-2"
             >
               <div
                 className={cn(
-                  "grid grid-cols-3  place-items-start text-sm gap-2 capitalize p-2 w-full hover:bg-neutral-800 rounded-sm"
+                  "grid grid-cols-3 text-sm capitalize place-items-start w-full"
                 )}
               >
                 <IoLogOut color="#FF8080" size={ICON_SIZE} />
-                <p className="col-span-2 text-[#FF8080] font-normal">Logout</p>
+                <span className="col-span-2 w-full text-[#FF8080] text-start">
+                  Logout
+                </span>
               </div>
             </Button>
           </form>

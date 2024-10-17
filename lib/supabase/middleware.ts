@@ -29,6 +29,7 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
+
   const createAnonymousUserRoute = ["/note", "/profile", "/explore"];
 
   const {
@@ -47,28 +48,36 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.next(); // You can handle this better, perhaps showing an error page
     }
   }
+
   const protectedPaths = [
     "/dashboard",
-    // "/explore",
-    "/note", // This will protect `/note`, but we need to exclude `/note/[id]`
+    "/note",
     "/create",
     "/settings",
     "/profile",
     "/bookmark",
   ];
 
-  // Custom condition to exclude `/note/[id]` but protect `/note`
+  // Custom condition to exclude `/note/[id]` and `/profile/[id]` but protect `/note`, `/profile`, and `/profile/edit`
   const isProtectedPath = protectedPaths.some(
     (path) =>
       request.nextUrl.pathname.startsWith(path) &&
-      !(path === "/note" && request.nextUrl.pathname.match(/^\/note\/[^\/]+$/)) // Exclude `/note/[id]`
+      !(
+        path === "/note" && request.nextUrl.pathname.match(/^\/note\/[^\/]+$/)
+      ) &&
+      !(
+        path === "/profile" &&
+        request.nextUrl.pathname.match(/^\/profile\/[^\/]+$/)
+      ) &&
+      !(path === "/profile" && request.nextUrl.pathname === "/profile/edit")
   );
 
   if (
-    (user?.is_anonymous &&
+    ((user?.is_anonymous || !user) &&
       isProtectedPath &&
       !request.url.startsWith("/auth")) ||
-    (!user && isProtectedPath && !request.url.startsWith("/auth"))
+    ((!user || user.is_anonymous) &&
+      request.nextUrl.pathname === "/profile/edit")
   ) {
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -95,7 +104,6 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
-
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:

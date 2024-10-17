@@ -418,7 +418,7 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
 
 export const signInWithGoogle = async () => {
   const origin =
-    env.NODE_ENV === "developement"
+    process.env.NODE_ENV === "development"
       ? headers().get("origin")
       : env.NEXT_PUBLIC_SITE_URL;
   const supabase = createClient();

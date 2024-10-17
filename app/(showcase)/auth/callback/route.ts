@@ -2,47 +2,44 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
-  // if "next" is in param, use it as the redirect URL
 
   if (code) {
     const supabase = createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user) {
-      // Check if the user exists in your database
       const { data: userProfile, error: userError } = await supabase
         .from("profiles")
         .select("id")
         .eq("id", data.user.id)
         .single();
 
-      const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
-      console.log("forwardedHost:", forwardedHost);
-      const isLocalEnv = process.env.NODE_ENV === "development";
-      console.log("isLocalEnv:", isLocalEnv);
+      const forwardedHost = request.headers.get("x-forwarded-host");
+      const protocol = request.headers.get("x-forwarded-proto") || "https";
+      const isProduction = process.env.NODE_ENV === "production";
 
       let redirectUrl: string;
 
       if (!userProfile) {
-        // User doesn't exist, redirect to register username page
         redirectUrl = "/auth/register-username";
       } else {
-        // User exists, redirect to dashboard
         redirectUrl = "/dashboard";
       }
 
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${redirectUrl}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${redirectUrl}`);
+      if (isProduction && forwardedHost) {
+        // Use forwarded host for correct URL in production
+        return NextResponse.redirect(
+          `${protocol}://${forwardedHost}${redirectUrl}`
+        );
       } else {
+        // Default to original origin or localhost for development
+        const origin = new URL(request.url).origin;
         return NextResponse.redirect(`${origin}${redirectUrl}`);
       }
     }
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  return NextResponse.redirect("/auth/auth-code-error");
 }

@@ -38,13 +38,13 @@ export default function LoginSignUpFloatingButton({
           <div className="flex gap-4">
             <Link
               href={"/auth/login"}
-              className="bg-main text-md h-10 w-full flex justify-center items-center px-6 rounded-sm hover:bg-main/80"
+              className="border bg-transparent text-md h-10 flex justify-center items-center w-full px-6 rounded-sm hover:border-neutral-700/50"
             >
               Login
             </Link>
             <Link
               href={"/auth/signup"}
-              className="border bg-transparent text-md h-10 flex justify-center items-center w-full px-6 rounded-sm hover:border-neutral-700/50"
+              className="bg-main text-md h-10 w-full flex justify-center items-center px-6 rounded-sm hover:bg-main/80"
             >
               Signup
             </Link>

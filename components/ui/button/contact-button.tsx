@@ -37,7 +37,7 @@ export default function ContactButton({ layout = "default", profile }: Props) {
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
-  if (profile?.websiteLink && profile.linkedinLink && profile.githubLink) {
+  if (!profile?.websiteLink && !profile?.linkedinLink && !profile?.githubLink) {
     return null;
   }
 

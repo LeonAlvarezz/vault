@@ -101,11 +101,8 @@ export async function getNoteExplore(filter?: NoteFilter) {
   const supabase = createClient();
   const {
     data: { user },
-    error: authErr,
   } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+
   let query = supabase
     .from("notes")
     .select(

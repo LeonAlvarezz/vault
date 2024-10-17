@@ -84,7 +84,7 @@ export default function FloatingButton({
           >
             <FaNoteSticky color={ICON_COLOR} size={ICON_SIZE} />
           </Button>
-          <Button
+          {/* <Button
             className="rounded-full size-10 p-2 hover:bg-blue-800 bg-main transition-transform"
             onClick={() => {
               setShowModal(true);
@@ -92,7 +92,7 @@ export default function FloatingButton({
             }}
           >
             <Image src={QuickSnip} alt="quick-snip" width={22} height={22} />
-          </Button>
+          </Button> */}
         </div>
       </div>
       <Button

@@ -1,6 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
-import { searchUserNote } from "../server/search";
+import {
+  searchBookmarkNote,
+  searchPublishedNote,
+  searchUserOwnNote,
+} from "../server/search";
 import { constructSearchQuery } from "@/utils/string";
 
 export async function getNoteById(id: string) {
@@ -84,7 +88,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
 
   if (filter?.query) {
     const searchQuery = constructSearchQuery(filter.query, "|");
-    const { data, error } = await searchUserNote(searchQuery);
+    const { data, error } = await searchUserOwnNote(searchQuery);
     return { data, error };
   }
 
@@ -149,6 +153,16 @@ export async function getNoteExplore(filter?: NoteFilter) {
         break;
     }
   }
+  if (filter?.query) {
+    const constructedQuery = filter?.query.replace(/_/g, " ");
+    const searchQuery = constructSearchQuery(constructedQuery, "|");
+    const { data, error } = await searchPublishedNote(
+      searchQuery || "",
+      filter as NoteFilter
+    );
+
+    return { data, error };
+  }
 
   const { data, error } = await query;
 
@@ -197,7 +211,7 @@ export async function getBookmarkNote(filter?: NoteFilter) {
 
   if (filter?.query) {
     const query = constructSearchQuery(filter.query, "|");
-    const { data, error } = await searchUserNote(query);
+    const { data, error } = await searchBookmarkNote(query);
     return { data, error };
   }
 
@@ -275,7 +289,8 @@ export const isNoteOwner = async (noteId: string) => {
   const { count, error } = await supabase
     .from("notes")
     .select("*", { count: "exact", head: true })
-    .eq("profile_id", user!.id);
+    .eq("profile_id", user!.id)
+    .eq("id", noteId);
   if (error) {
     return { count: 0, error };
   }

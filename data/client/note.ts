@@ -129,3 +129,15 @@ export async function getNoteContent(id: string) {
 
   return { data, error };
 }
+
+export async function getAllAvailableNoteForParams() {
+  const supabase = createClient();
+
+  let query = supabase
+    .from("notes")
+    .select("id")
+    .not("published_at", "is", null);
+
+  const { data } = await query;
+  return { data };
+}

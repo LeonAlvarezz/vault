@@ -22,18 +22,18 @@ export default function NoteCardPublished({
   const toggleLike = async () => {
     "use server";
     const { error } = await likeNote(note.id);
-    if (!error) {
-      revalidatePath("/note");
-    }
+    // if (!error) {
+    //   revalidatePath("/note");
+    // }
     return error;
   };
 
   const toggleBookmark = async () => {
     "use server";
     const { error } = await bookmarkNote(note.id);
-    if (!error) {
-      revalidatePath("/note");
-    }
+    // if (!error) {
+    //   revalidatePath("/note");
+    // }
     return error;
   };
   return (

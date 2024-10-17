@@ -1,5 +1,5 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import {
   IoBookmark,
@@ -28,7 +28,15 @@ export default function InteractionButton({
   bookmark = false,
 }: Props) {
   const [isLikePending, startLikeTransition] = useTransition();
+  const [isLike, setIsLike] = useState(
+    note.likes && note.likes.length > 0 && note.likes[0].deleted_at === null
+  );
   const [isBookmarkPending, startBookmarkTransition] = useTransition();
+  const [isBookmark, setIsBookmark] = useState(
+    note.bookmarks &&
+      note.bookmarks.length > 0 &&
+      note.bookmarks[0].deleted_at === null
+  );
   const handleToggleBookmark = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -44,10 +52,19 @@ export default function InteractionButton({
             variant: "destructive",
           });
         } else {
-          toast({
-            title: "Add Note to Bookmark",
-            variant: "success",
-          });
+          if (isBookmark) {
+            toast({
+              title: "Remove Note from Bookmark ",
+              variant: "success",
+            });
+          } else {
+            toast({
+              title: "Add Note to Bookmark ",
+              variant: "success",
+            });
+          }
+
+          setIsBookmark((prev) => !prev);
         }
       });
     } catch (error) {
@@ -73,10 +90,8 @@ export default function InteractionButton({
             variant: "destructive",
           });
         } else {
-          toast({
-            title: "Successfully Like Post",
-            variant: "success",
-          });
+          // Toggle the isLike state on success
+          setIsLike((prev) => !prev);
         }
       });
     } catch (error) {
@@ -95,17 +110,12 @@ export default function InteractionButton({
         className={cn(
           "group size-9 hover:border-red-500 self-end border border-neutral-600 p-1 rounded-full",
 
-          isLikePending ||
-            (note.likes &&
-              note.likes.length > 0 &&
-              note.likes[0].deleted_at === null &&
-              "border-0 bg-red-500 hover:opacity-80 hover:bg-red-500")
+          (isLikePending || isLike) &&
+            "border-0 bg-red-500 hover:opacity-80 hover:bg-red-500"
         )}
+        disabled={isLikePending}
       >
-        {isLikePending ||
-        (note.likes &&
-          note.likes.length > 0 &&
-          note.likes[0].deleted_at === null) ? (
+        {isLikePending || isLike ? (
           <IoIosHeart size={20} />
         ) : (
           <IoIosHeartEmpty size={20} className="group-hover:text-red-500" />
@@ -117,11 +127,12 @@ export default function InteractionButton({
         className={cn(
           "group size-9 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full",
 
-          (isBookmarkPending || bookmark) &&
+          (isBookmarkPending || isBookmark) &&
             "border-0 bg-blue-500 hover:opacity-80 hover:bg-blue-500"
         )}
+        disabled={isBookmarkPending}
       >
-        {isBookmarkPending || bookmark ? (
+        {isBookmarkPending || isBookmark ? (
           <IoBookmark size={20} />
         ) : (
           <IoBookmarkOutline size={20} className="group-hover:text-blue-500" />
@@ -132,10 +143,7 @@ export default function InteractionButton({
           // onClick={handleToggleBookmark}
           variant={"icon"}
           className={cn(
-            "group size-9 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full",
-
-            (isBookmarkPending || bookmark) &&
-              "border-0 bg-blue-500 hover:opacity-80 hover:bg-blue-500"
+            "group size-9 hover:border-blue-500 self-end border border-neutral-600 p-1 rounded-full"
           )}
         >
           <IoShareSocialOutline size={20} />

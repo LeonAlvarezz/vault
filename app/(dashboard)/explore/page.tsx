@@ -23,6 +23,7 @@ import { getAllCategories } from "@/data/client/category";
 import { getTags } from "@/data/server/tag";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
+import NoteList from "../note/_component/note-list";
 
 const STATUS = [
   {
@@ -78,12 +79,10 @@ type Props = {
 };
 
 export default async function NotePage({ searchParams }: Props) {
-  const [{ data: notes }, { data: categories }, { data: tags }] =
-    await Promise.all([
-      getNoteExplore(searchParams as NoteFilter),
-      getAllCategories(),
-      getTags(),
-    ]);
+  const [{ data: notes }, { data: categories }] = await Promise.all([
+    getNoteExplore(searchParams as NoteFilter),
+    getAllCategories(),
+  ]);
 
   const categoryOption = [
     { label: "All", value: "all" },
@@ -93,18 +92,10 @@ export default async function NotePage({ searchParams }: Props) {
     })) || []),
   ];
 
-  const tagsOption = tags?.map((tag) => {
-    return {
-      label: tag.name,
-      value: tag.name,
-      color: tag.color!,
-    };
-  });
-
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
-      <SearchInput />
+      <SearchInput searchParams={searchParams} />
       <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
         <div className="flex gap-2">
           <FilterCombobox
@@ -112,13 +103,6 @@ export default async function NotePage({ searchParams }: Props) {
             options={categoryOption!}
             defaultValue={searchParams?.category as string}
             label="Category"
-          />
-          <MultiFilterCombobox
-            filterKey={"tags"}
-            defaultValue={(searchParams?.tags as string[]) || []}
-            options={tagsOption || []}
-            placeholder="Tags"
-            maxCount={1}
           />
         </div>
 
@@ -132,15 +116,7 @@ export default async function NotePage({ searchParams }: Props) {
 
       {notes && notes.length > 0 ? (
         <Suspense fallback={<NoteSkeleton />}>
-          <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
-            {notes?.map((note, index) =>
-              note.published_at ? (
-                <NoteCardPublished key={index} note={note} />
-              ) : (
-                <NoteCard key={index} note={note} />
-              )
-            )}
-          </section>
+          <NoteList notes={notes} />
         </Suspense>
       ) : (
         <div

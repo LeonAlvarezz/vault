@@ -63,12 +63,11 @@ export default function SearchInput({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    console.log("value:", value);
 
     if (value.length === 0) {
       setTimeout(() => {
-        router.push("/search");
-      }, 100);
+        router.push(pathname);
+      }, 0);
     }
     setQuery(value);
   };
@@ -76,8 +75,8 @@ export default function SearchInput({
   const onClear = () => {
     setQuery("");
     setTimeout(() => {
-      router.push("/search");
-    }, 100);
+      router.push(pathname);
+    }, 0);
   };
 
   return (

@@ -79,6 +79,17 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  if (
+    url.pathname === "/explore" ||
+    url.pathname.match(/^\/explore\/[^\/]+$/)
+  ) {
+    // Only add the sortBy param if it's not already set
+    if (!url.searchParams.has("sortBy")) {
+      url.searchParams.set("sortBy", "trending");
+      return NextResponse.redirect(url);
+    }
+  }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:

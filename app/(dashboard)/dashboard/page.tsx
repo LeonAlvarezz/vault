@@ -22,13 +22,16 @@ export default async function page() {
       getNoteMetricLast3Months(),
       getRecentNote(3),
     ]);
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 ">Dashboard</h1>
       <div className="flex flex-col gap-2">
         <OverallStatistic summary={noteSummary} />
         <OverviewChart metrics={noteMetrics} />
-        {recentNotes && <RecentNoteCard notes={recentNotes} />}
+        {recentNotes && recentNotes.length > 0 && (
+          <RecentNoteCard notes={recentNotes} />
+        )}
       </div>
     </div>
   );

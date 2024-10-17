@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
 import { constructSearchQuery } from "@/utils/string";
-import { searchBookmarkNote, searchUserNote } from "./search";
+import { searchBookmarkNote } from "./search";
 
 export async function bookmarkNote(noteId: string) {
   const supabase = createClient();

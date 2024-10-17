@@ -34,6 +34,14 @@ export default function NoteCardFooter({
   const { toast } = useToast();
   const router = useRouter();
   const [isLikePending, startLikeTransition] = useTransition();
+  const [isLike, setIsLike] = useState(
+    note.likes && note.likes.length > 0 && note.likes[0].deleted_at === null
+  );
+  const [isBookmark, setIsBookmark] = useState(
+    note.bookmarks &&
+      note.bookmarks.length > 0 &&
+      note.bookmarks[0].deleted_at === null
+  );
   const [isBookmarkPending, startBookmarkTransition] = useTransition();
   const startProgress = useProgress();
   const handleToggleBookmark = async (
@@ -50,6 +58,20 @@ export default function NoteCardFooter({
             description: error.message,
             variant: "destructive",
           });
+        } else {
+          if (isBookmark) {
+            toast({
+              title: "Remove Note from Bookmark ",
+              variant: "success",
+            });
+          } else {
+            toast({
+              title: "Add Note to Bookmark ",
+              variant: "success",
+            });
+          }
+
+          setIsBookmark((prev) => !prev);
         }
       });
     } catch (error) {
@@ -66,6 +88,7 @@ export default function NoteCardFooter({
   ) => {
     event.stopPropagation();
     event.preventDefault();
+
     try {
       startLikeTransition(async () => {
         const error = await toggleLike();
@@ -75,6 +98,9 @@ export default function NoteCardFooter({
             description: error.message,
             variant: "destructive",
           });
+        } else {
+          // Toggle the isLike state on success
+          setIsLike((prev) => !prev);
         }
       });
     } catch (error) {
@@ -120,12 +146,10 @@ export default function NoteCardFooter({
         <Toggle
           aria-label="Toggle like"
           onClick={handleToggleLike}
-          className="p-0 h-fit "
+          className="p-0 h-fit"
+          disabled={isLikePending} // Optionally disable the button while the transition is in progress
         >
-          {isLikePending ||
-          (note.likes &&
-            note.likes.length > 0 &&
-            note.likes[0].deleted_at === null) ? (
+          {isLikePending || isLike ? (
             <IoIosHeart size={20} className="text-red-500 hover:opacity-50" />
           ) : (
             <IoIosHeartEmpty size={20} className="hover:text-red-500" />
@@ -136,8 +160,9 @@ export default function NoteCardFooter({
           aria-label="Toggle bookmark"
           onClick={handleToggleBookmark}
           className="p-0 h-fit "
+          disabled={isBookmarkPending} // Optionally disable the button while the transition is in progress
         >
-          {isBookmarkPending || bookmark ? (
+          {isBookmarkPending || isBookmark ? (
             <IoBookmark size={20} className="text-blue-500 hover:opacity-50" />
           ) : (
             <IoBookmarkOutline size={20} className="hover:text-blue-500" />

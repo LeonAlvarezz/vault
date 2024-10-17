@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
 import { CreateSearch } from "@/types/search.type";
 
-export async function searchUserNote(searchQuery: string) {
+export async function searchUserOwnNote(searchQuery: string) {
   const supabase = createClient();
   const {
     error: authErr,
@@ -21,6 +21,9 @@ export async function searchUserNote(searchQuery: string) {
     .eq("profile_id", user!.id);
 
   const { data, error } = await query.textSearch("fts", searchQuery);
+  if (error) {
+    return { data: null, error };
+  }
 
   return { data, error };
 }

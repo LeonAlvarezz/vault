@@ -9,11 +9,13 @@ type Props = {
   summary: NoteSummary | null;
 };
 const calculateDiffRate = (total: number, oldData: number) => {
-  const value = (total - oldData) / total;
+  if (oldData === 0 || oldData == null) {
+    return total === 0 ? 0 : 100;
+  }
 
+  const value = (total - oldData) / total;
   return Math.round(value * 100) / 100;
 };
-
 export default function OverallStatistic({ summary }: Props) {
   const viewDiff =
     calculateDiffRate(

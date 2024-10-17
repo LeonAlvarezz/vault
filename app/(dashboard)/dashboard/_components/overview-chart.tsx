@@ -64,7 +64,7 @@ export function OverviewChart({ metrics }: Props) {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full "
         >
-          {metrics ? (
+          {metrics && metrics.length > 0 ? (
             <BarChart
               accessibilityLayer
               data={metrics!}

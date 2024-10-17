@@ -62,33 +62,71 @@ export async function signup(formData: unknown) {
   }
 
   const { email, password, username } = result.data;
-  const { data, error } = await supabase.auth.signUp({ email, password });
 
-  if (error) {
-    return {
-      error: error.message,
-    };
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+  if (authError) {
+    return { error: authError.message };
   }
-
-  const userId = data.user?.id;
-  if (userId) {
-    const { error: profileError } = await supabase
-      .from("profiles")
-      .insert([{ auth_id: userId, username, email }]);
-    if (profileError) {
-      return { error: profileError.message };
+  if (user?.is_anonymous) {
+    const { data, error } = await supabase.auth.updateUser({ email, password });
+    if (error) {
+      return {
+        error: error.message,
+      };
     }
-    const { error: settingError } = await supabase
-      .from("settings")
-      .insert([{ profile_id: userId }]);
-    if (settingError) {
-      return { error: settingError.message };
-    }
-  }
 
-  if (!error) {
-    revalidatePath("/", "layout");
-    redirect("/auth/login");
+    const userId = data.user?.id;
+    if (userId) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert([{ auth_id: userId, username, email }]);
+      if (profileError) {
+        return { error: profileError.message };
+      }
+      const { error: settingError } = await supabase
+        .from("settings")
+        .insert([{ profile_id: userId }]);
+      if (settingError) {
+        return { error: settingError.message };
+      }
+    }
+
+    if (!error) {
+      revalidatePath("/", "layout");
+      redirect("/auth/login");
+    }
+  } else {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+      return {
+        error: error.message,
+      };
+    }
+
+    const userId = data.user?.id;
+    if (userId) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert([{ auth_id: userId, username, email }]);
+      if (profileError) {
+        return { error: profileError.message };
+      }
+      const { error: settingError } = await supabase
+        .from("settings")
+        .insert([{ profile_id: userId }]);
+      if (settingError) {
+        return { error: settingError.message };
+      }
+    }
+
+    if (!error) {
+      revalidatePath("/", "layout");
+      redirect("/auth/login");
+    }
   }
 }
 
@@ -364,7 +402,6 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
     error: authErr,
   } = await supabase.auth.getUser();
   if (checkAnon) {
-    console.log("user:", user);
     if (!user || user.is_anonymous) {
       return { data: false, error: authErr };
     }

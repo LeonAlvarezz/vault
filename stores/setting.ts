@@ -20,7 +20,6 @@ export const useSettings = create<SettingStore>((set) => ({
         //   title: "Failed to Fetch Settings",
         //   description: error.message,
         // });
-        console.log("Set Shortcut");
         set({
           disable_command_search: false,
           keyboard_shortcuts: { openCommandSearch: "Ctrl+K" },

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import ContactButton from "@/components/ui/button/contact-button";
 import Tag from "@/components/ui/tag";
 import { Link } from "react-transition-progress/next";
-import React from "react";
+import React, { cache } from "react";
 import { FaHeart, FaPen, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 
@@ -12,21 +12,34 @@ import { getNoteById, increaseView, isNoteOwner } from "@/data/server/note";
 import BackButton from "@/components/ui/button/back-button";
 import RelatedNoteCarousel from "@/components/ui/carousel/related-note-carousel";
 import Render from "@/components/tiptap/Render";
-import RenderHTML from "@/components/tiptap/RenderHTML";
 import InteractionButton from "@/components/ui/note-card/interaction-button";
 import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
 import { revalidatePath } from "next/cache";
 import { formatDate } from "@/lib/date";
 import { notFound } from "next/navigation";
-import { description } from "../../dashboard/_components/overview-chart";
 import { Metadata } from "next";
+import { getAllAvailableNoteForParams } from "@/data/client/note";
+export const revalidate = 30;
+
 type Props = {
   params: { id: string };
 };
 
+const getNote = cache(async (noteId: string) => {
+  const { data, error } = await getNoteById(noteId);
+  return { data, error };
+});
+
+export async function generateStaticParams() {
+  const { data: notes } = await getAllAvailableNoteForParams();
+  return notes!.map(({ id }) => ({
+    id,
+  }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { data: note } = await getNoteById(params.id);
+  const { data: note } = await getNote(params.id);
   return {
     title: note ? note.title : "Vault Note",
     description: note?.content_text,
@@ -45,8 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function NoteDetailPage({ params }: Props) {
   // TODO: Protect this route, make it accessible only when it is published
   const { count, error } = await isNoteOwner(params.id);
-  const isOwner = count && count > 1 ? true : false;
-  const { data: note } = await getNoteById(params.id);
+  const isOwner = count && count > 0 ? true : false;
+  const { data: note } = await getNote(params.id);
 
   if (!note) {
     notFound();

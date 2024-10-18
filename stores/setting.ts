@@ -16,22 +16,19 @@ export const useSettings = create<SettingStore>((set) => ({
     try {
       const { data, error } = await getUserSetting(); // Fetch from your backend API
       if (error) {
-        // toast({
-        //   title: "Failed to Fetch Settings",
-        //   description: error.message,
-        // });
         set({
           disable_command_search: false,
           keyboard_shortcuts: { openCommandSearch: "Ctrl+K" },
           notification: { desktop: false, mobile: false },
         });
+      } else {
+        set({
+          disable_command_search: data?.disable_command_search || false,
+          keyboard_shortcuts: data?.keyboard_shortcuts,
+          notification: data?.notification,
+          loading: false,
+        });
       }
-      set({
-        disable_command_search: data?.disable_command_search || false,
-        keyboard_shortcuts: data?.keyboard_shortcuts,
-        notification: data?.notification,
-        loading: false,
-      });
     } catch (error: unknown) {
       toast({
         title: "Failed to Fetch Settings",

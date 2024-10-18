@@ -478,21 +478,33 @@ export const registerUsername = async (formData: unknown) => {
   if (authErr) {
     return { error: authErr.message };
   }
-  const { error } = await supabase.from("profiles").insert([
-    {
-      email: user!.email!,
-      username: result.data.username,
-      auth_id: user!.id,
-      id: user!.id,
-    },
-  ]);
+  if (user) {
+    const { error } = await supabase.from("profiles").insert([
+      {
+        email: user!.email!,
+        username: result.data.username,
+        auth_id: user!.id,
+        id: user!.id,
+      },
+    ]);
 
-  if (!error) {
-    revalidatePath("/", "layout");
-    redirect("/dashboard");
+    const { error: settingError } = await supabase
+      .from("settings")
+      .insert([{ profile_id: user.id }]);
+    if (settingError) {
+      return { error: settingError.message };
+    }
+
+    if (!error) {
+      revalidatePath("/", "layout");
+      redirect("/dashboard");
+    } else {
+      return {
+        error: error.message,
+      };
+    }
   } else {
-    return {
-      error: error.message,
-    };
+    revalidatePath("/", "layout");
+    redirect("/auth/login");
   }
 };

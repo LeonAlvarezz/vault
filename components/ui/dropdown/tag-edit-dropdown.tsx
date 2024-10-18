@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useTransition } from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -27,15 +27,13 @@ type Props = {
     }>;
   };
   onTagUpdate?: () => Promise<void>;
-  onStartLoading?: () => void;
-  onFinishLoading?: () => void;
+  startLoadingTransition: React.TransitionStartFunction;
 };
 
 export default function TagEditDropdown({
   tag,
   onTagUpdate,
-  onStartLoading,
-  onFinishLoading,
+  startLoadingTransition,
 }: Props) {
   const [open, setOpen] = useState(false); // Track dropdown open state
   const { toast } = useToast();
@@ -72,17 +70,51 @@ export default function TagEditDropdown({
         console.log("No changes, skipping update.");
         return;
       }
-      onStartLoading && onStartLoading();
-      try {
-        const { error } = await updateTag(data);
-        if (error) {
+      startLoadingTransition(async () => {
+        try {
+          const { error } = await updateTag(data);
+          if (error) {
+            toast({
+              title: "Error Updating Tag!",
+              description: error.message,
+              variant: "destructive",
+            });
+            return;
+          }
+          if (onTagUpdate) {
+            onTagUpdate();
+          }
+          revalidatePathClient("/create");
+        } catch (error: unknown) {
           toast({
             title: "Error Updating Tag!",
+            description: error instanceof Error ? error.message : String(error),
+            variant: "destructive",
+          });
+        }
+      });
+    },
+    [toast, onTagUpdate, isDataChanged]
+  );
+
+  const handleDeleteTag = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    startLoadingTransition(async () => {
+      try {
+        const { error } = await deleteTag(+tag.value);
+        if (error) {
+          toast({
+            title: "Error Deleting Tag!",
             description: error.message,
             variant: "destructive",
           });
           return;
         }
+        toast({
+          title: "Successfully Delete Tag!",
+          variant: "success",
+        });
         if (onTagUpdate) {
           onTagUpdate();
         }
@@ -93,45 +125,8 @@ export default function TagEditDropdown({
           description: error instanceof Error ? error.message : String(error),
           variant: "destructive",
         });
-      } finally {
-        onFinishLoading && onFinishLoading();
       }
-    },
-    [toast, onTagUpdate, isDataChanged]
-  );
-
-  const handleDeleteTag = async (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onStartLoading && onStartLoading();
-
-    try {
-      const { error } = await deleteTag(+tag.value);
-      if (error) {
-        toast({
-          title: "Error Deleting Tag!",
-          description: error.message,
-          variant: "destructive",
-        });
-        return;
-      }
-      toast({
-        title: "Successfully Delete Tag!",
-        variant: "success",
-      });
-      if (onTagUpdate) {
-        onTagUpdate();
-      }
-      revalidatePathClient("/create");
-    } catch (error: unknown) {
-      toast({
-        title: "Error Updating Tag!",
-        description: error instanceof Error ? error.message : String(error),
-        variant: "destructive",
-      });
-    } finally {
-      onFinishLoading && onFinishLoading();
-    }
+    });
   };
 
   return (

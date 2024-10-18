@@ -164,6 +164,7 @@ export const TagMultiSelect = React.forwardRef<
     const { toast } = useToast();
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [tagLoading, setTagLoading] = React.useState(false);
+    const [isLoading, startLoadingTransition] = React.useTransition();
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -180,50 +181,52 @@ export const TagMultiSelect = React.forwardRef<
         setTagLoading(true);
 
         if (empty || options.length == 0) {
-          try {
-            const { error } = await createTags({ name: inputValue.trim() });
+          startLoadingTransition(async () => {
+            try {
+              const { error } = await createTags({ name: inputValue.trim() });
 
-            if (error) {
-              if (error.code === "23505") {
-                toast({
-                  title: "Error Creating Tag",
-                  description: "Cannot create tag with the same name",
-                  variant: "destructive",
-                });
-              } else if (error.code === "23514") {
-                toast({
-                  title: "Error Creating Tag",
-                  description: "Tag name cannot be longer than 20 characters",
-                  variant: "destructive",
-                });
+              if (error) {
+                if (error.code === "23505") {
+                  toast({
+                    title: "Error Creating Tag",
+                    description: "Cannot create tag with the same name",
+                    variant: "destructive",
+                  });
+                } else if (error.code === "23514") {
+                  toast({
+                    title: "Error Creating Tag",
+                    description: "Tag name cannot be longer than 20 characters",
+                    variant: "destructive",
+                  });
+                } else {
+                  toast({
+                    title: "Error Creating Tag",
+                    description: error.message || "An unknown error occurred",
+                    variant: "destructive",
+                  });
+                }
               } else {
                 toast({
-                  title: "Error Creating Tag",
-                  description: error.message || "An unknown error occurred",
-                  variant: "destructive",
+                  title: "Tag Created",
+                  description: "The tag was created successfully",
+                  variant: "success",
                 });
+                setInputValue("");
+                revalidatePathClient("/create");
+                if (onTagUpdate) {
+                  onTagUpdate();
+                }
               }
-            } else {
+            } catch (error) {
               toast({
-                title: "Tag Created",
-                description: "The tag was created successfully",
-                variant: "success",
+                title: "Error Creating Tag",
+                description: "An unexpected error occurred",
+                variant: "destructive",
               });
-              setInputValue("");
-              revalidatePathClient("/create");
-              if (onTagUpdate) {
-                onTagUpdate();
-              }
+            } finally {
+              setTagLoading(false);
             }
-          } catch (error) {
-            toast({
-              title: "Error Creating Tag",
-              description: "An unexpected error occurred",
-              variant: "destructive",
-            });
-          } finally {
-            setTagLoading(false);
-          }
+          });
         }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
@@ -360,7 +363,7 @@ export const TagMultiSelect = React.forwardRef<
               return hasMatch ? 1 : 0;
             }}
           >
-            {tagLoading && (
+            {isLoading && (
               <div className="absolute top-0 left-0 bg-neutral-900/50 w-full h-full z-50 flex justify-center items-center">
                 <Spinner size={24} />
               </div>
@@ -399,8 +402,7 @@ export const TagMultiSelect = React.forwardRef<
                           <TagEditDropdown
                             tag={option}
                             onTagUpdate={onTagUpdate}
-                            onStartLoading={() => setTagLoading(true)}
-                            onFinishLoading={() => setTagLoading(false)}
+                            startLoadingTransition={startLoadingTransition}
                           />
                         </div>
                       </CommandItem>

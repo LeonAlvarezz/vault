@@ -88,11 +88,6 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
         if (editorRef.current && editorRef.current.editor) {
           const editorContent = editorRef.current.editor.getJSON();
 
-          if (editorRef.current.editor.isEmpty) {
-            setSaveLoading(false);
-            return;
-          }
-
           const tags = Array.isArray(data.tags) ? [...data.tags] : [];
           const category =
             typeof data.category === "string"
@@ -145,15 +140,25 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
         content: editorRef.current?.editor?.getJSON(),
       };
 
+      console.log("completeCurrentValues:", completeCurrentValues);
+      console.log("previousValues:", previousValues);
+      console.log(
+        "!isEqual(completeCurrentValues, previousValues):",
+        !isEqual(completeCurrentValues, previousValues)
+      );
       return !isEqual(completeCurrentValues, previousValues);
     };
     const formValues = watch();
     if (hasChanged(formValues)) {
+      console.log("Saving");
+      console.log("formValues:", formValues);
       handleSaveNote(formValues);
       setPreviousValues({
         ...formValues,
         content: editorRef.current?.editor?.getJSON() || null,
       });
+    } else {
+      console.error("Not Saving");
     }
   }, [watch, handleSaveNote, previousValues]);
 
@@ -210,7 +215,10 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
       });
       setFormattedCategories(category!);
       setFormattedTags(tag!);
-      setValue("title", note?.title || "");
+      setValue(
+        "title",
+        note?.title && note.title !== "Untitled" ? note.title : ""
+      );
       if (note && note.category_id) {
         setValue("category", String(note?.category_id));
       }

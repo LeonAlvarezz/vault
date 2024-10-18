@@ -42,7 +42,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
 
   // Determine the categories selection based on filter
   const categoriesSelection =
-    filter && filter?.category !== "all"
+    filter && filter.category && filter.category !== "all"
       ? "categories!inner(*)"
       : "categories(*)";
 

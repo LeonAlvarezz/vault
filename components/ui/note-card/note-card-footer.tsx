@@ -1,14 +1,7 @@
 "use client";
-import React, {
-  startTransition,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import React, { startTransition, useState, useTransition } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
-import { FaRegHeart } from "react-icons/fa";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
-import { Button } from "../button";
 import { useRouter } from "next/navigation";
 import { Note } from "@/types/note.type";
 import { formatDate } from "@/lib/date";
@@ -16,21 +9,13 @@ import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { Toggle } from "../toggle";
 import { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "../use-toast";
-import { revalidatePathClient } from "@/app/api/action";
-import { BotMessageSquare } from "lucide-react";
 import { useProgress } from "react-transition-progress";
+import { likeNote } from "@/data/server/like";
+import { bookmarkNote } from "@/data/server/bookmark";
 type Props = {
   note: Note;
-  toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
-  toggleBookmark: () => Promise<AuthError | PostgrestError | null | undefined>;
-  bookmark?: boolean;
 };
-export default function NoteCardFooter({
-  note,
-  toggleLike,
-  toggleBookmark,
-  bookmark,
-}: Props) {
+export default function NoteCardFooter({ note }: Props) {
   const { toast } = useToast();
   const router = useRouter();
   const [isLikePending, startLikeTransition] = useTransition();
@@ -51,7 +36,7 @@ export default function NoteCardFooter({
     event.preventDefault();
     try {
       startBookmarkTransition(async () => {
-        const error = await toggleBookmark();
+        const { error } = await bookmarkNote(note.id);
         if (error) {
           toast({
             title: "Error Bookmark Post",
@@ -91,7 +76,7 @@ export default function NoteCardFooter({
 
     try {
       startLikeTransition(async () => {
-        const error = await toggleLike();
+        const { error } = await likeNote(note.id);
         if (error) {
           toast({
             title: "Error Liking Post",
@@ -99,7 +84,6 @@ export default function NoteCardFooter({
             variant: "destructive",
           });
         } else {
-          // Toggle the isLike state on success
           setIsLike((prev) => !prev);
         }
       });

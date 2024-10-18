@@ -6,6 +6,7 @@ import {
   searchUserOwnNote,
 } from "../server/search";
 import { constructSearchQuery } from "@/utils/string";
+import { CURSOR_LIMIT } from "../client/note";
 
 export async function getNoteById(id: string) {
   const supabase = createClient();
@@ -161,7 +162,7 @@ export async function getNoteExplore(filter?: NoteFilter) {
     return { data, error };
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query.limit(CURSOR_LIMIT);
 
   return { data, error };
 }

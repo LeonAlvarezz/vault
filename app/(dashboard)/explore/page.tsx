@@ -25,36 +25,8 @@ import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import NoteList from "../note/_component/note-list";
 import { Metadata } from "next";
-
-const STATUS = [
-  {
-    value: "javascript",
-    label: "Javascript",
-  },
-  {
-    value: "react",
-    label: "React",
-  },
-  {
-    value: "vue",
-    label: "VueJS",
-  },
-];
-
-const TAG = [
-  {
-    value: "framework",
-    label: "Framework",
-  },
-  {
-    value: "Websocket",
-    label: "Websocket",
-  },
-  {
-    value: "tutorial",
-    label: "Tutorial",
-  },
-];
+import ExploreInfiniteScroll from "@/components/ui/infinite-scroll/explore-infinite-scroll";
+import { CURSOR_LIMIT } from "@/data/client/note";
 
 const ORDER = [
   {
@@ -90,7 +62,7 @@ export default async function NotePage({ searchParams }: Props) {
     getNoteExplore(searchParams as NoteFilter),
     getAllCategories(),
   ]);
-
+  const hasMore = notes && notes?.length >= CURSOR_LIMIT ? true : false;
   const categoryOption = [
     { label: "All", value: "all" },
     ...(categories?.map((category) => ({
@@ -122,9 +94,14 @@ export default async function NotePage({ searchParams }: Props) {
       </div>
 
       {notes && notes.length > 0 ? (
-        <Suspense fallback={<NoteSkeleton />}>
-          <NoteList notes={notes} />
-        </Suspense>
+        // <Suspense fallback={<NoteSkeleton />}>
+        //   <NoteList notes={notes} />
+        // </Suspense>
+        <ExploreInfiniteScroll
+          notes={notes}
+          searchParams={searchParams}
+          isMore={hasMore}
+        />
       ) : (
         <div
           className="w-full flex justify-center items-center"

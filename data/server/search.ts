@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
 import { CreateSearch } from "@/types/search.type";
+import { constructSearchQuery } from "@/utils/string";
 
 export async function searchUserOwnNote(searchQuery: string) {
   const supabase = createClient();
@@ -90,7 +91,10 @@ export async function searchPublishedNote(
     }
   }
 
-  const { data, error } = await query.textSearch("fts", searchQuery);
+  const deconstructQuery = searchQuery.replace(/_/g, " ");
+  const search = constructSearchQuery(deconstructQuery, "|");
+
+  const { data, error } = await query.textSearch("fts", search);
 
   return { data, error };
 }

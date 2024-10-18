@@ -209,7 +209,6 @@ export async function getCusorNote(filter: NoteFilter, from = 0, to = 20) {
   // }
 
   const { data, error } = await query.range(from, to);
-  console.log("query:", query);
 
   return { data, error };
 }

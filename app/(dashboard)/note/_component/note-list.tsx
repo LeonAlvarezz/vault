@@ -14,6 +14,20 @@ export default function NoteList({ notes, optionButton = false }: Props) {
             key={note.id}
             note={note}
             optionButton={optionButton}
+            isLike={
+              note.likes &&
+              note.likes.length > 0 &&
+              note.likes[0].deleted_at === null
+                ? true
+                : false
+            }
+            isBookmark={
+              note.bookmarks &&
+              note.bookmarks.length > 0 &&
+              note.bookmarks[0].deleted_at === null
+                ? true
+                : false
+            }
           />
         ) : (
           <NoteCard key={note.id} note={note} />

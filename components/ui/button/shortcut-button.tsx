@@ -25,16 +25,8 @@ export default function ShortcutButton({ disabled = false }: Props) {
 
   useEffect(() => {
     const shortcutValue = getKeyboardValue(keyboard_shortcuts);
-    console.log("shortcutValue:", shortcutValue);
-    // console.log(
-    //   "shortcutValue.openCommandSearch:",
-    //   shortcutValue.openCommandSearch
-    // );
+
     if (shortcutValue && shortcutValue.openCommandSearch) {
-      console.log(
-        "shortcutValue.openCommandSearch:",
-        shortcutValue.openCommandSearch
-      );
       const normalizedShortcut = shortcutValue.openCommandSearch
         .split("+")
         .map((key) => convertKeyNotation(key))

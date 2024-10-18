@@ -4,8 +4,10 @@ import { Button } from "../button";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
-
-export default function BackButton() {
+type Props = {
+  onRevalidate?: () => void;
+};
+export default function BackButton({ onRevalidate }: Props) {
   const router = useRouter();
   const startProgress = useProgress();
   return (
@@ -16,6 +18,7 @@ export default function BackButton() {
       onClick={() => {
         startTransition(async () => {
           startProgress();
+          onRevalidate && onRevalidate();
           router.back();
         });
       }}

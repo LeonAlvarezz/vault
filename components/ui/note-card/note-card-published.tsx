@@ -13,12 +13,15 @@ import ImageContainer from "../image-container";
 import { likeNote } from "@/app/api/action";
 type Props = {
   note: Note;
-  bookmark?: boolean;
   optionButton?: boolean;
+  isBookmark?: boolean;
+  isLike?: boolean;
 };
 export default function NoteCardPublished({
   note,
   optionButton = false,
+  isBookmark,
+  isLike,
 }: Props) {
   return (
     <Link
@@ -55,11 +58,7 @@ export default function NoteCardPublished({
           {note.content_text}
         </p>
       </div>
-      <NoteCardFooter
-        note={note}
-        // toggleLike={toggleLike}
-        // toggleBookmark={toggleBookmark}
-      />
+      <NoteCardFooter note={note} bookmark={isBookmark} like={isLike} />
     </Link>
   );
 }

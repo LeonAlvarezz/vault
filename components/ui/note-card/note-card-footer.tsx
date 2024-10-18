@@ -14,19 +14,16 @@ import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
 type Props = {
   note: Note;
+  bookmark?: boolean;
+  like?: boolean;
 };
-export default function NoteCardFooter({ note }: Props) {
+export default function NoteCardFooter({ note, bookmark, like }: Props) {
   const { toast } = useToast();
   const router = useRouter();
   const [isLikePending, startLikeTransition] = useTransition();
-  const [isLike, setIsLike] = useState(
-    note.likes && note.likes.length > 0 && note.likes[0].deleted_at === null
-  );
-  const [isBookmark, setIsBookmark] = useState(
-    note.bookmarks &&
-      note.bookmarks.length > 0 &&
-      note.bookmarks[0].deleted_at === null
-  );
+  const [isLike, setIsLike] = useState(like);
+  // note;
+  const [isBookmark, setIsBookmark] = useState(bookmark);
   const [isBookmarkPending, startBookmarkTransition] = useTransition();
   const startProgress = useProgress();
   const handleToggleBookmark = async (

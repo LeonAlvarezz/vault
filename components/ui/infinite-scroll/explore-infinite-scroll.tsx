@@ -65,7 +65,24 @@ export default function ExploreInfiniteScroll({
       <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6 align-super">
         {noteItems.map((note) =>
           note.published_at ? (
-            <NoteCardPublished key={note.id} note={note} />
+            <NoteCardPublished
+              key={note.id}
+              note={note}
+              isBookmark={
+                note.bookmarks &&
+                note.bookmarks.length > 0 &&
+                note.bookmarks[0].deleted_at === null
+                  ? true
+                  : false
+              }
+              isLike={
+                note.likes &&
+                note.likes.length > 0 &&
+                note.likes[0].deleted_at === null
+                  ? true
+                  : false
+              }
+            />
           ) : (
             <NoteCard key={note.id} note={note} />
           )

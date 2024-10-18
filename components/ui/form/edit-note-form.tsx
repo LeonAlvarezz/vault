@@ -139,26 +139,15 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
         ...currentValues,
         content: editorRef.current?.editor?.getJSON(),
       };
-
-      console.log("completeCurrentValues:", completeCurrentValues);
-      console.log("previousValues:", previousValues);
-      console.log(
-        "!isEqual(completeCurrentValues, previousValues):",
-        !isEqual(completeCurrentValues, previousValues)
-      );
       return !isEqual(completeCurrentValues, previousValues);
     };
     const formValues = watch();
     if (hasChanged(formValues)) {
-      console.log("Saving");
-      console.log("formValues:", formValues);
       handleSaveNote(formValues);
       setPreviousValues({
         ...formValues,
         content: editorRef.current?.editor?.getJSON() || null,
       });
-    } else {
-      console.error("Not Saving");
     }
   }, [watch, handleSaveNote, previousValues]);
 
@@ -333,7 +322,11 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           </div>
         )}
         <div className="flex justify-between items-center">
-          <BackButton />
+          <BackButton
+            onRevalidate={() => {
+              revalidatePathClient("/");
+            }}
+          />
           <CreateNoteDropdownMenu
             handleSave={handleSubmit(handleSaveNote)}
             setOpenConfirmDialog={setOpenConfirmDialog}

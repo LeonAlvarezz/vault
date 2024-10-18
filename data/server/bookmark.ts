@@ -121,9 +121,10 @@ export async function getBookmark(filter?: NoteFilter) {
   let query = supabase
     .from("bookmarks")
     .select(
-      "*, note:notes!inner(*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id, created_at)), likes(*))"
+      "*, note:notes!inner(*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags!inner(tags!inner(id, name, color, profile_id, created_at)), likes(*), bookmarks(*))"
     )
     .eq("profile_id", user!.id)
+    .eq("notes.likes.profile_id", user!.id)
     .is("deleted_at", null);
 
   if (filter?.category && filter?.category !== "all") {

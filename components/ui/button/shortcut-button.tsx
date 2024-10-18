@@ -19,18 +19,23 @@ export default function ShortcutButton({ disabled = false }: Props) {
     setIsKeyRecording,
     isKeyRecording,
   } = useSettings();
-  const normalizedShortcut = getKeyboardValue(keyboard_shortcuts)
-    .openCommandSearch.split("+")
-    .map((key) => {
-      return convertKeyNotation(key);
-    })
-    .join("+");
 
   const [currentShortcut, setCurrentShortcut] = useState("");
   const [pressedEnter, setPressedEnter] = useState(false);
 
   useEffect(() => {
-    setCurrentShortcut(normalizedShortcut);
+    const shortcutValue = getKeyboardValue(keyboard_shortcuts);
+
+    if (shortcutValue && shortcutValue.openCommandSearch) {
+      const normalizedShortcut = shortcutValue.openCommandSearch
+        .split("+")
+        .map((key) => convertKeyNotation(key))
+        .join("+");
+
+      setCurrentShortcut(normalizedShortcut);
+    } else {
+      console.error("openCommandSearch is not defined");
+    }
   }, [keyboard_shortcuts]);
 
   const formatShortcut = useCallback((event: KeyboardEvent) => {

@@ -37,6 +37,7 @@ import { IoIosOptions } from "react-icons/io";
 import { SlOptionsVertical } from "react-icons/sl";
 import TagEditDropdown from "../dropdown/tag-edit-dropdown";
 import { createTags, revalidatePathClient } from "@/app/api/action";
+import Spinner from "../spinner";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -160,6 +161,7 @@ export const TagMultiSelect = React.forwardRef<
     const [inputValue, setInputValue] = React.useState("");
     const { toast } = useToast();
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const [tagLoading, setTagLoading] = React.useState(false);
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -173,6 +175,7 @@ export const TagMultiSelect = React.forwardRef<
       if (event.key === "Enter") {
         event.preventDefault();
         setIsPopoverOpen(true);
+        setTagLoading(true);
 
         if (empty || options.length == 0) {
           try {
@@ -216,6 +219,8 @@ export const TagMultiSelect = React.forwardRef<
               description: "An unexpected error occurred",
               variant: "destructive",
             });
+          } finally {
+            setTagLoading(false);
           }
         }
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
@@ -336,7 +341,7 @@ export const TagMultiSelect = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-full p-0"
+          className="w-full p-0 relative"
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
@@ -353,6 +358,11 @@ export const TagMultiSelect = React.forwardRef<
               return hasMatch ? 1 : 0;
             }}
           >
+            {tagLoading && (
+              <div className="absolute top-0 left-0 bg-neutral-900/50 w-full h-full z-50 flex justify-center items-center">
+                <Spinner size={24} />
+              </div>
+            )}
             <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}
@@ -410,6 +420,8 @@ export const TagMultiSelect = React.forwardRef<
                         <TagEditDropdown
                           tag={option}
                           onTagUpdate={onTagUpdate}
+                          onStartLoading={() => setTagLoading(true)}
+                          onFinishLoading={() => setTagLoading(false)}
                         />
                       </div>
                     </CommandItem>

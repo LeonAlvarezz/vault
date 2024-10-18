@@ -27,9 +27,16 @@ type Props = {
     }>;
   };
   onTagUpdate?: () => Promise<void>;
+  onStartLoading?: () => void;
+  onFinishLoading?: () => void;
 };
 
-export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
+export default function TagEditDropdown({
+  tag,
+  onTagUpdate,
+  onStartLoading,
+  onFinishLoading,
+}: Props) {
   const [open, setOpen] = useState(false); // Track dropdown open state
   const { toast } = useToast();
   const router = useRouter();
@@ -65,6 +72,7 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
         console.log("No changes, skipping update.");
         return;
       }
+      onStartLoading && onStartLoading();
       try {
         const { error } = await updateTag(data);
         if (error) {
@@ -85,6 +93,8 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
           description: error instanceof Error ? error.message : String(error),
           variant: "destructive",
         });
+      } finally {
+        onFinishLoading && onFinishLoading();
       }
     },
     [toast, onTagUpdate, isDataChanged]
@@ -93,6 +103,8 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
   const handleDeleteTag = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    onStartLoading && onStartLoading();
+
     try {
       const { error } = await deleteTag(+tag.value);
       if (error) {
@@ -117,6 +129,8 @@ export default function TagEditDropdown({ tag, onTagUpdate }: Props) {
         description: error instanceof Error ? error.message : String(error),
         variant: "destructive",
       });
+    } finally {
+      onFinishLoading && onFinishLoading();
     }
   };
 

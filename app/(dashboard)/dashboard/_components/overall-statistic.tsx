@@ -5,6 +5,7 @@ import React from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaEye } from "react-icons/fa";
 import { FaBookBookmark } from "react-icons/fa6";
+import { IoBookmark } from "react-icons/io5";
 type Props = {
   summary: NoteSummary | null;
 };
@@ -73,7 +74,7 @@ export default function OverallStatistic({ summary }: Props) {
         <CardHeader>
           <div className="flex justify-between">
             <p className="text-sm">Total Bookmark</p>
-            <FaBookBookmark />
+            <IoBookmark />
           </div>
         </CardHeader>
         <CardContent>

@@ -22,7 +22,7 @@ import { useParams } from "next/navigation";
 import { compressImage, toBase64 } from "@/lib/image";
 import { uploadImage } from "@/data/client/image";
 import { useDebouncedCallback } from "use-debounce";
-import { Content, EditorEvents } from "@tiptap/react";
+import { Content, EditorEvents, JSONContent } from "@tiptap/react";
 import useViewport from "@/hooks/useViewPort";
 import { Skeleton } from "../skeleton";
 import { cn } from "@/lib/utils";
@@ -30,6 +30,8 @@ import FormatMenuMobile from "../format-menu-mobile";
 import { NoteTag, Tag } from "@/types/tag.type";
 import { Category } from "@/types/category.type";
 import { Note } from "@/types/note.type";
+import { isEqual } from "lodash"; // Import
+import { Json } from "@/database.types";
 type Props = {
   tags: NoteTag[] | null;
   categories: Category[] | null;
@@ -56,12 +58,19 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
   const [formattedTags, setFormattedTags] = useState<SelectOption[]>([]);
   const { height, keyboardHeight } = useViewport();
   const [inputActive, setInputActive] = useState(false);
+  const [previousValues, setPreviousValues] = useState<CreateNoteFormValues>({
+    title: "",
+    content: null,
+    category: "",
+    tags: [],
+    cover: "",
+  });
 
   const { register, handleSubmit, setValue, watch } =
     useForm<CreateNoteFormValues>({
       defaultValues: {
         title: "",
-        content: {},
+        content: null,
         category: "",
         tags: [] as string[],
         cover: "",
@@ -130,9 +139,23 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
   );
 
   const handleAutoSave = useCallback(() => {
+    const hasChanged = (currentValues: CreateNoteFormValues) => {
+      const completeCurrentValues = {
+        ...currentValues,
+        content: editorRef.current?.editor?.getJSON(),
+      };
+
+      return !isEqual(completeCurrentValues, previousValues);
+    };
     const formValues = watch();
-    handleSaveNote(formValues);
-  }, [watch, handleSaveNote]);
+    if (hasChanged(formValues)) {
+      handleSaveNote(formValues);
+      setPreviousValues({
+        ...formValues,
+        content: editorRef.current?.editor?.getJSON() || null,
+      });
+    }
+  }, [watch, handleSaveNote, previousValues]);
 
   useEffect(() => {
     if (!image) return;
@@ -229,6 +252,17 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     // Clear the interval if the component unmounts
     return () => clearInterval(interval);
   }, [editorRef, note, toast]);
+
+  useEffect(() => {
+    const initialValues: CreateNoteFormValues = {
+      title: note?.title || "",
+      content: note?.content as JSONContent, // Ensure `content` is an object
+      category: note?.category_id ? String(note.category_id) : "",
+      tags: note?.tags?.map((tag) => String(tag.tags?.id)) || [],
+      cover: note?.cover_url || "",
+    };
+    setPreviousValues(initialValues);
+  }, [note]);
 
   //   if (isLoading) {
   //     return (

@@ -57,7 +57,7 @@ body {
     box-decoration-break: clone;
     font-size: 0.9rem;
     padding: 0.25em;
-    span {
+    border: 1 hsl(var(--popover)) span {
       color: hsl(var(--second));
     }
   }

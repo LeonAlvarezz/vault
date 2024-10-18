@@ -38,6 +38,8 @@ import { SlOptionsVertical } from "react-icons/sl";
 import TagEditDropdown from "../dropdown/tag-edit-dropdown";
 import { createTags, revalidatePathClient } from "@/app/api/action";
 import Spinner from "../spinner";
+import { Skeleton } from "../skeleton";
+import TagSkeleton from "../skeleton/tag-skeleton";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -377,56 +379,34 @@ export const TagMultiSelect = React.forwardRef<
                 </p>
               </CommandEmpty>
               <CommandGroup>
-                {/* <CommandItem
-                  key="all"
-                  onSelect={toggleAll}
-                  className="cursor-pointer"
-                >
-                  <div
-                    className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.length
-                        ? "bg-primary text-primary-foreground"
-                        : "opacity-50 [&_svg]:invisible"
-                    )}
-                  >
-                    <CheckIcon className="h-4 w-4" />
-                  </div>
-                  <span>(Select All)</span>
-                </CommandItem> */}
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      value={option.label}
-                      onSelect={() => toggleOption(option.value)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          isSelected ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {/* <p>{option.label}</p> */}
-                      <div className="flex justify-between items-center w-full">
-                        <Tag
-                          // key={value}
-                          color={option.color}
-                          // style={{ animationDuration: `${animation}s` }}
-                        >
-                          {option?.label}
-                        </Tag>
-                        <TagEditDropdown
-                          tag={option}
-                          onTagUpdate={onTagUpdate}
-                          onStartLoading={() => setTagLoading(true)}
-                          onFinishLoading={() => setTagLoading(false)}
+                <React.Suspense fallback={<TagSkeleton />}>
+                  {options.map((option) => {
+                    const isSelected = selectedValues.includes(option.value);
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        value={option.label}
+                        onSelect={() => toggleOption(option.value)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            isSelected ? "opacity-100" : "opacity-0"
+                          )}
                         />
-                      </div>
-                    </CommandItem>
-                  );
-                })}
+                        <div className="flex justify-between items-center w-full">
+                          <Tag color={option.color}>{option?.label}</Tag>
+                          <TagEditDropdown
+                            tag={option}
+                            onTagUpdate={onTagUpdate}
+                            onStartLoading={() => setTagLoading(true)}
+                            onFinishLoading={() => setTagLoading(false)}
+                          />
+                        </div>
+                      </CommandItem>
+                    );
+                  })}
+                </React.Suspense>
               </CommandGroup>
               <CommandGroup>
                 <div className="flex justify-center flex-col items-center">

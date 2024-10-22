@@ -27,6 +27,8 @@ import NoteList from "../note/_component/note-list";
 import { Metadata } from "next";
 import ExploreInfiniteScroll from "@/components/ui/infinite-scroll/explore-infinite-scroll";
 import { CURSOR_LIMIT } from "@/data/client/note";
+import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/data/server/profiles";
 
 const ORDER = [
   {
@@ -58,8 +60,10 @@ export const metadata: Metadata = {
 };
 
 export default async function NotePage({ searchParams }: Props) {
+  const supabase = createClient();
+  const user = await getUser(supabase);
   const [{ data: notes }, { data: categories }] = await Promise.all([
-    getNoteExplore(searchParams as NoteFilter),
+    getNoteExplore(user, searchParams as NoteFilter),
     getAllCategories(),
   ]);
   const hasMore = notes && notes?.length >= CURSOR_LIMIT ? true : false;
@@ -74,7 +78,7 @@ export default async function NotePage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
-      <SearchInput searchParams={searchParams} />
+      {/* <SearchInput searchParams={searchParams} /> */}
       <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
         <div className="flex gap-2">
           <FilterCombobox

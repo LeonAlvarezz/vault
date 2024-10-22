@@ -1,5 +1,8 @@
 import { InsertUserPayload } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
+import { cache } from "react";
+import { redirect } from "next/navigation";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 const insertUser = async (id: string, payload: InsertUserPayload) => {
   const supabase = createClient();
@@ -34,13 +37,7 @@ export const getProfilesById = async (id: string) => {
 
 export const getProfile = async () => {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
   const { data, error } = await supabase
     .from("profiles")
     .select("*, content: aboutMe->content")
@@ -51,3 +48,15 @@ export const getProfile = async () => {
   }
   return { data, error };
 };
+
+export const getUser = cache(async (supabase: SupabaseClient) => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  if (error) {
+    redirect("/auth/login");
+  }
+
+  return user;
+});

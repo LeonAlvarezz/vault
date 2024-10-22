@@ -6,7 +6,7 @@ import OpenAI from "openai";
 
 import { env } from "@/utils/env";
 import { constructSearchQuery } from "@/utils/string";
-export const CURSOR_LIMIT = 20;
+export const CURSOR_LIMIT = 5;
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = createClient();
@@ -107,14 +107,7 @@ export async function unpublishNote(id: string) {
 
 export async function getNoteContent(id: string) {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
   const { data, error } = await supabase
     .from("notes")
     .select(
@@ -126,7 +119,6 @@ export async function getNoteContent(id: string) {
   `
     )
     .eq("id", id)
-    .eq("profile_id", user!.id)
     .single();
 
   return { data, error };
@@ -143,8 +135,8 @@ export async function getAllAvailableNoteForParams() {
   const { data } = await query;
   return { data };
 }
-
-export async function getCusorNote(filter: NoteFilter, from = 0, to = 20) {
+//TODO: MIGHT NEED WORK
+export async function getCursorNote(filter: NoteFilter, from = 0, to = 20) {
   const supabase = createClient();
   const {
     data: { user },

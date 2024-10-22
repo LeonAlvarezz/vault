@@ -2,17 +2,11 @@ import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
 import { CreateSearch } from "@/types/search.type";
 import { constructSearchQuery } from "@/utils/string";
+import { getUser } from "./profiles";
 
 export async function searchUserOwnNote(searchQuery: string) {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
 
   let query = supabase
     .from("notes")
@@ -31,14 +25,7 @@ export async function searchUserOwnNote(searchQuery: string) {
 
 export async function searchBookmarkNote(searchQuery: string) {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
 
   let query = supabase
     .from("bookmarks")
@@ -101,14 +88,7 @@ export async function searchPublishedNote(
 
 export async function getRecentSearch() {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
 
   const { data, error } = await supabase
     .from("searches")

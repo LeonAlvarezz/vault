@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoteCardPublished from "../note-card/note-card-published";
 import NoteCard from "../note-card/note-card";
-import { CURSOR_LIMIT, getCusorNote } from "@/data/client/note";
+import { CURSOR_LIMIT, getCursorNote } from "@/data/client/note";
 import Spinner from "../spinner";
 
 type Props = {
@@ -26,15 +26,22 @@ export default function ExploreInfiniteScroll({
   const [hasMore, setHasMore] = useState(isMore);
 
   const fetchMore = async () => {
-    console.log("fetch");
-    const { data, error } = await getCusorNote(
+    const { data, error } = await getCursorNote(
       searchParams as NoteFilter,
       range.from,
       range.to
     );
 
     if (data && data.length > 0) {
-      setNoteItems((prev) => [...prev, ...data]);
+      setNoteItems((prevItems) => {
+        // Create a copy of the existing items
+        const updatedItems = [...prevItems];
+
+        // Push new data into the existing array (modifies in place)
+        updatedItems.push(...data);
+
+        return updatedItems; // Return the updated array to update the state
+      });
       setRange((prevRange) => ({
         from: prevRange.to,
         to: prevRange.to + CURSOR_LIMIT,
@@ -61,6 +68,7 @@ export default function ExploreInfiniteScroll({
           <Spinner size={18} />
         </div>
       }
+      className="!overflow-visible"
     >
       <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6 align-super">
         {noteItems.map((note) =>

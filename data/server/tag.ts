@@ -1,15 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "./profiles";
 
 export async function getTags() {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
   const { data, error } = await supabase
     .from("tags")
     .select("*")

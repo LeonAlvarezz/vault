@@ -29,55 +29,8 @@ import { NoteFilter } from "@/types/note.type";
 import { deleteSearch } from "@/app/api/action";
 import SearchLogContainer from "@/components/ui/search/search-log-container";
 import { Metadata } from "next";
-
-const STATUS = [
-  {
-    value: "all_note",
-    label: "All Note",
-  },
-  {
-    value: "published",
-    label: "Published",
-  },
-  {
-    value: "unpublished",
-    label: "Unpublished",
-  },
-];
-
-const TAG = [
-  {
-    value: "framework",
-    label: "Framework",
-  },
-  {
-    value: "Websocket",
-    label: "Websocket",
-  },
-  {
-    value: "tutorial",
-    label: "Tutorial",
-  },
-];
-
-const ORDER = [
-  {
-    value: "recent",
-    label: "Recent",
-  },
-  {
-    value: "most_popular",
-    label: "Most Popular",
-  },
-  {
-    value: "trending",
-    label: "Trending",
-  },
-  {
-    value: "most_liked",
-    label: "Most Liked",
-  },
-];
+import { getUser } from "@/data/server/profiles";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Vault - Search",
@@ -94,6 +47,8 @@ export default async function SearchPage({ searchParams }: Props) {
   if (searchParams && searchParams.query) {
     searchQuery = constructSearchQuery(searchParams.query.toString(), "|");
   }
+  const supabase = createClient();
+  const user = await getUser(supabase);
 
   const [
     { data: notes, error },
@@ -115,7 +70,7 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Search</h1>
-      <SearchInput searchParams={searchParams} />
+      <SearchInput searchParams={searchParams} user={user!} />
       {searchParams && searchParams.query ? (
         <section>
           <div className="mt-4 flex gap-2">

@@ -32,9 +32,8 @@ export async function updateSession(request: NextRequest) {
 
   const createAnonymousUserRoute = ["/note", "/explore"];
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getSession();
+  const user = data.session?.user;
 
   const { pathname } = url;
   if (
@@ -42,8 +41,8 @@ export async function updateSession(request: NextRequest) {
     (createAnonymousUserRoute.some((path) => pathname.startsWith(path)) ||
       pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/))
   ) {
-    const { data: signInResult, error } =
-      await supabase.auth.signInAnonymously();
+    const { error } = await supabase.auth.signInAnonymously();
+
     if (error) {
       console.error("Failed to sign in anonymously:", error);
       return NextResponse.next(); // You can handle this better, perhaps showing an error page

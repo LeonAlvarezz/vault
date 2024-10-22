@@ -7,13 +7,12 @@ import {
 } from "../server/search";
 import { constructSearchQuery } from "@/utils/string";
 import { CURSOR_LIMIT } from "../client/note";
+import { User } from "@supabase/supabase-js";
+import { getUser } from "./profiles";
 
 export async function getNoteById(id: string) {
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getUser(supabase);
   let query = supabase
     .from("notes")
     .select(
@@ -33,14 +32,7 @@ export async function getNoteById(id: string) {
 
 export async function getAllNotesByProfileId(filter?: NoteFilter) {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
-
+  const user = await getUser(supabase);
   // Determine the categories selection based on filter
   const categoriesSelection =
     filter && filter.category && filter.category !== "all"
@@ -98,11 +90,12 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
   return { data, error };
 }
 
-export async function getNoteExplore(filter?: NoteFilter) {
+export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession();
+  // const user = session?.user;
 
   let query = supabase
     .from("notes")
@@ -169,13 +162,7 @@ export async function getNoteExplore(filter?: NoteFilter) {
 
 export async function getBookmarkNote(filter?: NoteFilter) {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
   let query = supabase
     .from("notes")
     .select(
@@ -277,13 +264,7 @@ export async function increaseView(noteId: string) {
 
 export const isNoteOwner = async (noteId: string) => {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
   const { count, error } = await supabase
     .from("notes")
     .select("*", { count: "exact", head: true })
@@ -337,22 +318,18 @@ export async function getPublishedNotesByProfileId(
   return { data, error };
 }
 
-export async function getUserPublishedNotes(filter?: NoteFilter) {
+export async function getUserPublishedNotes(
+  userId: string,
+  filter?: NoteFilter
+) {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
   let query = supabase
     .from("notes")
     .select(
       "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id, created_at)), likes(*), bookmarks(*)"
     )
-    .eq("profile_id", user!.id)
-    .eq("likes.profile_id", user!.id)
+    .eq("profile_id", userId)
+    .eq("likes.profile_id", userId)
     .not("published_at", "is", null);
 
   if (filter?.sortBy) {
@@ -384,13 +361,7 @@ export async function getUserPublishedNotes(filter?: NoteFilter) {
 
 export async function getRecentNote(count: number) {
   const supabase = createClient();
-  const {
-    data: { user },
-    error: authErr,
-  } = await supabase.auth.getUser();
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
+  const user = await getUser(supabase);
   const { data, error } = await supabase
     .from("notes")
     .select("*")
@@ -405,14 +376,6 @@ export async function getRecentNote(count: number) {
 
 export async function getNoteContent(id: string) {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
   const { data, error } = await supabase
     .from("notes")
     .select(
@@ -424,7 +387,6 @@ export async function getNoteContent(id: string) {
   `
     )
     .eq("id", id)
-    .eq("profile_id", user!.id)
     .single();
 
   return { data, error };

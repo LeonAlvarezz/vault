@@ -161,7 +161,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
 
-    const compressedImage = await compressImage(image, { maxSizeMB: 1 });
+    const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
 
     const { publicUrl, error } = await uploadImage(compressedImage);
 

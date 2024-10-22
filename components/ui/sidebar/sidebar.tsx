@@ -12,6 +12,7 @@ import { Button } from "../button";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent } from "../tooltip";
 import LogoutButton from "../button/logout-button";
+
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
 export const SIDEBAR_ITEM = [
@@ -67,27 +68,9 @@ export default async function Sidebar({ isAuthenticatedAsAnon }: Props) {
   if (!isAuthenticatedAsAnon) {
     return null;
   }
+
   const { data: profile, error } = await getProfile();
-  const handleSignout = () => {
-    signout();
-  };
-  // const [profileAvatar, setProfileAvatar] = useState("");
-  // useEffect(() => {
-  //   const handleGetAvatar = async () => {
-  //     const { data, error } = await getProfile();
-  //     if (error) {
-  //       toast({
-  //         title: "Unexpected Error!",
-  //         description: error.message,
-  //       });
-  //     }
-  //     setProfileAvatar(
-  //       data?.avatar_url
-  //         ? data?.avatar_url
-  //         : data!.username.slice(0, 1).toUpperCase()
-  //     );
-  //   };
-  // }, []);
+
   return (
     <aside className="hidden sm:block sticky top-0 bottom-0 h-screen w-16 bg-neutral-900 border-r-[1px] border-neutral-800 z-50">
       <div className="flex justify-between flex-col min-h-svh sm:min-h-screen">

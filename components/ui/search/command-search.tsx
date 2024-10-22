@@ -33,6 +33,7 @@ import { getKeyboardValue } from "@/utils/json";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
+import { createClient } from "@/lib/supabase/client";
 
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {

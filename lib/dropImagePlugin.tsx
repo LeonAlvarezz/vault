@@ -53,7 +53,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
 
             // Proceed with image compression and upload
             const compressedImage = await compressImage(image, {
-              maxSizeMB: 1,
+              maxSizeMB: 0.1,
             });
             const { publicUrl, error } = await upload(compressedImage);
 
@@ -117,7 +117,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
 
               if (upload) {
                 const compressedImage = await compressImage(image, {
-                  maxSizeMB: 1,
+                  maxSizeMB: 0.1,
                 });
                 const { publicUrl, error } = await upload(compressedImage);
 

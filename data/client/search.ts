@@ -45,26 +45,14 @@ export async function commandSearch(searchQuery: string, isGlobal: boolean) {
   return { data, error };
 }
 
-export async function logSearch(payload: CreateSearch) {
+export async function logSearch(userId: string, payload: CreateSearch) {
   const supabase = createClient();
-  const {
-    error: authErr,
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (authErr) {
-    return { data: null, error: authErr };
-  }
-  if (user?.is_anonymous)
-    return {
-      error: null,
-    };
 
   const { data: search, error: countError } = await supabase
     .from("searches")
     .select("*")
     .eq("query", payload.query)
-    .eq("profile_id", user!.id)
+    .eq("profile_id", userId)
     .single();
   if (countError && countError.code !== "PGRST116") {
     return { error: countError };
@@ -85,13 +73,13 @@ export async function logSearch(payload: CreateSearch) {
       .from("searches")
       .insert([
         {
-          profile_id: user!.id,
+          profile_id: userId,
           query: payload.query,
           search_source: payload.search_source,
           search_type: payload.search_type,
         },
       ])
-      .eq("profile_id", user!.id);
+      .eq("profile_id", userId);
     if (error) {
       return { error: null };
     }

@@ -3,12 +3,13 @@ import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
-import { getProfile } from "@/data/server/profiles";
+import { getProfile, getUser } from "@/data/server/profiles";
 import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
 import CoverImage from "./edit/feature/cover_image";
 import { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
 type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
@@ -19,10 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default async function Page({ searchParams }: Props) {
+  const supabase = createClient();
+  const user = await getUser(supabase);
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([
       getProfile(),
-      getUserPublishedNotes(searchParams as NoteFilter),
+      getUserPublishedNotes(user!.id, searchParams as NoteFilter),
     ]);
   return (
     <>

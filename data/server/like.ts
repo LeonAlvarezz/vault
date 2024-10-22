@@ -1,6 +1,6 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-
+//NOT USING
 export async function likeNote(noteId: string) {
   const supabase = createClient();
   let action;

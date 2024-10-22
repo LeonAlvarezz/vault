@@ -13,15 +13,18 @@ import {
 import { useToast } from "../use-toast";
 import { logSearch } from "@/data/client/search";
 import { sanitizeSearchInput } from "@/utils/string";
+import { User } from "@supabase/supabase-js";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchKey?: string;
+  user: User;
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default function SearchInput({
   onChange,
   searchKey = "public",
   searchParams,
+  user,
 }: Props) {
   const [query, setQuery] = useState("");
   const router = useRouter();
@@ -43,7 +46,7 @@ export default function SearchInput({
         search_source: SEARCH_SOURCE.SEARCH_BAR,
         search_type: SEARCH_TYPE.NOTE,
       };
-      const { error } = await logSearch(payload);
+      const { error } = await logSearch(user.id, payload);
       if (error) {
         toast({
           title: "Error Inserting Search",

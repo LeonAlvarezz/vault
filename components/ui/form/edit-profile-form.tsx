@@ -38,7 +38,7 @@ export default function EditProfileForm({ profile }: Props) {
       avatar_url: imagePreview || undefined,
       aboutMe: editorRef.current?.editor?.getJSON(),
     };
-    const response = await editProfile(data);
+    const response = await editProfile(profile.id, data);
     if (response?.error) {
       setErrors(response.error as ZodFormattedError<EditProfile>);
       //   toast({

@@ -268,7 +268,7 @@ export async function deleteNote(id: string) {
   return { error: null };
 }
 
-export async function editProfile(formData: unknown) {
+export async function editProfile(id: string, formData: unknown) {
   const supabase = createClient();
   const result = EditProfileSchema.safeParse(formData);
   if (!result.success) {
@@ -282,7 +282,6 @@ export async function editProfile(formData: unknown) {
       error: result.error.format(),
     };
   }
-  const user = await getUser(supabase);
 
   const { error } = await supabase
     .from("profiles")
@@ -297,7 +296,7 @@ export async function editProfile(formData: unknown) {
       occupation: result.data.occupation,
       updated_at: new Date().toISOString(),
     })
-    .match({ id: user!.id });
+    .match({ id: id });
   if (error) {
     return {
       error: error.message,

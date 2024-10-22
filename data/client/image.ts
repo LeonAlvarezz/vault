@@ -1,9 +1,10 @@
 import { createClient } from "@/lib/supabase/client";
-import { getUser } from "../server/profiles";
 
 export async function uploadImage(image: File) {
   const supabase = createClient();
-  const user = await getUser(supabase);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const { data, error } = await supabase.storage
     .from("note-images")
     .upload(`image/${user?.email}/${image.name}`, image, {

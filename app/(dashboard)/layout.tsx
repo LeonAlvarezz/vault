@@ -17,7 +17,7 @@ export default async function DashboardLayout({
     <div className="flex flex-1 relative">
       <Sidebar isAuthenticatedAsAnon={isAuthenticatedAsAnon} />
       <SidebarMobile isAuthenticatedAsAnon={isAuthenticatedAsAnon} />
-      <main className="w-[90%] sm:w-[80%] xl:w-[50%] pt-10 pb-20 mx-auto z-10 relative">
+      <main className="w-[90%] sm:w-[80%] xl:w-[60%] pt-10 pb-20 mx-auto z-10 relative">
         {children}
         <FloatingButton isAuthenticatedAsAnon={isAuthenticatedAsAnon} />
         <Tutorial isAuthenticatedAsAnon={isAuthenticatedAsAnon} />

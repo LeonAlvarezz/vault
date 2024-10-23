@@ -53,7 +53,6 @@ export default async function NotePage({ searchParams }: Props) {
       value: category.name,
     })) || []),
   ];
-  notes?.map((note, index) => console.log(`${index}:${note.title}`));
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>

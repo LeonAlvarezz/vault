@@ -6,7 +6,7 @@ import OpenAI from "openai";
 
 import { env } from "@/utils/env";
 import { constructSearchQuery } from "@/utils/string";
-export const CURSOR_LIMIT = 5;
+export const CURSOR_LIMIT = 20;
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = createClient();

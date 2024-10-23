@@ -14,6 +14,7 @@ import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combo
 import { getTags } from "@/data/server/tag";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
 import { Metadata } from "next";
+import BookmarkList from "@/components/ui/list/bookmark-list";
 
 export const metadata: Metadata = {
   title: "Vault - Bookmark",
@@ -83,26 +84,25 @@ export default async function BookmarkPage({ searchParams }: Props) {
       </div>
 
       {bookmarks && bookmarks.length > 0 ? (
-        <Suspense fallback={<NoteSkeleton />}>
-          <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
-            {bookmarks.map((bookmark, index) =>
-              bookmark.note.published_at ? (
-                <NoteCardPublished
-                  key={index}
-                  note={bookmark.note}
-                  isBookmark={true}
-                  isLike={
-                    bookmark.note.likes &&
-                    bookmark.note.likes.length > 0 &&
-                    bookmark.note.likes[0].deleted_at === null
-                  }
-                />
-              ) : (
-                <NoteCard key={index} note={bookmark.note} />
-              )
-            )}
-          </section>
-        </Suspense>
+        // <section className="columns-1 sm:columns-2 2xl:columns-3 gap-2 space-y-2 my-6">
+        //   {bookmarks.map((bookmark, index) =>
+        //     bookmark.note.published_at ? (
+        //       <NoteCardPublished
+        //         key={index}
+        //         note={bookmark.note}
+        //         isBookmark={true}
+        //         isLike={
+        //           bookmark.note.likes &&
+        //           bookmark.note.likes.length > 0 &&
+        //           bookmark.note.likes[0].deleted_at === null
+        //         }
+        //       />
+        //     ) : (
+        //       <NoteCard key={index} note={bookmark.note} />
+        //     )
+        //   )}
+        // </section>
+        <BookmarkList bookmarks={bookmarks} />
       ) : (
         <div
           className="w-full flex justify-center items-center"

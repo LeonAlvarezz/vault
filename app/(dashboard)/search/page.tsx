@@ -22,15 +22,15 @@ import { constructSearchQuery } from "@/utils/string";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
-import NoteList from "../note/_component/note-list";
+import NoteList from "../../../components/ui/list/note-list";
 import NoNote from "@/components/ui/error/no-note";
 import { getAllCategories } from "@/data/client/category";
 import { NoteFilter } from "@/types/note.type";
 import { deleteSearch } from "@/app/api/action";
-import SearchLogContainer from "@/components/ui/search/search-log-container";
 import { Metadata } from "next";
 import { getUser } from "@/data/server/profiles";
 import { createClient } from "@/lib/supabase/server";
+import SearchLogContainer from "@/components/ui/search/search-log-container";
 
 export const metadata: Metadata = {
   title: "Vault - Search",
@@ -70,7 +70,7 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Search</h1>
-      <SearchInput searchParams={searchParams} user={user!} />
+      <SearchInput user={user!} />
       {searchParams && searchParams.query ? (
         <section>
           <div className="mt-4 flex gap-2">
@@ -82,9 +82,7 @@ export default async function SearchPage({ searchParams }: Props) {
             />
           </div>
           {notes && notes.length > 0 ? (
-            <Suspense fallback={<NoteSkeleton />}>
-              <NoteList notes={notes} />
-            </Suspense>
+            <NoteList notes={notes} />
           ) : (
             <div
               className="w-full flex justify-center items-center"
@@ -102,11 +100,7 @@ export default async function SearchPage({ searchParams }: Props) {
                 <GiBackwardTime size={20} />
                 <h2 className="text-xl font-bold">Recent</h2>
               </div>
-              <div className="flex flex-col gap-2">
-                {recentSearches.map((search) => (
-                  <SearchLogContainer key={search.id} search={search} />
-                ))}
-              </div>
+              <SearchLogContainer searches={recentSearches} />
             </div>
           )}
         </section>

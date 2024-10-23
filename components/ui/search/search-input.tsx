@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { Button } from "../button";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CreateSearch,
   SEARCH_SOURCE,
@@ -14,55 +14,79 @@ import { useToast } from "../use-toast";
 import { logSearch } from "@/data/client/search";
 import { sanitizeSearchInput } from "@/utils/string";
 import { User } from "@supabase/supabase-js";
+import { useDebouncedCallback } from "use-debounce";
+import { useProgress } from "react-transition-progress";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchKey?: string;
-  user: User;
-  searchParams?: { [key: string]: string | string[] | undefined };
+  user: User | null;
+  debounce?: boolean;
 };
 export default function SearchInput({
   onChange,
   searchKey = "public",
-  searchParams,
+  debounce = false,
   user,
 }: Props) {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const startProgress = useProgress();
   const { toast } = useToast();
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (debounce) {
+      if (!query) return;
+      debouceSearch();
+      return;
+    }
     if (event.key === "Enter") {
       if (!query) return;
       onSearch();
     }
   };
+  const debouceSearch = useDebouncedCallback(async () => {
+    onSearch();
+  }, 500);
 
   const onSearch = async () => {
     const sanitizedQuery = sanitizeSearchInput(query);
     if (sanitizedQuery) {
       const encodedQuery = encodeURIComponent(sanitizedQuery);
       const payload: CreateSearch = {
-        query: query,
+        query: sanitizedQuery, // Ensure consistency here
         search_source: SEARCH_SOURCE.SEARCH_BAR,
         search_type: SEARCH_TYPE.NOTE,
       };
-      const { error } = await logSearch(user.id, payload);
-      if (error) {
-        toast({
-          title: "Error Inserting Search",
-          description: error.message,
-          variant: "destructive",
-        });
+
+      if (user?.id) {
+        // Added user check
+        const { error } = await logSearch(user.id, payload);
+        if (error) {
+          return toast({
+            title: "Error Inserting Search",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
       }
-      router.push(`${pathname}?query=${encodedQuery}`);
+      const params = new URLSearchParams(searchParams);
+      params.set("query", encodedQuery);
+      const queryString = params.toString();
+      const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+      React.startTransition(() => {
+        startProgress();
+        router.push(newUrl);
+      });
     }
   };
 
   useEffect(() => {
-    const query = searchParams?.query?.toString();
+    const query = searchParams?.get("query");
     const searchQuery = query?.replace(/_/g, " ");
     setQuery(searchQuery || "");
-  }, [searchParams?.query]);
+  }, [searchParams]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

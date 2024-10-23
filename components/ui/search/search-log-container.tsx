@@ -1,46 +1,27 @@
 "use client";
 import { Search } from "@/types/search.type";
-import React from "react";
-import { Button } from "../button";
-import { IoClose } from "react-icons/io5";
-import { deleteSearch } from "@/app/api/action";
-import { toast } from "../use-toast";
-import { Link } from "react-transition-progress/next";
-import { sanitizeSearchInput } from "@/utils/string";
+import React, { useTransition } from "react";
+import Spinner from "../spinner";
+import SearchLogContainerItem from "./search-log-container-item";
 type Props = {
-  search: Search;
+  searches: Search[];
 };
-export default function SearchLogContainer({ search }: Props) {
-  const handleDelete = async (id: number) => {
-    const { error } = await deleteSearch(id);
-    if (error) {
-      toast({
-        title: "Error Deleting Search",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
-  const constructRouteURL = () => {
-    const sanitizedQuery = sanitizeSearchInput(search.query || "");
-    const encodedQuery = encodeURIComponent(sanitizedQuery);
-    return `/search?query=${encodedQuery}`;
-  };
+export default function SearchLogContainer({ searches }: Props) {
+  const [isLoading, setTransition] = useTransition();
   return (
-    <Link
-      href={constructRouteURL()}
-      className="hover:bg-neutral-800 w-full py-1 px-2 rounded-sm cursor-pointer flex justify-between items-center"
-    >
-      <p className="text-sm">{search.query}</p>
-      <Button
-        variant={"icon"}
-        size={"icon"}
-        className="hover:text-red-500"
-        type="submit"
-        onClick={() => handleDelete(search.id)}
-      >
-        <IoClose size={16} />
-      </Button>
-    </Link>
+    <div className="flex flex-col gap-2 relative">
+      {searches.map((search) => (
+        <SearchLogContainerItem
+          key={search.id}
+          search={search}
+          setTransition={setTransition}
+        />
+      ))}
+      {isLoading && (
+        <div className="absolute top-0 left-0 bg-neutral-900/50 w-full h-full z-50 flex justify-center items-center">
+          <Spinner size={24} />
+        </div>
+      )}
+    </div>
   );
 }

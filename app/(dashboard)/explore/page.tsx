@@ -1,32 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
-import React, { Suspense } from "react";
-import { IoSearch } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
-import NoteCard from "@/components/ui/note-card/note-card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import React from "react";
 import SearchInput from "@/components/ui/search/search-input";
-import OrderSelect from "@/components/ui/select/order-select";
 import { getNoteExplore } from "@/data/server/note";
-import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import ImageContainer from "@/components/ui/image-container";
-import NoteCardPublished from "@/components/ui/note-card/note-card-published";
 import { NoteFilter } from "@/types/note.type";
 import { getAllCategories } from "@/data/client/category";
-import { getTags } from "@/data/server/tag";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
-import { MultiFilterCombobox } from "@/components/ui/combobox/multi-filter-combobox";
-import NoteList from "../note/_component/note-list";
 import { Metadata } from "next";
 import ExploreInfiniteScroll from "@/components/ui/infinite-scroll/explore-infinite-scroll";
-import { CURSOR_LIMIT } from "@/data/client/note";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/data/server/profiles";
 
@@ -66,7 +46,6 @@ export default async function NotePage({ searchParams }: Props) {
     getNoteExplore(user, searchParams as NoteFilter),
     getAllCategories(),
   ]);
-  const hasMore = notes && notes?.length >= CURSOR_LIMIT ? true : false;
   const categoryOption = [
     { label: "All", value: "all" },
     ...(categories?.map((category) => ({
@@ -74,11 +53,11 @@ export default async function NotePage({ searchParams }: Props) {
       value: category.name,
     })) || []),
   ];
-
+  notes?.map((note, index) => console.log(`${index}:${note.title}`));
   return (
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
-      {/* <SearchInput searchParams={searchParams} /> */}
+      <SearchInput user={user} debounce />
       <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
         <div className="flex gap-2">
           <FilterCombobox
@@ -101,11 +80,7 @@ export default async function NotePage({ searchParams }: Props) {
         // <Suspense fallback={<NoteSkeleton />}>
         //   <NoteList notes={notes} />
         // </Suspense>
-        <ExploreInfiniteScroll
-          notes={notes}
-          searchParams={searchParams}
-          isMore={hasMore}
-        />
+        <ExploreInfiniteScroll notes={notes} searchParams={searchParams} />
       ) : (
         <div
           className="w-full flex justify-center items-center"

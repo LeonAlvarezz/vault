@@ -26,7 +26,7 @@ export default function NoteCardPublished({
   return (
     <Link
       href={`/note/${note?.id}`}
-      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform"
+      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform mb-2"
     >
       {note?.cover_url && (
         <ImageContainer

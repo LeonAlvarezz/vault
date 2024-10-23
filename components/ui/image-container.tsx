@@ -5,6 +5,7 @@ import Image from "next/image";
 import { env } from "process";
 import React, { useEffect, useState } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import { Skeleton } from "./skeleton";
 
 type Props = {
   src: string;
@@ -35,6 +36,11 @@ const useBlurPlaceholder = (src: string, shouldBlur: boolean) => {
 
   return blurPlaceholder;
 };
+const handleClick = (e: React.MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  // Optional: Do something here if you want
+};
 
 export default function ImageContainer({
   src,
@@ -44,7 +50,7 @@ export default function ImageContainer({
   preview = true,
   blur = false,
 }: Props) {
-  const blurPlaceholder = useBlurPlaceholder(src, blur);
+  // const blurPlaceholder = useBlurPlaceholder(src, blur);
   const imageProps = {
     src,
     alt,
@@ -52,18 +58,29 @@ export default function ImageContainer({
     height: 0,
     style: { width: "100%", height: "100%", objectFit },
     sizes: "(max-width: 1250px) 100vw, 1250px",
-    ...(blur && blurPlaceholder
-      ? { placeholder: "blur" as const, blurDataURL: blurPlaceholder }
-      : {}),
+    // ...(blur && blurPlaceholder
+    //   ? { placeholder: "blur" as const, blurDataURL: blurPlaceholder }
+    //   : {}),
   };
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <Skeleton className="w-full h-32" />;
+  }
 
   return (
     <div className={cn("relative", className)}>
       {preview ? (
         <PhotoProvider>
-          <PhotoView src={src}>
-            <Image {...imageProps} />
-          </PhotoView>
+          <div onClick={handleClick} className="w-full h-full">
+            <PhotoView src={src}>
+              <Image {...imageProps} />
+            </PhotoView>
+          </div>
         </PhotoProvider>
       ) : (
         <Image {...imageProps} />

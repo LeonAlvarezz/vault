@@ -9,7 +9,7 @@ import {
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import { Note } from "@/types/note.type";
 import React, { Suspense } from "react";
-import NoteList from "../../note/_component/note-list";
+import NoteList from "../../../../components/ui/list/note-list";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import NoNote from "@/components/ui/error/no-note";
 type Props = {
@@ -45,9 +45,7 @@ export default function NoteTab({ notes, searchParams }: Props) {
         label="Sort By"
       />
       {notes && notes.length > 0 ? (
-        <Suspense fallback={<NoteSkeleton />}>
-          <NoteList notes={notes} />
-        </Suspense>
+        <NoteList notes={notes} />
       ) : (
         <div
           className="w-full flex justify-center items-center"

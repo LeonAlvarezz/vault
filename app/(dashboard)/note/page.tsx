@@ -9,7 +9,7 @@ import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
-import NoteList from "./_component/note-list";
+import NoteList from "../../../components/ui/list/note-list";
 import { Metadata } from "next";
 const STATUS = [
   {

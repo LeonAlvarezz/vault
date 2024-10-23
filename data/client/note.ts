@@ -201,6 +201,5 @@ export async function getCursorNote(filter: NoteFilter, from = 0, to = 20) {
   // }
 
   const { data, error } = await query.range(from, to);
-
   return { data, error };
 }

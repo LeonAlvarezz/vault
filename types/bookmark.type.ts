@@ -1,3 +1,5 @@
+import { Note } from "./note.type";
+
 export type Bookmark = {
   created_at: string;
   deleted_at: string | null;
@@ -5,4 +7,5 @@ export type Bookmark = {
   note_id: string;
   profile_id: string;
   updated_at: string | null;
+  note?: Note;
 };

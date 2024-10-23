@@ -65,6 +65,7 @@
     "react-hook-form": "^7.53.0",
     "react-icons": "^5.2.0",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-masonry-css": "^1.0.16",
     "react-photo-view": "^1.2.6",
     "react-swipeable": "^7.0.1",
     "react-transition-progress": "^0.0.4",

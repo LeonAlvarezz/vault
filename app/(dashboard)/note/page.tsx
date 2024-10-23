@@ -76,9 +76,7 @@ export default async function NotePage({ searchParams }: Props) {
         />
       </div>
       {notes && notes.length > 0 ? (
-        <Suspense fallback={<NoteSkeleton />}>
-          <NoteList notes={notes} optionButton />
-        </Suspense>
+        <NoteList notes={notes} optionButton />
       ) : (
         <div
           className="w-full flex justify-center items-center"

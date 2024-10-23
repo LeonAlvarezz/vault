@@ -32,9 +32,9 @@ export default function BookmarkList({
       columnClassName="my-masonry-grid_column" // Add your own styling here if needed
     >
       {bookmarks?.map((bookmark) =>
-        bookmark.note.published_at ? (
+        bookmark.note?.published_at ? (
           <NoteCardPublished
-            key={bookmark.note.id}
+            key={bookmark.id}
             note={bookmark.note}
             optionButton={optionButton}
             isLike={
@@ -47,7 +47,7 @@ export default function BookmarkList({
             isBookmark={true}
           />
         ) : (
-          <NoteCard key={bookmark.note.id} note={bookmark.note} />
+          <NoteCard key={bookmark.id} note={bookmark.note} />
         )
       )}
     </Masonry>

@@ -35,8 +35,9 @@ export async function updateSession(request: NextRequest) {
 
   // const { data } = await supabase.auth.getSession();
   // const user = data.session?.user;
-  const { data } = await supabase.auth.getSession();
-  const user = data.session?.user;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const { pathname } = url;
   if (!user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute)) {
     const { error } = await supabase.auth.signInAnonymously();
@@ -70,7 +71,6 @@ export async function updateSession(request: NextRequest) {
     (!user && request.nextUrl.pathname === "/profile/edit");
 
   if (needsAuth) {
-    console.log("GOING TO LOGIN");
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }

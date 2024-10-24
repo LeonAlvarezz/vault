@@ -32,16 +32,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const cacheUser = await getCacheUser(supabase);
-  console.log("--------cacheUser:", cacheUser?.email);
-  const userFromDB = await supabase.auth.getUser();
-  console.log("+++++++++userFromDB:", userFromDB.data.user?.email);
-  const userFromSession = await supabase.auth.getSession();
-  console.log(
-    "*********userFromSession:",
-    userFromSession.data.session?.user.email
-  );
   return (
     <html
       lang="en"

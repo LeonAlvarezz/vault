@@ -65,7 +65,6 @@ export default async function NoteDetailPage(props: Props) {
   const { count, error } = await isNoteOwner(params.id);
   const isOwner = count && count > 0 ? true : false;
   const { data: note } = await getNote(params.id);
-  const loading = true;
 
   if (!note) {
     notFound();
@@ -76,30 +75,12 @@ export default async function NoteDetailPage(props: Props) {
     console.error("Failed to increase view count:", viewError);
   }
 
-  const toggleLike = async () => {
-    "use server";
-    const { error } = await likeNote(note.id);
-    if (!error) {
-      revalidatePath("/note");
-    }
-    return error;
-  };
-
-  const toggleBookmark = async () => {
-    "use server";
-    const { error } = await bookmarkNote(note.id);
-    if (!error) {
-      revalidatePath("/note");
-    }
-    return error;
-  };
-  if (loading) {
-  }
   return (
     <article className="pb-10">
       <section className="flex gap-2 flex-col">
         <div className="flex justify-between items-center">
           <BackButton />
+
           {isOwner && (
             <Link
               href={`/create/${note.id}`}
@@ -109,55 +90,53 @@ export default async function NoteDetailPage(props: Props) {
             </Link>
           )}
         </div>
-        <Suspense fallback={<NoteDetailSkeleton />}>
-          <h1 className="text-2xl">{note.title}</h1>
-          {note?.categories && (
-            <Tag color={note?.categories.color!} className="h-6">
-              <p>{note?.categories.name!}</p>
-            </Tag>
-          )}
-          <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 mb-6 gap-y-2">
-            <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
-              <Link href={`/profile/${note.profile_id}`}>
-                <div className="flex gap-2">
-                  <Avatar className="size-10">
-                    {note.profile?.avatar_url && (
-                      <AvatarImage src={note.profile.avatar_url} />
-                    )}
-                    <AvatarFallback>
-                      {note.profile?.username.slice(0, 1).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm">{note.profile.username}</p>
-                    <p className="text-xs text-neutral-400">
-                      {formatDate(note.published_at || "")}
-                    </p>
-                  </div>
+        {/* <Suspense fallback={<NoteDetailSkeleton />}> */}
+        <h1 className="text-2xl">{note.title}</h1>
+        {note?.categories && (
+          <Tag color={note?.categories.color!} className="h-6">
+            <p>{note?.categories.name!}</p>
+          </Tag>
+        )}
+        <div className="flex justify-between items-end sm:items-center sm:flex-row flex-col mt-2 mb-6 gap-y-2">
+          <div className="flex gap-4 sm:justify-start justify-between items-center w-full">
+            <Link href={`/profile/${note.profile_id}`}>
+              <div className="flex gap-2">
+                <Avatar className="size-10">
+                  {note.profile?.avatar_url && (
+                    <AvatarImage src={note.profile.avatar_url} />
+                  )}
+                  <AvatarFallback>
+                    {note.profile?.username.slice(0, 1).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm">{note.profile.username}</p>
+                  <p className="text-xs text-neutral-400">
+                    {formatDate(note.published_at || "")}
+                  </p>
                 </div>
-              </Link>
-              <div className="block sm:hidden">
-                <ContactButton layout="mobile" profile={note.profile} />
               </div>
-              <div className="hidden sm:block">
-                <ContactButton layout="alternative" profile={note.profile} />
-              </div>
+            </Link>
+            <div className="block sm:hidden">
+              <ContactButton layout="mobile" profile={note.profile} />
             </div>
-            <InteractionButton
-              note={note}
-              toggleBookmark={toggleBookmark}
-              toggleLike={toggleLike}
-              bookmark={
-                note.bookmarks &&
-                note.bookmarks.length > 0 &&
-                note.bookmarks[0].deleted_at === null
-                  ? true
-                  : false
-              }
-            />
+            <div className="hidden sm:block">
+              <ContactButton layout="alternative" profile={note.profile} />
+            </div>
           </div>
-          <Render content={note.content} />
-        </Suspense>
+          <InteractionButton
+            note={note}
+            bookmark={
+              note.bookmarks &&
+              note.bookmarks.length > 0 &&
+              note.bookmarks[0].deleted_at === null
+                ? true
+                : false
+            }
+          />
+        </div>
+        <Render content={note.content} />
+        {/* </Suspense> */}
       </section>
       {/* <RelatedNoteCarousel /> */}
     </article>

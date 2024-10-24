@@ -15,18 +15,13 @@ import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { toast } from "../use-toast";
 import { cn } from "@/lib/utils";
 import ShareModal from "../modal/share-modal";
+import { bookmarkNote } from "@/data/server/bookmark";
+import { likeNote } from "@/app/api/action";
 type Props = {
   note: Note;
-  toggleLike: () => Promise<AuthError | PostgrestError | null | undefined>;
-  toggleBookmark: () => Promise<AuthError | PostgrestError | null | undefined>;
   bookmark?: boolean;
 };
-export default function InteractionButton({
-  toggleBookmark,
-  toggleLike,
-  note,
-  bookmark = false,
-}: Props) {
+export default function InteractionButton({ note, bookmark = false }: Props) {
   const [isLikePending, startLikeTransition] = useTransition();
   const [isLike, setIsLike] = useState(
     note.likes && note.likes.length > 0 && note.likes[0].deleted_at === null
@@ -44,7 +39,7 @@ export default function InteractionButton({
     event.preventDefault();
     try {
       startBookmarkTransition(async () => {
-        const error = await toggleBookmark();
+        const { error } = await bookmarkNote(note.id);
         if (error) {
           toast({
             title: "Error Bookmark Post",
@@ -82,7 +77,7 @@ export default function InteractionButton({
     event.preventDefault();
     try {
       startLikeTransition(async () => {
-        const error = await toggleLike();
+        const { error } = await likeNote(note.id);
         if (error) {
           toast({
             title: "Error Liking Post",

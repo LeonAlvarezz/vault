@@ -14,6 +14,7 @@ import {
 } from "@/data/server/note-metric";
 import { getRecentNote } from "@/data/server/note";
 import { Metadata } from "next";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
   title: "Vault - Dashboard",

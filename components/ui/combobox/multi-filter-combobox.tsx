@@ -252,7 +252,7 @@ export const MultiFilterCombobox = React.forwardRef<
             variant="outline"
             role="combobox"
             className={cn(
-              `${sizeClasses[size]} justify-between rounded-sm font-normal w-fit min-w-[200px]`,
+              `${sizeClasses[size]} justify-between rounded-sm font-normal`,
               className
             )}
           >

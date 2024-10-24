@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { startTransition } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,11 +16,19 @@ import { usePathname } from "next/navigation";
 import { IoLogOut } from "react-icons/io5";
 import { ICON_COLOR, ICON_SIZE } from "../sidebar/sidebar";
 import { signout } from "@/app/api/action";
+import { useProgress } from "react-transition-progress";
 type Props = {
   items: SidebarMobileProps[];
 };
 export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
   const pathname = usePathname();
+  const startProgress = useProgress();
+  const handleSignout = async () => {
+    startTransition(async () => {
+      startProgress();
+      signout();
+    });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -56,7 +64,7 @@ export default function SidebarOptionalItemDropdownMenu({ items }: Props) {
             <Button
               variant={"icon"}
               size={"icon"}
-              formAction={signout}
+              formAction={handleSignout}
               className="w-full hover:bg-neutral-700/50 rounded-sm  p-2"
             >
               <div

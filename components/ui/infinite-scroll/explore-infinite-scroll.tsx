@@ -13,7 +13,7 @@ import NoteList from "@/components/ui/list/note-list";
 export const breakpointColumnsObj = {
   default: 3,
   1400: 2,
-  400: 1,
+  500: 1,
 };
 
 type Props = {

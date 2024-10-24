@@ -110,6 +110,7 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
 
       const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
       const { publicUrl, error } = await uploadImage(compressedImage);
+      console.log("error:", error);
 
       if (error) {
         editor!
@@ -225,7 +226,7 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
         <FaLink size={14} />
       </Button>
       <UploadButton
-        className="hover:border-neutral-500 border transition-all border-neutral-700 flex justify-center items-center"
+        className="hover:border-neutral-500 border transition-all border-neutral-700 flex justify-center items-center flex-shrink-0"
         setImage={setImage}
       >
         <FaUpload />

@@ -58,21 +58,21 @@ export default async function NotePage(props: Props) {
     <>
       <h1 className="text-2xl font-bold mb-4 ">Explore</h1>
       <SearchInput user={user} debounce />
-      <div className="mt-4 flex sm:flex-row flex-col gap-2  justify-between">
-        <div className="flex gap-2">
-          <FilterCombobox
-            filterKey={"category"}
-            options={categoryOption!}
-            defaultValue={searchParams?.category as string}
-            label="Category"
-          />
-        </div>
+      <div className="mt-4 flex gap-2  justify-between">
+        <FilterCombobox
+          filterKey={"category"}
+          options={categoryOption!}
+          defaultValue={searchParams?.category as string}
+          label="Category"
+          size="md"
+        />
 
         <FilterCombobox
           filterKey={"sortBy"}
           options={ORDER}
           defaultValue={searchParams?.sortBy as string}
           label="Sort By"
+          size="md"
         />
       </div>
       {notes && notes.length > 0 ? (

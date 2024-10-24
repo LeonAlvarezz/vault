@@ -11,6 +11,7 @@ import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
 import NoteList from "../../../components/ui/list/note-list";
 import { Metadata } from "next";
+import { Skeleton } from "@/components/ui/skeleton";
 const STATUS = [
   {
     value: "all",
@@ -67,6 +68,7 @@ export default async function NotePage(props: Props) {
           options={STATUS}
           defaultValue={searchParams?.status as string}
           label="All Note"
+          size="md"
         />
         <MultiFilterCombobox
           filterKey={"tags"}
@@ -74,6 +76,7 @@ export default async function NotePage(props: Props) {
           options={tagsOption || []}
           placeholder="Tags"
           maxCount={1}
+          size="md"
         />
       </div>
       {notes && notes.length > 0 ? (

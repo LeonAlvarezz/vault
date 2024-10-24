@@ -7,7 +7,7 @@ import { searchBookmarkNote } from "./search";
 import { getUser } from "./profiles";
 
 export async function bookmarkNote(noteId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   let action;
   const today = new Date().toISOString().split("T")[0];
 
@@ -104,7 +104,7 @@ export async function bookmarkNote(noteId: string) {
 }
 
 export async function getBookmark(filter?: NoteFilter) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   let query = supabase
     .from("bookmarks")

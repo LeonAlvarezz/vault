@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getUser } from "./profiles";
 
 export async function getNoteSummary() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
 
   const { data, error } = await supabase
@@ -17,7 +17,7 @@ export async function getNoteSummary() {
 }
 
 export async function getNoteMetricLast3Months() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   const { data, error } = await supabase
     .rpc("get_note_chart_data", { user_id: user!.id })

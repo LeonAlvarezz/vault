@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 const insertUser = async (id: string, payload: InsertUserPayload) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("profiles").insert([
     {
       ...payload, // Spread the payload object here
@@ -22,7 +22,7 @@ const insertUser = async (id: string, payload: InsertUserPayload) => {
 };
 
 export const getProfilesById = async (id: string) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
     .select("*,  content: aboutMe->content")
@@ -36,7 +36,7 @@ export const getProfilesById = async (id: string) => {
 };
 
 export const getProfile = async () => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   const { data, error } = await supabase
     .from("profiles")

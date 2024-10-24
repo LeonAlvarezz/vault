@@ -30,7 +30,7 @@ const ORDER = [
 ];
 
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const metadata: Metadata = {
@@ -39,8 +39,9 @@ export const metadata: Metadata = {
     "Discover community-shared notes, ideas, and knowledge in Vault's Explore section.",
 };
 
-export default async function NotePage({ searchParams }: Props) {
-  const supabase = createClient();
+export default async function NotePage(props: Props) {
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const user = await getUser(supabase);
   const [{ data: notes }, { data: categories }] = await Promise.all([
     getNoteExplore(user, searchParams as NoteFilter),
@@ -74,7 +75,6 @@ export default async function NotePage({ searchParams }: Props) {
           label="Sort By"
         />
       </div>
-
       {notes && notes.length > 0 ? (
         // <Suspense fallback={<NoteSkeleton />}>
         //   <NoteList notes={notes} />

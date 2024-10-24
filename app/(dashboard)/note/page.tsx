@@ -27,7 +27,7 @@ const STATUS = [
 ];
 
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const metadata: Metadata = {
@@ -35,7 +35,8 @@ export const metadata: Metadata = {
   description: "Create, edit, and publish your developer notes on Vault.",
 };
 
-export default async function NotePage({ searchParams }: Props) {
+export default async function NotePage(props: Props) {
+  const searchParams = await props.searchParams;
   const [{ data: notes }, { data: categories }, { data: tags }] =
     await Promise.all([
       getAllNotesByProfileId(searchParams as NoteFilter),

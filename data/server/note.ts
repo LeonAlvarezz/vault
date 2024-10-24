@@ -11,7 +11,7 @@ import { User } from "@supabase/supabase-js";
 import { getUser } from "./profiles";
 
 export async function getNoteById(id: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   let query = supabase
     .from("notes")
@@ -31,7 +31,7 @@ export async function getNoteById(id: string) {
 }
 
 export async function getAllNotesByProfileId(filter?: NoteFilter) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   // Determine the categories selection based on filter
   const categoriesSelection =
@@ -91,7 +91,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
 }
 
 export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
-  const supabase = createClient();
+  const supabase = await createClient();
   // const {
   //   data: { session },
   // } = await supabase.auth.getSession();
@@ -161,7 +161,7 @@ export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
 }
 
 export async function getBookmarkNote(filter?: NoteFilter) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   let query = supabase
     .from("notes")
@@ -207,7 +207,7 @@ export async function getBookmarkNote(filter?: NoteFilter) {
 
 export async function increaseView(noteId: string) {
   "use server";
-  const supabase = createClient();
+  const supabase = await createClient();
   const today = new Date().toISOString().split("T")[0];
 
   const { data: note, error: noteError } = await supabase
@@ -263,7 +263,7 @@ export async function increaseView(noteId: string) {
 }
 
 export const isNoteOwner = async (noteId: string) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   if (!user) {
     return { count: 0 };
@@ -284,7 +284,7 @@ export async function getPublishedNotesByProfileId(
   id: string,
   filter?: NoteFilter
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   let query = supabase
     .from("notes")
     .select(
@@ -325,7 +325,7 @@ export async function getUserPublishedNotes(
   userId: string,
   filter?: NoteFilter
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   let query = supabase
     .from("notes")
     .select(
@@ -363,7 +363,7 @@ export async function getUserPublishedNotes(
 }
 
 export async function getRecentNote(count: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await getUser(supabase);
   const { data, error } = await supabase
     .from("notes")
@@ -378,7 +378,7 @@ export async function getRecentNote(count: number) {
 }
 
 export async function getNoteContent(id: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("notes")
     .select(

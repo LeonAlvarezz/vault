@@ -62,8 +62,5 @@ export function shouldCreateAnonymousUser(
   pathname: string,
   routes: string[]
 ): boolean {
-  return (
-    routes.some((route) => pathname.startsWith(route)) ||
-    pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/) !== null
-  );
+  return (routes.some((route) => pathname.startsWith(route)) || pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/) !== null);
 }

@@ -39,9 +39,10 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-export default async function SearchPage({ searchParams }: Props) {
+export default async function SearchPage(props: Props) {
+  const searchParams = await props.searchParams;
   let searchQuery;
 
   if (searchParams && searchParams.query) {

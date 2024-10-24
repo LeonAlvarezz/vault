@@ -11,7 +11,7 @@ import CoverImage from "./edit/feature/cover_image";
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const metadata: Metadata = {
@@ -19,8 +19,9 @@ export const metadata: Metadata = {
   description: "View and manage your personal developer profile on Vault.",
 };
 
-export default async function Page({ searchParams }: Props) {
-  const supabase = createClient();
+export default async function Page(props: Props) {
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
   const user = await getUser(supabase);
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([

@@ -25,7 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const revalidate = 30;
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 const getNote = cache(async (noteId: string) => {
@@ -42,7 +42,8 @@ export async function generateStaticParams() {
     .slice(0, 100);
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const { data: note } = await getNote(params.id);
   return {
     title: note ? note.title : "Vault Note",
@@ -59,7 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function NoteDetailPage({ params }: Props) {
+export default async function NoteDetailPage(props: Props) {
+  const params = await props.params;
   const { count, error } = await isNoteOwner(params.id);
   const isOwner = count && count > 0 ? true : false;
   const { data: note } = await getNote(params.id);

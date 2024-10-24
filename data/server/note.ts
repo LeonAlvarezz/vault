@@ -265,10 +265,13 @@ export async function increaseView(noteId: string) {
 export const isNoteOwner = async (noteId: string) => {
   const supabase = createClient();
   const user = await getUser(supabase);
+  if (!user) {
+    return { count: 0 };
+  }
   const { count, error } = await supabase
     .from("notes")
     .select("*", { count: "exact", head: true })
-    .eq("profile_id", user!.id)
+    .eq("profile_id", user.id)
     .eq("id", noteId);
   if (error) {
     return { count: 0, error };

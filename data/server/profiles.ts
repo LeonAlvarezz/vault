@@ -54,9 +54,6 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  if (error) {
-    redirect("/auth/login");
-  }
 
   return user;
 });

@@ -1,4 +1,5 @@
 import { env } from "@/utils/env";
+import { isProtectedRoute, shouldCreateAnonymousUser } from "@/utils/route";
 import { CookieOptions, createServerClient } from "@supabase/ssr";
 import { NextFetchEvent, NextResponse, type NextRequest } from "next/server";
 
@@ -32,54 +33,44 @@ export async function updateSession(request: NextRequest) {
 
   const createAnonymousUserRoute = ["/note", "/explore"];
 
+  // const { data } = await supabase.auth.getSession();
+  // const user = data.session?.user;
   const { data } = await supabase.auth.getSession();
   const user = data.session?.user;
-
   const { pathname } = url;
-  if (
-    !user &&
-    (createAnonymousUserRoute.some((path) => pathname.startsWith(path)) ||
-      pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/))
-  ) {
+  if (!user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute)) {
     const { error } = await supabase.auth.signInAnonymously();
-
     if (error) {
       console.error("Failed to sign in anonymously:", error);
-      return NextResponse.next(); // You can handle this better, perhaps showing an error page
+      return NextResponse.next();
     }
   }
 
-  const protectedPaths = [
-    "/dashboard",
-    "/note",
-    "/create",
-    "/settings",
-    "/profile",
-    "/bookmark",
-  ];
-
-  // Custom condition to exclude `/note/[id]` and `/profile/[id]` but protect `/note`, `/profile`, and `/profile/edit`
-  const isProtectedPath = protectedPaths.some(
-    (path) =>
-      request.nextUrl.pathname.startsWith(path) &&
-      !(
-        path === "/note" &&
-        request.nextUrl.pathname.match(/^\/note\/[0-9a-fA-F\-]{36}$/)
-      ) &&
-      !(
-        path === "/profile" &&
-        request.nextUrl.pathname.match(/^\/profile\/[0-9a-fA-F\-]{36}$/)
-      ) &&
-      !(path === "/profile" && request.nextUrl.pathname === "/profile/edit")
-  );
-
-  if (
-    ((user?.is_anonymous || !user) &&
-      isProtectedPath &&
-      !request.url.startsWith("/auth")) ||
+  const protectedPaths = {
+    dashboard: "/dashboard",
+    note: {
+      base: "/note",
+      protected: true,
+      exceptions: [/^\/note\/[0-9a-fA-F\-]{36}$/], // UUID pattern
+    },
+    profile: {
+      base: "/profile",
+      protected: true,
+      exceptions: [/^\/profile\/[0-9a-fA-F\-]{36}$/],
+      additionalProtected: ["/profile/edit"],
+    },
+    settings: "/settings",
+    create: "/create",
+    bookmark: "/bookmark",
+  };
+  const needsAuth =
     ((!user || user.is_anonymous) &&
-      request.nextUrl.pathname === "/profile/edit")
-  ) {
+      isProtectedRoute(request.nextUrl.pathname, protectedPaths) &&
+      !request.url.startsWith("/auth")) ||
+    (!user && request.nextUrl.pathname === "/profile/edit");
+
+  if (needsAuth) {
+    console.log("GOING TO LOGIN");
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }
@@ -95,16 +86,16 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  if (
-    url.pathname === "/explore" ||
-    url.pathname.match(/^\/explore\/[^\/]+$/)
-  ) {
-    // Only add the sortBy param if it's not already set
-    if (!url.searchParams.has("sortBy")) {
-      url.searchParams.set("sortBy", "trending");
-      return NextResponse.redirect(url);
-    }
-  }
+  // if (
+  //   url.pathname === "/explore" ||
+  //   url.pathname.match(/^\/explore\/[^\/]+$/)
+  // ) {
+  //   // Only add the sortBy param if it's not already set
+  //   if (!url.searchParams.has("sortBy")) {
+  //     url.searchParams.set("sortBy", "trending");
+  //     return NextResponse.redirect(url);
+  //   }
+  // }
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:

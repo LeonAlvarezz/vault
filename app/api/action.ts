@@ -17,6 +17,7 @@ import { CreateTag } from "@/types/tag.type";
 import { headers } from "next/headers";
 import { env } from "@/utils/env";
 import { getCacheUser } from "@/data/server/profiles";
+import { SearchResult, SearchResultCol } from "@/types/search.type";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -232,7 +233,7 @@ export async function vectorSearch(searchQuery: string) {
       user_id: user!.id,
     })
     .select("*, profiles!notes_profile_id_fkey!inner(*)")
-    .returns<Note>();
+    .returns<SearchResult[]>();
 
   return { notes, error };
 }

@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {
@@ -297,7 +298,7 @@ export default function CommandSearch() {
   return (
     // <div {...bind()}>]
     // </div>
-    (<CommandDialog open={open} onOpenChange={setOpen} shouldFilter={false}>
+    <CommandDialog open={open} onOpenChange={setOpen} shouldFilter={false}>
       {/* {searchLoading && <CommandLoading />} */}
       <CommandInput
         placeholder="Type a command or search..."
@@ -306,12 +307,15 @@ export default function CommandSearch() {
         <div className="flex gap-2">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="size-[24px]">
+              <TooltipTrigger className="size-[24px]" asChild>
                 <Toggle
                   aria-label="Toggle AI"
                   pressed={isVectorSearch}
                   onPressedChange={handleVectorToggle}
-                  className="w-6 h-6 p-1 group hover:bg-neutral-600"
+                  className={cn(
+                    "w-6 h-6 p-1 group hover:bg-neutral-600",
+                    isVectorSearch && "bg-neutral-700/50"
+                  )}
                 >
                   <IoSparklesSharp className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block bg-clip-text" />
                 </Toggle>
@@ -323,12 +327,15 @@ export default function CommandSearch() {
           </TooltipProvider>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="size-[24px]">
+              <TooltipTrigger className="size-[24px]" asChild>
                 <Toggle
                   aria-label="Toggle global"
                   pressed={isGlobal}
                   onPressedChange={handlePressedChange}
-                  className="w-6 h-6 p-1 group hover:bg-neutral-600"
+                  className={cn(
+                    "w-6 h-6 p-1 group hover:bg-neutral-600",
+                    isGlobal && "bg-neutral-700/50"
+                  )}
                 >
                   <RiGlobalLine className="text-neutral-400" />
                 </Toggle>
@@ -346,7 +353,7 @@ export default function CommandSearch() {
             <Spinner size={20} />
           </div>
         )}
-        {isGlobal ? (
+        {isGlobal || isVectorSearch ? (
           <>
             {searchResult.length > 0 && (
               <CommandGroup heading="Global">
@@ -358,7 +365,11 @@ export default function CommandSearch() {
                       setOpen(false);
                       startTransition(async () => {
                         startProgress();
-                        router.push(`/note/${result.id}`);
+
+                        const url = result.published_at
+                          ? `/note/${result.id}`
+                          : `/create/${result.id}`;
+                        router.push(url);
                       });
                     }}
                     isLast={index === searchResult.length - 1}
@@ -396,6 +407,6 @@ export default function CommandSearch() {
             <CommandEmpty>No results found.</CommandEmpty>
           </div>
         ))}
-    </CommandDialog>)
+    </CommandDialog>
   );
 }

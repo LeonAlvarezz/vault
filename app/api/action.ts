@@ -9,9 +9,9 @@ import {
 } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
 import { formatZodIssue } from "@/utils/zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { BlockNode, SaveNotePayload } from "@/types/note.type";
+import { BlockNode, Note, SaveNotePayload } from "@/types/note.type";
 import OpenAI from "openai";
 import { CreateTag } from "@/types/tag.type";
 import { headers } from "next/headers";
@@ -44,6 +44,7 @@ export async function login(formData: unknown) {
 
   if (!error) {
     revalidatePath("/", "layout");
+    revalidateTag("*");
     redirect("/dashboard");
   } else {
     return {
@@ -100,6 +101,7 @@ export async function signup(formData: unknown) {
 
     if (!error) {
       revalidatePath("/", "layout");
+      revalidateTag("*");
       redirect("/auth/login");
     }
   } else {
@@ -143,6 +145,7 @@ export async function signout() {
   }
 
   revalidatePath("/", "layout");
+  revalidateTag("*");
   redirect("/auth/login");
 }
 
@@ -221,19 +224,6 @@ export async function vectorSearch(searchQuery: string) {
   const [{ embedding }] = result.data;
 
   const user = await getCacheUser(supabase);
-  // let query = supabase.rpc("match_notes_global", {
-  //   query_embedding: JSON.stringify(embedding),
-  //   match_threshold: 0.8,
-  //   match_count: 10,
-  //   // user_id: user!.id,
-  // });
-
-  // if (!isGlobal) {
-  //   query = query.eq("profile_id", user!.id);
-  // } else {
-  //   query = query.not("published_at", "is", null).neq("profile_id", user!.id);
-  // }
-
   const { data: notes, error } = await supabase
     .rpc("match_notes_global", {
       query_embedding: JSON.stringify(embedding),
@@ -241,7 +231,8 @@ export async function vectorSearch(searchQuery: string) {
       match_count: 10,
       user_id: user!.id,
     })
-    .select("*");
+    .select("*, profiles!notes_profile_id_fkey!inner(*)")
+    .returns<Note>();
 
   return { notes, error };
 }
@@ -490,6 +481,13 @@ export async function likeNote(noteId: string) {
   //   return { error: authErr };
   // }
   const user = await getCacheUser(supabase);
+  if (!user || user.is_anonymous) {
+    return {
+      error: {
+        message: "You must login to like & bookmark note ",
+      },
+    };
+  }
   //Check if note already like
   const { data: like, error: likeError } = await supabase
     .from("likes")
@@ -497,7 +495,6 @@ export async function likeNote(noteId: string) {
     .eq("profile_id", user!.id)
     .eq("note_id", noteId)
     .single();
-
   if (likeError && likeError.code !== "PGRST116") {
     return { error: likeError };
   }

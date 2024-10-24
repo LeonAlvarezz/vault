@@ -54,10 +54,13 @@ const getUserInternal = async (supabase: SupabaseClient) => {
     data: { user },
     error,
   } = await supabase.auth.getUser();
+  console.log("user:", user?.email);
 
   return user;
 };
 
 export const getCacheUser = cache(
-  unstable_cache(getUserInternal, ["userId"], { tags: ["users"] })
+  unstable_cache(getUserInternal, undefined, {
+    tags: ["users"],
+  })
 );

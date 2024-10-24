@@ -6,7 +6,7 @@ import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "./button";
 import { RiGlobalLine } from "react-icons/ri";
 import { Toggle } from "./toggle";
@@ -37,6 +37,7 @@ const CommandDialog = ({
 }: CommandDialogProps) => {
   return (
     <Dialog {...props}>
+      <DialogTitle className="hidden">Command</DialogTitle>
       <DialogContent className="overflow-hidden p-0 shadow-lg">
         <Command
           shouldFilter={shouldFilter}

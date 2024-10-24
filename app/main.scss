@@ -49,6 +49,9 @@ body {
     color: hsl(var(--second));
     cursor: pointer;
     text-decoration: underline;
+    span {
+      color: hsl(var(--second));
+    }
   }
 
   code {

@@ -39,6 +39,12 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
   const { pathname } = url;
+  // console.log("user in middleware:", user?.email);
+  // !user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute);
+  // console.log(
+  //   "!user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute):",
+  //   !user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute)
+  // );
   if (!user && shouldCreateAnonymousUser(pathname, createAnonymousUserRoute)) {
     const { error } = await supabase.auth.signInAnonymously();
     if (error) {

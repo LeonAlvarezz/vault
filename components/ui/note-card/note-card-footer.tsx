@@ -10,8 +10,8 @@ import { Toggle } from "../toggle";
 import { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "../use-toast";
 import { useProgress } from "react-transition-progress";
-import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
+import { likeNote } from "@/app/api/action";
 type Props = {
   note: Note;
   bookmark?: boolean;

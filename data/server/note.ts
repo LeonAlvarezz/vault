@@ -92,11 +92,6 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
 
 export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
   const supabase = await createClient();
-  // const {
-  //   data: { session },
-  // } = await supabase.auth.getSession();
-  // const user = session?.user;
-
   let query = supabase
     .from("notes")
     .select(
@@ -379,6 +374,10 @@ export async function getRecentNote(count: number) {
 
 export async function getNoteContent(id: string) {
   const supabase = await createClient();
+  const user = await getCacheUser(supabase);
+  if (!user) {
+    return { error: "Something Went Wrong" };
+  }
   const { data, error } = await supabase
     .from("notes")
     .select(
@@ -390,6 +389,7 @@ export async function getNoteContent(id: string) {
   `
     )
     .eq("id", id)
+    .eq("profile_id", user.id)
     .single();
 
   return { data, error };

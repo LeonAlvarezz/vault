@@ -13,7 +13,12 @@ const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
 
   return (
     <NodeViewWrapper>
-      <ImageContainer src={src} alt={alt} blur className="my-4" />
+      <ImageContainer
+        src={src}
+        alt={alt || "User Uploaded Image"}
+        blur
+        className="my-4"
+      />
     </NodeViewWrapper>
   );
 };

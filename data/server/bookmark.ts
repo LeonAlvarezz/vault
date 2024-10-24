@@ -12,6 +12,13 @@ export async function bookmarkNote(noteId: string) {
   const today = new Date().toISOString().split("T")[0];
 
   const user = await getCacheUser(supabase);
+  if (!user || user.is_anonymous) {
+    return {
+      error: {
+        message: "You must login to like & bookmark note ",
+      },
+    };
+  }
   //Check if note already bookmark
   const { data: bookmark, error: bookmarkError } = await supabase
     .from("bookmarks")
@@ -106,6 +113,13 @@ export async function bookmarkNote(noteId: string) {
 export async function getBookmark(filter?: NoteFilter) {
   const supabase = await createClient();
   const user = await getCacheUser(supabase);
+  if (!user || user.is_anonymous) {
+    return {
+      error: {
+        message: "You must login to like & bookmark note ",
+      },
+    };
+  }
   let query = supabase
     .from("bookmarks")
     .select(

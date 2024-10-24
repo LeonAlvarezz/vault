@@ -27,6 +27,5 @@ export async function getNoteMetricLast3Months() {
     return { data: null, error };
   }
 
-  console.log("data:", data);
   return { data, error };
 }

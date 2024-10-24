@@ -44,7 +44,7 @@ export default async function Page(props: Props) {
   }
   return (
     <>
-      <EditNoteForm tags={tags} categories={categories} note={note} />
+      <EditNoteForm tags={tags} categories={categories} note={note!} />
     </>
   );
 }

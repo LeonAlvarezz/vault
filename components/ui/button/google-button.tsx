@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "../button";
 import ImageContainerBlur from "../image-container-blur";
 import { signInWithGoogle } from "@/app/api/action";
+import GoogleIcon from "@/public/image/google.png";
 
 export default function GoogleButton() {
   return (

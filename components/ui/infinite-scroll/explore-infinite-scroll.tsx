@@ -89,36 +89,6 @@ export default function ExploreInfiniteScroll({ notes, searchParams }: Props) {
       className="!overflow-visible mb-10"
     >
       <NoteList notes={noteItems} />
-      {/* <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="flex gap-2 my-6" // Ensure there's a gap between columns
-        columnClassName="my-masonry-grid_column" // Add your own styling here if needed
-      >
-        {noteItems.map((note) =>
-          note.published_at ? (
-            <NoteCardPublished
-              key={note.id}
-              note={note}
-              isBookmark={
-                note.bookmarks &&
-                note.bookmarks.length > 0 &&
-                note.bookmarks[0].deleted_at === null
-                  ? true
-                  : false
-              }
-              isLike={
-                note.likes &&
-                note.likes.length > 0 &&
-                note.likes[0].deleted_at === null
-                  ? true
-                  : false
-              }
-            />
-          ) : (
-            <NoteCard key={note.id} note={note} />
-          )
-        )}
-      </Masonry> */}
     </InfiniteScroll>
   );
 }

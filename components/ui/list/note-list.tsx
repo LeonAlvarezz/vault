@@ -21,15 +21,14 @@ export default function NoteList({ notes, optionButton = false }: Props) {
   if (isLoading) {
     return <NoteSkeleton />;
   }
-
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
       className="flex gap-2 my-6" // Ensure there's a gap between columns
       columnClassName="my-masonry-grid_column" // Add your own styling here if needed
     >
-      {notes?.map((note) =>
-        note.published_at ? (
+      {notes?.map((note) => {
+        return note.published_at ? (
           <NoteCardPublished
             key={note.id}
             note={note}
@@ -51,8 +50,8 @@ export default function NoteList({ notes, optionButton = false }: Props) {
           />
         ) : (
           <NoteCard key={note.id} note={note} />
-        )
-      )}
+        );
+      })}
     </Masonry>
   );
 }

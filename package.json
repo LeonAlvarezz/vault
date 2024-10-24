@@ -69,14 +69,13 @@
     "react-photo-view": "^1.2.6",
     "react-swipeable": "^7.0.1",
     "react-transition-progress": "^0.0.4",
-    "recharts": "^2.12.7",
+    "recharts": "^2.13.0",
     "sass": "^1.77.6",
     "sharp": "^0.33.5",
     "shiki": "^1.18.0",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "tiptap-extension-code-block-shiki": "^0.4.0",
     "use-debounce": "^10.0.3",
     "use-detect-keyboard-open": "^0.4.0",
     "zod": "^3.23.8",
@@ -94,6 +93,7 @@
   },
   "resolutions": {
     "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "react-is": "^19.0.0-beta-26f2496093-20240514"
   }
 }

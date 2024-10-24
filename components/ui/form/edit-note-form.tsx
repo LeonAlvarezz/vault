@@ -226,7 +226,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     const setEditorContent = () => {
       if (note && editorRef.current?.editor) {
         try {
-          // Ensure that the editor is fully initialized before setting content
+          // eslint-disable-next-line react/no-unused-prop-types
           editorRef.current.editor.commands.setContent(note.content as Content);
         } catch (error) {
           toast({
@@ -248,7 +248,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
 
     // Clear the interval if the component unmounts
     return () => clearInterval(interval);
-  }, [editorRef, note, toast]);
+  }, [editorRef, note]);
 
   useEffect(() => {
     const initialValues: CreateNoteFormValues = {

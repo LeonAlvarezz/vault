@@ -22,7 +22,7 @@ type Props = {
   // id: string;
   note: Note;
 };
-export default async function RenderWithTiptap({ data, note }: Props) {
+export default function RenderWithTiptap({ data, note }: Props) {
   const editor = useEditor({
     shouldRerenderOnTransaction: false,
     editable: false,

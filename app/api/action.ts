@@ -16,7 +16,7 @@ import OpenAI from "openai";
 import { CreateTag } from "@/types/tag.type";
 import { headers } from "next/headers";
 import { env } from "@/utils/env";
-import { getUser } from "@/data/server/profiles";
+import { getCacheUser } from "@/data/server/profiles";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -220,7 +220,7 @@ export async function vectorSearch(searchQuery: string) {
 
   const [{ embedding }] = result.data;
 
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   // let query = supabase.rpc("match_notes_global", {
   //   query_embedding: JSON.stringify(embedding),
   //   match_threshold: 0.8,
@@ -307,7 +307,7 @@ export async function editProfile(id: string, formData: unknown) {
 
 export const getProfile = async () => {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
 
   const { data, error } = await supabase
     .from("profiles")
@@ -338,7 +338,7 @@ export async function deleteTag(id: number) {
 
 export async function createTags(payload: CreateTag) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const { data, error } = await supabase
     .from("tags")
     .insert({ name: payload.name, profile_id: user!.id })
@@ -353,7 +353,7 @@ export async function createTags(payload: CreateTag) {
 
 export const updateUserCover = async (cover_url: string) => {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const { error } = await supabase
     .from("profiles")
     .update({ cover_url: cover_url })
@@ -485,11 +485,11 @@ export async function likeNote(noteId: string) {
   // const {
   //   data: { user },
   //   error: authErr,
-  // } = await supabase.auth.getUser();
+  // } = await supabase.auth.getCacheUser();
   // if (authErr) {
   //   return { error: authErr };
   // }
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   //Check if note already like
   const { data: like, error: likeError } = await supabase
     .from("likes")

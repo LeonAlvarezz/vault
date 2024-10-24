@@ -4,14 +4,14 @@ import { createClient } from "@/lib/supabase/server";
 import { NoteFilter } from "@/types/note.type";
 import { constructSearchQuery } from "@/utils/string";
 import { searchBookmarkNote } from "./search";
-import { getUser } from "./profiles";
+import { getCacheUser } from "./profiles";
 
 export async function bookmarkNote(noteId: string) {
   const supabase = await createClient();
   let action;
   const today = new Date().toISOString().split("T")[0];
 
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   //Check if note already bookmark
   const { data: bookmark, error: bookmarkError } = await supabase
     .from("bookmarks")
@@ -105,7 +105,7 @@ export async function bookmarkNote(noteId: string) {
 
 export async function getBookmark(filter?: NoteFilter) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   let query = supabase
     .from("bookmarks")
     .select(

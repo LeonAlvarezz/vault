@@ -3,7 +3,7 @@ import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
-import { getProfile, getUser } from "@/data/server/profiles";
+import { getProfile, getCacheUser } from "@/data/server/profiles";
 import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([
       getProfile(),

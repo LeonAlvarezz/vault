@@ -1,7 +1,6 @@
 // "use client";
 import { cn } from "@/lib/utils";
 import { Link } from "react-transition-progress/next";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import AboutTab from "../_feature/about-tab";
 import NoteTab from "../_feature/note-tab";

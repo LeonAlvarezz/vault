@@ -8,11 +8,11 @@ import {
 import { constructSearchQuery } from "@/utils/string";
 import { CURSOR_LIMIT } from "../client/note";
 import { User } from "@supabase/supabase-js";
-import { getUser } from "./profiles";
+import { getCacheUser } from "./profiles";
 
 export async function getNoteById(id: string) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   let query = supabase
     .from("notes")
     .select(
@@ -32,7 +32,7 @@ export async function getNoteById(id: string) {
 
 export async function getAllNotesByProfileId(filter?: NoteFilter) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   // Determine the categories selection based on filter
   const categoriesSelection =
     filter && filter.category && filter.category !== "all"
@@ -162,7 +162,7 @@ export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
 
 export async function getBookmarkNote(filter?: NoteFilter) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   let query = supabase
     .from("notes")
     .select(
@@ -264,7 +264,7 @@ export async function increaseView(noteId: string) {
 
 export const isNoteOwner = async (noteId: string) => {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   if (!user) {
     return { count: 0 };
   }
@@ -364,7 +364,7 @@ export async function getUserPublishedNotes(
 
 export async function getRecentNote(count: number) {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const { data, error } = await supabase
     .from("notes")
     .select("*")

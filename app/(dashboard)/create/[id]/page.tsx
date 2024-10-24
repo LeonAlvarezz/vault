@@ -6,7 +6,7 @@ import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React, { cache, useCallback, useEffect, useRef, useState } from "react";
+import React, { cache } from "react";
 
 export type CreateNoteFormValues = {
   title: string;

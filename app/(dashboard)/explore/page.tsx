@@ -8,7 +8,7 @@ import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
 import { Metadata } from "next";
 import ExploreInfiniteScroll from "@/components/ui/infinite-scroll/explore-infinite-scroll";
 import { createClient } from "@/lib/supabase/server";
-import { getUser } from "@/data/server/profiles";
+import { getCacheUser } from "@/data/server/profiles";
 
 const ORDER = [
   {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 export default async function NotePage(props: Props) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const [{ data: notes }, { data: categories }] = await Promise.all([
     getNoteExplore(user, searchParams as NoteFilter),
     getAllCategories(),

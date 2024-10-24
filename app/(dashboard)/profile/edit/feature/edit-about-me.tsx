@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { Profile } from "@/types/profiles.type";
 import { Content } from "@tiptap/react";
 type Props = {
-  editorRef: RefObject<TiptapEditorRef>;
+  editorRef: RefObject<TiptapEditorRef | null>;
   profile: Profile;
 };
 export default function EditAboutMeSection({ editorRef, profile }: Props) {

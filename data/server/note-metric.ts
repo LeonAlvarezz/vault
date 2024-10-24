@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { getUser } from "./profiles";
+import { getCacheUser } from "./profiles";
 
 export async function getNoteSummary() {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
 
   const { data, error } = await supabase
     .rpc("get_note_summary", { user_id: user!.id })
@@ -18,7 +18,7 @@ export async function getNoteSummary() {
 
 export async function getNoteMetricLast3Months() {
   const supabase = await createClient();
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   const { data, error } = await supabase
     .rpc("get_note_chart_data", { user_id: user!.id })
     .select("*");
@@ -26,5 +26,7 @@ export async function getNoteMetricLast3Months() {
   if (error) {
     return { data: null, error };
   }
+
+  console.log("data:", data);
   return { data, error };
 }

@@ -28,6 +28,9 @@ export default function EditProfileForm({ profile }: Props) {
     profile.avatar_url || null
   );
   const handleSubmit = async (formData: FormData) => {
+    const serializableContent = JSON.stringify(
+      editorRef.current?.editor?.getJSON()
+    );
     const data: EditProfile = {
       username: formData.get("username")?.toString() || undefined,
       githubLink: formData.get("githubLink")?.toString() || undefined,
@@ -36,17 +39,11 @@ export default function EditProfileForm({ profile }: Props) {
       bios: formData.get("bios")?.toString(),
       occupation: formData.get("occupation")?.toString(),
       avatar_url: imagePreview || undefined,
-      aboutMe: editorRef.current?.editor?.getJSON(),
+      aboutMe: JSON.parse(serializableContent),
     };
     const response = await editProfile(profile.id, data);
     if (response?.error) {
       setErrors(response.error as ZodFormattedError<EditProfile>);
-      //   toast({
-      //     title: "Login Error!",
-      //     description: response.error,
-      //     variant: "destructive",
-      //     duration: 1500,
-      //   });
     } else {
       toast({
         title: "Successfully Edit Profile",

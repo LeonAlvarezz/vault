@@ -110,8 +110,6 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
 
       const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
       const { publicUrl, error } = await uploadImage(compressedImage);
-      console.log("error:", error);
-
       if (error) {
         editor!
           .chain()

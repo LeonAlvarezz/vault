@@ -17,13 +17,14 @@ import BulletList from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
-import { EditorEvents, mergeAttributes } from "@tiptap/core";
+import { EditorEvents, JSONContent, mergeAttributes } from "@tiptap/core";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { CustomImageExtension } from "./TipTapImage";
 import { uploadImage } from "@/data/client/image";
 import { CodeBlockExtension } from "./CustomCodeBlock";
 import CodeBlock from "@tiptap/extension-code-block";
+import { Json } from "@/database.types";
 
 export interface TiptapEditorRef {
   editor: ReturnType<typeof useEditor> | null;
@@ -33,11 +34,12 @@ interface TiptapEditorProps {
   onUpdate?: (props: EditorEvents["update"]) => void;
   onFocus: () => void;
   onBlur?: () => void;
+  onChange?: () => void;
 }
 
 const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
   (props, ref) => {
-    const { onUpdate, onFocus, onBlur } = props;
+    const { onUpdate, onFocus, onBlur, onChange } = props;
     const editorRef = useRef<HTMLDivElement>(null);
     const [hasScrolledUp, setHasScrolledUp] = useState(false);
 
@@ -141,6 +143,10 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
           editor={editor}
           className="text-sm"
           spellCheck={false}
+          // defaultValue={
+          //   content as string | number | readonly string[] | undefined
+          // }
+          // readOnly
         />
       </div>
     );

@@ -200,7 +200,7 @@ export const MultiSelect = React.forwardRef<
     };
 
     return (
-      <Popover
+      (<Popover
         open={isPopoverOpen}
         onOpenChange={setIsPopoverOpen}
         modal={modalPopover}
@@ -304,19 +304,6 @@ export const MultiSelect = React.forwardRef<
                 {options.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
                   return (
-                    <CommandItem
-                      key={option.value}
-                      value={option.value}
-                      onSelect={() => toggleOption(option.value)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          isSelected ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {option.label}
-                    </CommandItem>
                     // <CommandItem
                     //   key={option.value}
                     //   onSelect={() => toggleOption(option.value)}
@@ -337,6 +324,19 @@ export const MultiSelect = React.forwardRef<
                     //   )}
                     //   <span>{option.label}</span>
                     // </CommandItem>
+                    (<CommandItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={() => toggleOption(option.value)}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          isSelected ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {option.label}
+                    </CommandItem>)
                   );
                 })}
               </CommandGroup>
@@ -370,7 +370,7 @@ export const MultiSelect = React.forwardRef<
             onClick={() => setIsAnimating(!isAnimating)}
           />
         )}
-      </Popover>
+      </Popover>)
     );
   }
 );

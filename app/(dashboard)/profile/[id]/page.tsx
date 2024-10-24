@@ -9,10 +9,12 @@ import { getPublishedNotesByProfileId } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
-  params: { id: string };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<{ id: string }>;
 };
-export default async function AccountPage({ searchParams, params }: Props) {
+export default async function AccountPage(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const [
     { data: profile, error: profileError },
     { data: notes, error: noteError },

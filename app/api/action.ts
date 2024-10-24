@@ -16,14 +16,14 @@ import OpenAI from "openai";
 import { CreateTag } from "@/types/tag.type";
 import { headers } from "next/headers";
 import { env } from "@/utils/env";
-import { getUser } from "@/data/server/profiles";
+import { getCacheUser } from "@/data/server/profiles";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
 });
 
 export async function login(formData: unknown) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const result = LoginSchema.safeParse(formData);
   if (!result.success) {
     let errorMessage = "";
@@ -52,7 +52,7 @@ export async function login(formData: unknown) {
   }
 }
 export async function signup(formData: unknown) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const result = SignupSchema.safeParse(formData);
 
   if (!result.success) {
@@ -135,7 +135,7 @@ export async function signup(formData: unknown) {
 }
 
 export async function signout() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
 
   if (error) {
@@ -153,7 +153,7 @@ export async function revalidatePathClient(path: string) {
 /*Vector Search OPENAI*/
 
 export async function saveNote(payload: SaveNotePayload) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const result = await openai.embeddings.create({
     input: payload.title + payload.content_text,
@@ -211,7 +211,7 @@ export async function saveNote(payload: SaveNotePayload) {
 }
 
 export async function vectorSearch(searchQuery: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const result = await openai.embeddings.create({
     input: searchQuery,
@@ -220,7 +220,7 @@ export async function vectorSearch(searchQuery: string) {
 
   const [{ embedding }] = result.data;
 
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   // let query = supabase.rpc("match_notes_global", {
   //   query_embedding: JSON.stringify(embedding),
   //   match_threshold: 0.8,
@@ -247,7 +247,7 @@ export async function vectorSearch(searchQuery: string) {
 }
 
 export async function deleteSearch(id: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.from("searches").delete().match({ id });
   if (error) {
@@ -258,7 +258,7 @@ export async function deleteSearch(id: number) {
 }
 
 export async function deleteNote(id: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase.from("notes").delete().match({ id });
   if (error) {
@@ -269,7 +269,7 @@ export async function deleteNote(id: string) {
 }
 
 export async function editProfile(id: string, formData: unknown) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const result = EditProfileSchema.safeParse(formData);
   if (!result.success) {
     // result.error.issues.forEach((issue) => {
@@ -306,8 +306,8 @@ export async function editProfile(id: string, formData: unknown) {
 }
 
 export const getProfile = async () => {
-  const supabase = createClient();
-  const user = await getUser(supabase);
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
 
   const { data, error } = await supabase
     .from("profiles")
@@ -322,7 +322,7 @@ export const getProfile = async () => {
 };
 
 export async function deleteTag(id: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error: authErr } = await supabase.auth.getUser();
 
   if (authErr) {
@@ -337,8 +337,8 @@ export async function deleteTag(id: number) {
 }
 
 export async function createTags(payload: CreateTag) {
-  const supabase = createClient();
-  const user = await getUser(supabase);
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
   const { data, error } = await supabase
     .from("tags")
     .insert({ name: payload.name, profile_id: user!.id })
@@ -352,8 +352,8 @@ export async function createTags(payload: CreateTag) {
 }
 
 export const updateUserCover = async (cover_url: string) => {
-  const supabase = createClient();
-  const user = await getUser(supabase);
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
   const { error } = await supabase
     .from("profiles")
     .update({ cover_url: cover_url })
@@ -366,7 +366,7 @@ export const updateUserCover = async (cover_url: string) => {
 };
 //TODO: REFINE THIS BETTER
 export const isUserAuthenticated = async (checkAnon: boolean) => {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -385,8 +385,8 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
 };
 
 export const signInWithGoogle = async () => {
-  const origin = headers().get("origin");
-  const supabase = createClient();
+  const origin = (await headers()).get("origin");
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -432,7 +432,7 @@ export const signInWithGoogle = async () => {
 };
 
 export const registerUsername = async (formData: unknown) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const result = RegisterUsernameSchema.safeParse(formData);
   if (!result.success) {
     return {
@@ -478,18 +478,18 @@ export const registerUsername = async (formData: unknown) => {
 };
 
 export async function likeNote(noteId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   let action;
   const today = new Date().toISOString().split("T")[0];
 
   // const {
   //   data: { user },
   //   error: authErr,
-  // } = await supabase.auth.getUser();
+  // } = await supabase.auth.getCacheUser();
   // if (authErr) {
   //   return { error: authErr };
   // }
-  const user = await getUser(supabase);
+  const user = await getCacheUser(supabase);
   //Check if note already like
   const { data: like, error: likeError } = await supabase
     .from("likes")

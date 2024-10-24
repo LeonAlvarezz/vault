@@ -1,4 +1,3 @@
-import { redirect, usePathname } from "next/navigation";
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FaEye } from "react-icons/fa";
@@ -15,6 +14,7 @@ import {
 } from "@/data/server/note-metric";
 import { getRecentNote } from "@/data/server/note";
 import { Metadata } from "next";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata: Metadata = {
   title: "Vault - Dashboard",

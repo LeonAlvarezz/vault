@@ -11,6 +11,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import {} from "@/context/categorization-context";
 import { ProgressBar, ProgressBarProvider } from "react-transition-progress";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { createClient } from "@/lib/supabase/server";
+import { getCacheUser } from "@/data/server/profiles";
 
 // const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
@@ -25,7 +27,7 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

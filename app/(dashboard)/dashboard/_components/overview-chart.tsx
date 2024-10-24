@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -18,6 +18,9 @@ import {
 import { NoteChartData, NoteMetric } from "@/types/note-metric.type";
 
 export const description = "An interactive bar chart";
+// const BarChart = RechartsBarChart as React.ComponentType<
+//   React.ComponentProps<typeof RechartsBarChart>
+// >;
 const mockData = [
   {
     date: "10/10/2024",
@@ -89,6 +92,7 @@ export function OverviewChart({ metrics }: Props) {
                   });
                 }}
               />
+              <YAxis />
               <ChartTooltip
                 content={
                   <ChartTooltipContent

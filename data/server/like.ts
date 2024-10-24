@@ -2,7 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 //NOT USING
 export async function likeNote(noteId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   let action;
   const today = new Date().toISOString().split("T")[0];
 

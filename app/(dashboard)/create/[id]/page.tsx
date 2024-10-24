@@ -6,7 +6,7 @@ import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React, { cache, useCallback, useEffect, useRef, useState } from "react";
+import React, { cache } from "react";
 
 export type CreateNoteFormValues = {
   title: string;
@@ -16,7 +16,7 @@ export type CreateNoteFormValues = {
   cover: string;
 };
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 const getNote = cache(async (noteId: string) => {
@@ -24,13 +24,15 @@ const getNote = cache(async (noteId: string) => {
   return { data, error };
 });
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const { data: note } = await getNote(params.id);
   return {
     title: note ? `Vault - ${note.title}` : "Vault",
   };
 }
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const [
     { data: note, error: noteError },
     { data: tags },

@@ -3,7 +3,7 @@ import ImageContainerBlur from "@/components/ui/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";
-import { getProfile, getUser } from "@/data/server/profiles";
+import { getProfile, getCacheUser } from "@/data/server/profiles";
 import { getUserPublishedNotes } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
@@ -11,7 +11,7 @@ import CoverImage from "./edit/feature/cover_image";
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const metadata: Metadata = {
@@ -19,9 +19,10 @@ export const metadata: Metadata = {
   description: "View and manage your personal developer profile on Vault.",
 };
 
-export default async function Page({ searchParams }: Props) {
-  const supabase = createClient();
-  const user = await getUser(supabase);
+export default async function Page(props: Props) {
+  const searchParams = await props.searchParams;
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
   const [{ data: profile, error }, { data: notes, error: noteError }] =
     await Promise.all([
       getProfile(),

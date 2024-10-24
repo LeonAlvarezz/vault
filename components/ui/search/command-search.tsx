@@ -296,9 +296,9 @@ export default function CommandSearch() {
 
   return (
     // <div {...bind()}>]
-    <CommandDialog open={open} onOpenChange={setOpen} shouldFilter={false}>
+    // </div>
+    (<CommandDialog open={open} onOpenChange={setOpen} shouldFilter={false}>
       {/* {searchLoading && <CommandLoading />} */}
-
       <CommandInput
         placeholder="Type a command or search..."
         onValueChange={handleInputChange}
@@ -396,7 +396,6 @@ export default function CommandSearch() {
             <CommandEmpty>No results found.</CommandEmpty>
           </div>
         ))}
-    </CommandDialog>
-    // </div>
+    </CommandDialog>)
   );
 }

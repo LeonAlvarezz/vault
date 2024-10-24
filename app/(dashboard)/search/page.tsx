@@ -28,7 +28,7 @@ import { getAllCategories } from "@/data/client/category";
 import { NoteFilter } from "@/types/note.type";
 import { deleteSearch } from "@/app/api/action";
 import { Metadata } from "next";
-import { getUser } from "@/data/server/profiles";
+import { getCacheUser } from "@/data/server/profiles";
 import { createClient } from "@/lib/supabase/server";
 import SearchLogContainer from "@/components/ui/search/search-log-container";
 
@@ -39,16 +39,17 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-export default async function SearchPage({ searchParams }: Props) {
+export default async function SearchPage(props: Props) {
+  const searchParams = await props.searchParams;
   let searchQuery;
 
   if (searchParams && searchParams.query) {
     searchQuery = constructSearchQuery(searchParams.query.toString(), "|");
   }
-  const supabase = createClient();
-  const user = await getUser(supabase);
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
 
   const [
     { data: notes, error },

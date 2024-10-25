@@ -4,7 +4,7 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 import { cn } from "@/lib/utils";
 import NextImage from "next/image";
 import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";
-import ImageContainer from "../ui/image-container";
+import ImageContainerBlurClient from "../ui/image/image-container-blur-client";
 import { useEffect, useState } from "react";
 
 // Define a React component to handle image rendering
@@ -13,7 +13,7 @@ const CustomImage = ({ node, updateAttributes }: NodeViewProps) => {
 
   return (
     <NodeViewWrapper>
-      <ImageContainer
+      <ImageContainerBlurClient
         src={src}
         alt={alt || "User Uploaded Image"}
         blur

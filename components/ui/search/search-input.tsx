@@ -16,6 +16,7 @@ import { sanitizeSearchInput } from "@/utils/string";
 import { User } from "@supabase/supabase-js";
 import { useDebouncedCallback } from "use-debounce";
 import { useProgress } from "react-transition-progress";
+import KeyboardKey from "../keyboard-key/keyboard-key";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchKey?: string;
@@ -115,6 +116,9 @@ export default function SearchInput({
         value={query}
         onChange={handleChange}
       />
+      <div className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none hidden sm:inline-flex select-none items-center gap-1 rounded ">
+        <KeyboardKey />
+      </div>
 
       <div className="absolute top-1/2 -translate-y-1/2 right-2 w-fit flex gap-1 items-center">
         {query.length > 0 && (

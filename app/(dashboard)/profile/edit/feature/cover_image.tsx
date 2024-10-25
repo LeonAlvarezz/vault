@@ -1,7 +1,7 @@
 "use client";
 import { updateUserCover } from "@/app/api/action";
 import UploadButton from "@/components/ui/button/upload-button";
-import ImageContainer from "@/components/ui/image-container";
+import ImageContainerBlurClient from "@/components/ui/image/image-container-blur-client";
 import { toast } from "@/components/ui/use-toast";
 import { uploadImage } from "@/data/client/image";
 import { compressImage, toBase64 } from "@/lib/image";
@@ -55,13 +55,13 @@ export default function CoverImage({ profile }: Props) {
   return (
     <div className="relative">
       {imagePreviewUrl ? (
-        <ImageContainer
+        <ImageContainerBlurClient
           src={imagePreviewUrl}
           alt="cover-image"
           className="overflow-hidden h-[150px] w-full opacity-80"
         />
       ) : (
-        <ImageContainer
+        <ImageContainerBlurClient
           src="/image/default-cover1.png"
           alt="default-cover"
           className="overflow-hidden h-[150px] w-full opacity-80"

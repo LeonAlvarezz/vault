@@ -57,7 +57,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
           codeBlock: false,
         }),
         Placeholder.configure({
-          placeholder: "Content goes here...",
+          placeholder: "Write something here...",
         }),
         BulletList.configure({
           keepMarks: true,
@@ -130,7 +130,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     if (!editor) {
       return (
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full items-center h-full">
           <AiOutlineLoading3Quarters className="animate-spin" size={20} />
         </div>
       );

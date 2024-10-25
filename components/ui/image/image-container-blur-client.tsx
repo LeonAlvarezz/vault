@@ -5,12 +5,13 @@ import Image from "next/image";
 import { env } from "process";
 import React, { useEffect, useState } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "../skeleton";
 
 type Props = {
   src: string;
   alt?: string;
   className?: string;
+  skeletonHeight?: string;
   objectFit?: "cover" | "contain";
   preview?: boolean;
   blur?: boolean;
@@ -42,13 +43,14 @@ const handleClick = (e: React.MouseEvent) => {
   // Optional: Do something here if you want
 };
 
-export default function ImageContainer({
+export default function ImageContainerBlurClient({
   src,
   alt = "",
   className,
   objectFit = "cover",
   preview = true,
   blur = false,
+  skeletonHeight,
 }: Props) {
   // const blurPlaceholder = useBlurPlaceholder(src, blur);
   const imageProps = {
@@ -69,7 +71,7 @@ export default function ImageContainer({
   }, []);
 
   if (loading) {
-    return <Skeleton className="w-full h-32" />;
+    return <Skeleton className={cn("w-full", skeletonHeight)} />;
   }
 
   return (

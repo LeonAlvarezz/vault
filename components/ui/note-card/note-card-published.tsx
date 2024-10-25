@@ -1,16 +1,11 @@
 import React from "react";
-import ImageContainerBlur from "../image-container-blur";
 import Tag from "../tag";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 import { Link } from "react-transition-progress/next";
 import NoteCardFooter from "./note-card-footer";
-import { BlockNode, Note } from "@/types/note.type";
-import { renderNoteDescription } from "@/lib/renderNote";
-// import { likeNote } from "@/data/server/like";
-import { revalidatePath } from "next/cache";
-import { bookmarkNote } from "@/data/server/bookmark";
-import ImageContainer from "../image-container";
-import { likeNote } from "@/app/api/action";
+import { Note } from "@/types/note.type";
+
+import ImageContainerBlurClient from "../image/image-container-blur-client";
 type Props = {
   note: Note;
   optionButton?: boolean;
@@ -29,7 +24,7 @@ export default function NoteCardPublished({
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform mb-2"
     >
       {note?.cover_url && (
-        <ImageContainer
+        <ImageContainerBlurClient
           className="h-[200px] overflow-hidden rounded-sm bg-neutral-900 aspect-video "
           src={note.cover_url}
           alt={note.title}

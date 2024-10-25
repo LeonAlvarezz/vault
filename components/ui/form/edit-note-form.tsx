@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import BackButton from "../button/back-button";
 import CreateNoteDropdownMenu from "../dropdown/create-note-dropdown";
-import ImageContainer from "../image-container";
+import ImageContainerBlurClient from "../image/image-container-blur-client";
 import UploadButton from "../button/upload-button";
 import { FaImage, FaPen } from "react-icons/fa";
 import { Input } from "../input";
@@ -330,7 +330,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
         </div>
         {imagePreviewUrl && (
           <div className="relative bg-neutral-800 mb-2">
-            <ImageContainer
+            <ImageContainerBlurClient
               src={imagePreviewUrl}
               className="h-20 opacity-50"
               preview={false}

@@ -1,11 +1,11 @@
 import React from "react";
-import ImageContainer from "../image-container";
+import ImageContainerBlurClient from "../image/image-container-blur-client";
 import { Link } from "react-transition-progress/next";
 
 export default function NotAvailable() {
   return (
     <div className="flex flex-col gap-4 items-center ">
-      <ImageContainer
+      <ImageContainerBlurClient
         src="/image/not-available.svg"
         alt="empty"
         className="size-[200px] opacity-80"

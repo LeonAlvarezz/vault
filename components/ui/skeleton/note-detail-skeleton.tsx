@@ -9,9 +9,6 @@ export default function NoteDetailSkeleton() {
     <div className="flex gap-2 flex-col">
       <div className="flex justify-between items-center">
         <BackButton />
-        <Button disabled variant={"icon"} size={"icon"} className="w-5 h-5">
-          <FaPen size={12} />
-        </Button>
       </div>
       <Skeleton className="w-[300px] h-[30px]" />
       <Skeleton className="w-[100px] h-[20px]" />

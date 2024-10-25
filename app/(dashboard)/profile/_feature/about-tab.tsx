@@ -1,5 +1,5 @@
 import Render from "@/components/tiptap/Render";
-import ImageContainerBlur from "@/components/ui/image-container-blur";
+import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import NotAvailable from "@/components/ui/not-availble";
 import { Profile } from "@/types/profiles.type";
 import React from "react";

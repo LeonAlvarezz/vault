@@ -1,6 +1,5 @@
 import React from "react";
-import ImageContainerBlur from "../image-container-blur";
-import ImageContainer from "../image-container";
+import ImageContainerBlurClient from "../image/image-container-blur-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { formatDate } from "@/lib/date";
 import { SearchResultCol } from "@/types/search.type";
@@ -18,7 +17,7 @@ export default function SearchResultColumn({ searchResult }: Props) {
       className="grid grid-cols-4 gap-4 px-2 items-center rounded-sm h-32 hover:bg-neutral-700/50 hover:cursor-pointer"
     >
       {searchResult.cover_url && (
-        <ImageContainer
+        <ImageContainerBlurClient
           src={searchResult.cover_url}
           alt="placeholder"
           className="h-32"

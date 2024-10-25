@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import ImageContainerBlur from "@/components/ui/image-container-blur";
+import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import React from "react";
 import TabView from "../_component/tab-view";
 import ContactButton from "@/components/ui/button/contact-button";

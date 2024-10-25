@@ -1,4 +1,4 @@
-import ImageContainerBlur from "@/components/ui/image-container-blur";
+import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import {
   BlockNode,
   NOTE_CONTENT_TYPE,
@@ -38,7 +38,7 @@ export function renderNote(node: BlockNode): JSX.Element {
         language: language,
       }).value;
       return (
-        <div>
+        <>
           <div className="w-full bg-neutral-800 flex justify-between px-2 rounded-tr-sm rounded-tl-sm">
             <div className="flex gap-10 items-center">
               <p className="text-[10px] text-neutral-500">
@@ -54,7 +54,7 @@ export function renderNote(node: BlockNode): JSX.Element {
           <pre className={`language-${language} mt-0`}>
             <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
           </pre>
-        </div>
+        </>
       );
 
     case NOTE_CONTENT_TYPE.BULLET_LIST:

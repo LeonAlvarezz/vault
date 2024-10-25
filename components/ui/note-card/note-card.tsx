@@ -1,20 +1,10 @@
 import React, { MouseEvent } from "react";
-import { FaRegHeart } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
-import { Button } from "../button";
 import { Link } from "react-transition-progress/next";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import Tag from "../tag";
-import { SlOptionsVertical } from "react-icons/sl";
-import { useRouter } from "next/navigation";
-import NoteCardPublished from "./note-card-published";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
-import { BlockNode, Note } from "@/types/note.type";
-import { renderNote, renderNoteDescription } from "@/lib/renderNote";
+import { Note } from "@/types/note.type";
 import { formatDate } from "@/lib/date";
-import ImageContainerBlur from "../image-container-blur";
-import { isContentArray } from "@/utils/string";
-import ImageContainer from "../image-container";
+import ImageContainerBlurClient from "../image/image-container-blur-client";
 type NoteCardProps = {
   note?: Note;
   bookmark?: boolean;
@@ -58,7 +48,7 @@ export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
       className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] border-neutral-700 duration-500  transition-all mb-2"
     >
       {note?.cover_url && (
-        <ImageContainer
+        <ImageContainerBlurClient
           className="h-[200px] bg-neutral-900 overflow-hidden rounded-sm mb-2 object-contain"
           src={note?.cover_url}
           objectFit="cover"

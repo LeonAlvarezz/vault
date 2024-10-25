@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ImageContainerBlur from "@/components/ui/image-container-blur";
+import ImageContainerBlur from "@/components/ui/image/image-container-blur";
 import React, { Suspense } from "react";
 import EditProfileDropdownMenu from "@/components/ui/dropdown/edit-profile-dropdown";
 import TabView from "./_component/tab-view";

@@ -1,7 +1,6 @@
 import React from "react";
 import SearchInput from "@/components/ui/search/search-input";
 import { getNoteExplore } from "@/data/server/note";
-import ImageContainer from "@/components/ui/image-container";
 import { NoteFilter } from "@/types/note.type";
 import { getAllCategories } from "@/data/client/category";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
@@ -9,6 +8,7 @@ import { Metadata } from "next";
 import ExploreInfiniteScroll from "@/components/ui/infinite-scroll/explore-infinite-scroll";
 import { createClient } from "@/lib/supabase/server";
 import { getCacheUser } from "@/data/server/profiles";
+import ImageContainerBlurClient from "@/components/ui/image/image-container-blur-client";
 
 const ORDER = [
   {
@@ -86,7 +86,7 @@ export default async function NotePage(props: Props) {
           style={{ minHeight: "calc(100svh - 280px)" }}
         >
           <div className="flex flex-col gap-4 items-center ">
-            <ImageContainer
+            <ImageContainerBlurClient
               src="/image/empty-note.svg"
               alt="empty"
               className="size-[100px] opacity-80"

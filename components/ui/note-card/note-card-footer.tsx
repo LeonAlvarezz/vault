@@ -16,8 +16,14 @@ type Props = {
   note: Note;
   bookmark?: boolean;
   like?: boolean;
+  noInteraction?: boolean;
 };
-export default function NoteCardFooter({ note, bookmark, like }: Props) {
+export default function NoteCardFooter({
+  note,
+  bookmark,
+  like,
+  noInteraction = false,
+}: Props) {
   const { toast } = useToast();
   const router = useRouter();
   const [isLikePending, startLikeTransition] = useTransition();
@@ -124,31 +130,40 @@ export default function NoteCardFooter({ note, bookmark, like }: Props) {
         </div>
       </div>
       <div className="flex gap-1 items-end">
-        <Toggle
-          aria-label="Toggle like"
-          onClick={handleToggleLike}
-          className="p-0 h-fit"
-          disabled={isLikePending} // Optionally disable the button while the transition is in progress
-        >
-          {isLikePending || isLike ? (
-            <IoIosHeart size={20} className="text-red-500 hover:opacity-50" />
-          ) : (
-            <IoIosHeartEmpty size={20} className="hover:text-red-500" />
-          )}
-        </Toggle>
-
-        <Toggle
-          aria-label="Toggle bookmark"
-          onClick={handleToggleBookmark}
-          className="p-0 h-fit "
-          disabled={isBookmarkPending} // Optionally disable the button while the transition is in progress
-        >
-          {isBookmarkPending || isBookmark ? (
-            <IoBookmark size={20} className="text-blue-500 hover:opacity-50" />
-          ) : (
-            <IoBookmarkOutline size={20} className="hover:text-blue-500" />
-          )}
-        </Toggle>
+        {!noInteraction && (
+          <>
+            <Toggle
+              aria-label="Toggle like"
+              onClick={handleToggleLike}
+              className="p-0 h-fit"
+              disabled={isLikePending} // Optionally disable the button while the transition is in progress
+            >
+              {isLikePending || isLike ? (
+                <IoIosHeart
+                  size={20}
+                  className="text-red-500 hover:opacity-50"
+                />
+              ) : (
+                <IoIosHeartEmpty size={20} className="hover:text-red-500" />
+              )}
+            </Toggle>
+            <Toggle
+              aria-label="Toggle bookmark"
+              onClick={handleToggleBookmark}
+              className="p-0 h-fit "
+              disabled={isBookmarkPending} // Optionally disable the button while the transition is in progress
+            >
+              {isBookmarkPending || isBookmark ? (
+                <IoBookmark
+                  size={20}
+                  className="text-blue-500 hover:opacity-50"
+                />
+              ) : (
+                <IoBookmarkOutline size={20} className="hover:text-blue-500" />
+              )}
+            </Toggle>
+          </>
+        )}
       </div>
     </div>
   );

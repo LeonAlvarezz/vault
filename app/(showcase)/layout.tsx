@@ -1,3 +1,4 @@
+import Footer from "@/components/ui/footer";
 import Nav from "@/components/ui/Nav";
 import React, { Suspense } from "react";
 
@@ -9,9 +10,10 @@ export default function LayoutPage({
   return (
     <>
       <Nav />
-      <main className="mx-auto w-[90%] sm:w-[70%] min-h-svh sm:min-h-screen">
+      <main className="mx-auto w-[90%] sm:w-[70%] lg:w-[55%] min-h-svh sm:min-h-screen">
         {children}
       </main>
+      <Footer />
     </>
   );
 }

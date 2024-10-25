@@ -4,7 +4,7 @@ import React from "react";
 import Masonry from "react-masonry-css";
 export const breakpointColumnsObj = {
   default: 2,
-  500: 1,
+  900: 3,
 };
 
 export default function PreviewExplore() {
@@ -12,7 +12,6 @@ export default function PreviewExplore() {
     <Masonry
       breakpointCols={breakpointColumnsObj}
       className="flex gap-2 scale-110 relative right-4" // Ensure there's a gap between columns
-      columnClassName="my-masonry-grid_column" // Add your
     >
       <div className="bg-gradient-to-br from-neutral-900/20 to-neutral-900 absolute top-0 left-0 w-full h-[500px] z-20"></div>
 
@@ -26,7 +25,7 @@ export default function PreviewExplore() {
           Building Interactive Charts in Next.js with Shadcn
         </p>
         <p className="text-[10px] text-neutral-500 line-clamp-2 mt-1">
-          Learn how to integrate Shadcn's UI components with Next.js to create
+          Learn how to integrate Shadcn UI components with Next.js to create
           responsive, dynamic charts for real-time data visualization.
         </p>
       </div>

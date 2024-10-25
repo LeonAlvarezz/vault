@@ -15,7 +15,7 @@ export default function LinkButton({ href, className, label }: Props) {
         className
       )}
     >
-      <p className="text-xs font-semibold">{label}</p>
+      <p className="text-sm font-semibold">{label}</p>
     </Link>
   );
 }

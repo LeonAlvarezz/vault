@@ -17,7 +17,7 @@ export default function PreviewSearch() {
       </div>
       <Separator className="my-2" />
       <div className="py-1.5">
-        <p className="text-xs">What's NextJS</p>
+        <p className="text-xs">{`What's NextJS`}</p>
         <p className="text-[10px] text-neutral-600">John Doe</p>
       </div>
       <Separator className="my-1" />

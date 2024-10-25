@@ -292,7 +292,7 @@ body {
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   /*bg color*/
-  background: #292a2e;
+  background: rgb(23 23 23 / var(--tw-bg-opacity));
   /*box border radius*/
   border-radius: 7px;
 }

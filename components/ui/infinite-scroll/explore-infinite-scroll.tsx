@@ -11,7 +11,7 @@ import Masonry from "react-masonry-css";
 import NoteList from "@/components/ui/list/note-list";
 
 export const breakpointColumnsObj = {
-  default: 3,
+  default: 4,
   1400: 2,
   500: 1,
 };

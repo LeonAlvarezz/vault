@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { cache, Suspense } from "react";
 import { getAllNotesByProfileId } from "@/data/server/note";
 import { getAllCategories } from "@/data/client/category";
 import { FilterCombobox } from "@/components/ui/combobox/filter-combobox";
@@ -9,9 +9,9 @@ import CategorySwipe from "./_component/category-swipe";
 import NoteSkeleton from "@/components/ui/skeleton/note-skeleton";
 import NoNote from "@/components/ui/error/no-note";
 import SearchInputLocal from "@/components/ui/search/search-input-local";
-import NoteList from "../../../components/ui/list/note-list";
 import { Metadata } from "next";
-import { Skeleton } from "@/components/ui/skeleton";
+import { unstable_cache } from "next/cache";
+import NoteList from "@/components/ui/list/note-list";
 const STATUS = [
   {
     value: "all",
@@ -28,7 +28,7 @@ const STATUS = [
 ];
 
 type Props = {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
 export const metadata: Metadata = {
@@ -36,8 +36,7 @@ export const metadata: Metadata = {
   description: "Create, edit, and publish your developer notes on Vault.",
 };
 
-export default async function NotePage(props: Props) {
-  const searchParams = await props.searchParams;
+export default async function NotePage({ searchParams }: Props) {
   const [{ data: notes }, { data: categories }, { data: tags }] =
     await Promise.all([
       getAllNotesByProfileId(searchParams as NoteFilter),
@@ -68,7 +67,6 @@ export default async function NotePage(props: Props) {
           options={STATUS}
           defaultValue={searchParams?.status as string}
           label="All Note"
-          size="md"
         />
         <MultiFilterCombobox
           filterKey={"tags"}
@@ -76,11 +74,12 @@ export default async function NotePage(props: Props) {
           options={tagsOption || []}
           placeholder="Tags"
           maxCount={1}
-          size="md"
         />
       </div>
       {notes && notes.length > 0 ? (
-        <NoteList notes={notes} optionButton />
+        <Suspense fallback={<NoteSkeleton />}>
+          <NoteList notes={notes} optionButton />
+        </Suspense>
       ) : (
         <div
           className="w-full flex justify-center items-center"

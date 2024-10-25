@@ -394,3 +394,22 @@ export async function getNoteContent(id: string) {
 
   return { data, error };
 }
+
+export async function getHighlightNote() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("notes")
+    .select("*, profile:profiles!notes_profile_id_fkey!inner(*)")
+    .not("published_at", "is", null)
+    .neq("cover_url", "")
+    .limit(9)
+    .order("like", { ascending: false })
+    .order("view", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return { data: null, error };
+  }
+
+  return { data, error };
+}

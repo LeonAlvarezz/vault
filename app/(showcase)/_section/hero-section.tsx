@@ -8,8 +8,11 @@ import SampleEditor from "../_feature/sample-editor";
 
 export default function HeroSection() {
   return (
-    <section style={{ minHeight: "calc(100svh - 50px)" }} className="relative ">
-      <div className="w-[70%] text-center mx-auto pt-10 md:pt-20 flex items-center flex-col gap-4 ">
+    <section
+      style={{ minHeight: "calc(100svh - 50px)" }}
+      className="relative flex flex-col items-center justify-center"
+    >
+      <div className="w-[70%] text-center mx-auto flex items-center flex-col gap-4 ">
         <h1 className="text-4xl font-bold">
           Your All-in-One Developer Knowledge{" "}
           <span className="underline text-second">Vault</span>
@@ -52,7 +55,7 @@ export default function HeroSection() {
         />
       </div>
       <div className="lg:flex hidden justify-end mt-4">
-        <div className="flex gap-2 w-fit md:px-20 xl:px-32">
+        <div className="flex gap-2 w-fit relative left-52">
           <ImageContainer
             src={SquigglyArrow}
             alt="squiggly-arrow"

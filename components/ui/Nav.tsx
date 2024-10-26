@@ -9,7 +9,7 @@ import HamburgerMenu from "./menu/hamburger-menu";
 
 export default function Nav() {
   return (
-    <nav className="bg-popover w-full h-14 flex items-center justify-between px-6 sm:px-20">
+    <nav className="bg-950/50 w-full h-14 flex items-center justify-between px-6 sm:px-20">
       {/* <Image src={}>
 
       </Image> */}

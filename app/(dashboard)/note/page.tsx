@@ -28,7 +28,7 @@ const STATUS = [
 ];
 
 type Props = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const metadata: Metadata = {
@@ -37,9 +37,10 @@ export const metadata: Metadata = {
 };
 
 export default async function NotePage({ searchParams }: Props) {
+  const params = await searchParams;
   const [{ data: notes }, { data: categories }, { data: tags }] =
     await Promise.all([
-      getAllNotesByProfileId(searchParams as NoteFilter),
+      getAllNotesByProfileId(params as NoteFilter),
       getAllCategories(),
       getTags(),
     ]);
@@ -55,22 +56,19 @@ export default async function NotePage({ searchParams }: Props) {
     <>
       <SearchInputLocal />
       <div className="flex mt-4 justify-between">
-        <CategorySwipe
-          categories={categories || []}
-          searchParams={searchParams}
-        />
+        <CategorySwipe categories={categories || []} searchParams={params} />
       </div>
 
       <div className="mt-4 flex gap-2">
         <FilterCombobox
           filterKey={"status"}
           options={STATUS}
-          defaultValue={searchParams?.status as string}
+          defaultValue={params?.status as string}
           label="All Note"
         />
         <MultiFilterCombobox
           filterKey={"tags"}
-          defaultValue={(searchParams?.tags as string[]) || []}
+          defaultValue={(params?.tags as string[]) || []}
           options={tagsOption || []}
           placeholder="Tags"
           maxCount={1}

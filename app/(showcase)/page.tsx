@@ -24,17 +24,14 @@ export default async function page() {
   const { data: notes } = await getHighlightNote();
   return (
     <div className="flex flex-col gap-4">
-      <div className="bg-main size-72 rounded-full blur-3xl opacity-10 absolute -right-10 bottom-0 -z-10"></div>
-      <div className="bg-main size-72 rounded-full blur-3xl opacity-10 absolute -left-16 top-10 -z-10"></div>
       <HeroSection />
       <FeatureSection />
-      <div className="bg-main size-72 rounded-full blur-3xl opacity-10 absolute -right-10 bottom-0 -z-10"></div>
-      <div className="bg-main size-72 rounded-full blur-3xl opacity-10 absolute -left-16 top-10 -z-10"></div>
+
       <NoteHighlightSection notes={notes} />
-      <section className="w-full mb-52">
+      <section className="bg-red-500/10 min-h-fit section-center mb-40">
         <div className="relative overflow-hidden bg-neutral-900 border border-neutral-700/50 animated-border-box -z-10">
           <div className=" flex flex-col  sm:flex-row p-10 justify-between w-full items-center ">
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-semibold">
               Capture Insights Today, Empower Tomorrow
             </h1>
             <div className="flex gap-4 w-full mt-4 sm:mt-0 justify-start sm:justify-end">

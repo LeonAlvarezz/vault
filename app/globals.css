@@ -86,4 +86,8 @@ body {
   body {
     @apply bg-app_background text-foreground;
   }
+
+  .section-center {
+    @apply mx-auto w-[90%] sm:w-[70%] lg:w-[55%] min-h-[90vh] sm:min-h-screen;
+  }
 }

@@ -5,7 +5,7 @@ import { RiGlobalLine } from "react-icons/ri";
 
 export default function PreviewSearch() {
   return (
-    <div className="max-h-[250px] w-full border border-neutral-700/50  p-3 rounded-sm relative overflow-hidden animated-border-box scale-[1.1] preview-search">
+    <div className="max-h-[300px] !w-[450px] border border-neutral-700/50 p-3 rounded-sm overflow-hidden lg:mt-0 mt-4 animated-border-box preview-search absolute  lg:left-0 left-24">
       <div className="bg-gradient-to-b from-neutral-900/30 to-neutral-900/100 absolute top-0 left-0 w-full h-full z-20"></div>
 
       <div className="flex gap-2 justify-between items-center">

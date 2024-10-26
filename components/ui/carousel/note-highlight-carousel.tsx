@@ -13,7 +13,7 @@ type Props = {
 };
 export default function NoteHighlightCarousel({ notes }: Props) {
   return (
-    <Carousel className="w-full relative h-fit">
+    <Carousel className="w-[80%] lg:w-full relative h-fit">
       <CarouselContent className="-ml-2 ">
         {notes?.map((note, index) => (
           <CarouselItem key={index} className="pl-2 md:basis-1/2 2xl:basis-1/3">

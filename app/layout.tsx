@@ -41,7 +41,7 @@ export default async function RootLayout({
     >
       <body
         className={cn(
-          "dark:bg-app_background bg-app_background overflow-x-hidden",
+          "dark:bg-app_background bg-app_background",
           font.className
         )}
       >

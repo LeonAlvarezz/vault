@@ -297,12 +297,11 @@ body {
   border-radius: 7px;
 }
 .preview-search {
-  transform: rotateX(20deg) rotateY(340deg) scale(1.25);
+  transform: rotateX(20deg) rotateY(340deg);
 }
 .mask-bottom {
   background: linear-gradient(to bottom, var(--mask-visible) 30%, var(--mask-invisible) 80%);
 }
-
 @keyframes rotate {
   100% {
     transform: translate(-50%, -50%) rotate(1turn);

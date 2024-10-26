@@ -9,33 +9,35 @@ import React from "react";
 
 export default function LoginPage() {
   return (
-    <div className="w-full mx-auto lg:w-[70%] xl:w-[50%] flex flex-col min-h-svh sm:min-h-screen justify-center items-center">
-      <div className="text-center leading-loose">
-        <h1 className="text-balance text-2xl font-bold">
-          Welcome Back to Vault
-        </h1>
-        <p className="text-sm mt-2 text-neutral-400">
-          New to Vault?{" "}
-          <Link
-            href={"/auth/signup"}
-            className="text-second underline hover:text-second/80 font-bold"
-          >
-            Sign Up
-          </Link>
-        </p>
+    <div className="section-center !min-h-[calc(100vh-56px)]">
+      <div className="w-full mx-auto lg:w-[70%] xl:w-[50%] flex flex-col justify-center !min-h-[calc(100vh-56px)] items-center">
+        <div className="text-center leading-loose">
+          <h1 className="text-balance text-2xl font-bold">
+            Welcome Back to Vault
+          </h1>
+          <p className="text-sm mt-2 text-neutral-400">
+            New to Vault?{" "}
+            <Link
+              href={"/auth/signup"}
+              className="text-second underline hover:text-second/80 font-bold"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 mt-6 w-full ">
+          <GoogleButton />
+          {/* <GithubButton /> */}
+        </div>
+        <Separator className="my-6" />
+        <LoginForm />
+        <Link
+          className="mt-6 text-sm hover:text-second"
+          href={"/forgot-password"}
+        >
+          Forget Password?
+        </Link>
       </div>
-      <div className="flex flex-col gap-2 mt-6 w-full ">
-        <GoogleButton />
-        {/* <GithubButton /> */}
-      </div>
-      <Separator className="my-6" />
-      <LoginForm />
-      <Link
-        className="mt-6 text-sm hover:text-second"
-        href={"/forgot-password"}
-      >
-        Forget Password?
-      </Link>
     </div>
   );
 }

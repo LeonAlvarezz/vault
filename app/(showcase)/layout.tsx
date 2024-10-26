@@ -1,5 +1,5 @@
 import Footer from "@/components/ui/footer";
-import Nav from "@/components/ui/Nav";
+import Navbar from "@/components/ui/nav/nav-bar";
 import React, { Suspense } from "react";
 
 export default function LayoutPage({
@@ -9,7 +9,7 @@ export default function LayoutPage({
 }>) {
   return (
     <>
-      <Nav />
+      <Navbar />
       <main>{children}</main>
       <Footer />
     </>

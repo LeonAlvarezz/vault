@@ -2,12 +2,13 @@ import React from "react";
 import Logo from "@/public/image/logo.png";
 import ThemeSwitch from "@/theme/ThemeSwitch";
 import Image from "next/image";
-import ImageContainerBlur from "./image/image-container-blur";
+import ImageContainerBlur from "../image/image-container-blur";
 import Link from "next/link";
-import { Button } from "./button";
-import HamburgerMenu from "./menu/hamburger-menu";
+import { Button } from "../button";
+import HamburgerMenu from "../menu/hamburger-menu";
+import NavbarItem from "./nav-bar-item";
 
-export default function Nav() {
+export default function Navbar() {
   return (
     <nav className="bg-950/50 w-full h-14 flex items-center justify-between px-6 sm:px-20">
       {/* <Image src={}>
@@ -16,14 +17,7 @@ export default function Nav() {
       <div className="hidden sm:flex items-center justify-between w-full">
         <div className="flex gap-10 items-center">
           <ImageContainerBlur src={Logo} alt="logo" className="h-8" />
-          <div className="flex gap-10">
-            <Link href="/" className="text-sm hover:text-second">
-              Home
-            </Link>
-            <Link href="/pricing" className="text-sm hover:text-second ">
-              Pricing
-            </Link>
-          </div>
+          <NavbarItem />
         </div>
         <Link
           href={"/dashboard"}

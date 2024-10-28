@@ -60,6 +60,7 @@
     "openai": "^4.67.3",
     "plaiceholder": "^3.0.0",
     "react": "19.0.0-rc-69d4b800-20241021",
+    "react-confetti": "^6.1.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "react-hook-form": "^7.53.0",

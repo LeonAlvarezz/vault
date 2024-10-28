@@ -6,6 +6,7 @@ import {
   LoginSchema,
   RegisterUsernameSchema,
   SignupSchema,
+  SUBCRIPTION_TIER,
 } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
 import { formatZodIssue } from "@/utils/zod";
@@ -605,5 +606,14 @@ export async function likeNote(noteId: string) {
 }
 
 export async function updateSubscription() {
-  console.log("++++++SUBSCRIBE+++++++");
+  const supabase = await createClient();
+  const user = await getCacheUser(supabase);
+  const { error } = await supabase
+    .from("profiles")
+    .update({ subscription_tier: SUBCRIPTION_TIER.PREMIUM })
+    .match({ id: user!.id });
+  if (error) {
+    return { error };
+  }
+  return { error: null };
 }

@@ -17,19 +17,12 @@ import {
   FaUpload,
 } from "react-icons/fa";
 import { LuHeading1, LuHeading2 } from "react-icons/lu";
-
 import { TbBlockquote } from "react-icons/tb";
 import { MdFormatListBulleted } from "react-icons/md";
 import { Button } from "./button";
-import {
-  Editor,
-  mergeAttributes,
-  useCurrentEditor,
-  useEditor,
-} from "@tiptap/react";
+import { Editor } from "@tiptap/react";
 import { cn } from "@/lib/utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import LinkModal from "./modal/link-modal";
 import UploadButton from "./button/upload-button";
 import { uploadImage } from "@/data/client/image";
 import { useToast } from "./use-toast";

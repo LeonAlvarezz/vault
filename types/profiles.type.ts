@@ -2,6 +2,11 @@ import { Json } from "@/database.types";
 import { JSONContent } from "@tiptap/react";
 import { z } from "zod";
 
+export enum SUBCRIPTION_TIER {
+  FREE = "free",
+  PREMIUM = "premium",
+}
+
 export type Profile = {
   aboutMe: Json | null;
   auth_id: string;

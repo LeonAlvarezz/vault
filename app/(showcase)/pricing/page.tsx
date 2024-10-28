@@ -65,7 +65,10 @@ export default function PricingPage() {
             </ul>
           </div>
           {/* TODO Change to use real payment link */}
-          <LinkButton href={env.STRIPE_PAYMENT_LINK} label="Upgrade Now" />
+          <LinkButton
+            href={env.STRIPE_PREMIUM_TIER_PAYMENT_LINK}
+            label="Upgrade Now"
+          />
         </div>
       </div>
     </section>

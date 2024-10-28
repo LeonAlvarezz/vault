@@ -50,7 +50,7 @@ export default function ShareModal({ children, note }: ShareModalProps) {
             <Input
               variant={"outline"}
               className="w-full rounded-r-none"
-              value={notePath}
+              defaultValue={notePath}
             />
             <CopyButton text={notePath} />
           </div>

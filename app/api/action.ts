@@ -251,8 +251,12 @@ export async function deleteSearch(id: number) {
 
 export async function deleteNote(id: string) {
   const supabase = await createClient();
+  const now = new Date().toISOString();
 
-  const { error } = await supabase.from("notes").delete().match({ id });
+  const { error } = await supabase
+    .from("notes")
+    .update({ deleted_at: now })
+    .match({ id });
   if (error) {
     return { error };
   }

@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,17 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { MdPublish, MdModeEdit, MdSave } from "react-icons/md";
 import ShareModal from "../modal/share-modal";
 import { IoShareSocial } from "react-icons/io5";
+import { Note } from "@/types/note.type";
+import ConfirmPublishDialog from "../dialog/confirm-publish-dialog";
 type Props = {
   handleSave: () => Promise<void>;
-  setOpenConfirmDialog: Dispatch<SetStateAction<boolean>>;
+  note: Note | null;
+  category: string;
 };
 export default function CreateNoteDropdownMenu({
   handleSave,
-  setOpenConfirmDialog,
+  note,
+  category,
 }: Props) {
   return (
     <DropdownMenu>
@@ -31,21 +35,21 @@ export default function CreateNoteDropdownMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
-        <DropdownMenuItem
-          className="p-0"
-          onClick={() => {
-            setOpenConfirmDialog(true);
-          }}
-        >
-          <Button
-            variant={"icon"}
-            type="button"
-            className="  p-2 w-full flex items-center justify-start h-full font-normal hover:bg-neutral-700/50 text-neutral-300"
+        <ConfirmPublishDialog note={note} category={category}>
+          <DropdownMenuItem
+            className="p-0"
+            onSelect={(e) => e.preventDefault()}
           >
-            <MdPublish className="mr-2 h-4 w-4" />
-            <p className="whitespace-nowrap">Publish</p>
-          </Button>
-        </DropdownMenuItem>
+            <Button
+              variant={"icon"}
+              type="button"
+              className="  p-2 w-full flex items-center justify-start h-full font-normal hover:bg-neutral-700/50 text-neutral-300"
+            >
+              <MdPublish className="mr-2 h-4 w-4" />
+              <p className="whitespace-nowrap">Publish</p>
+            </Button>
+          </DropdownMenuItem>
+        </ConfirmPublishDialog>
         <ShareModal>
           <DropdownMenuItem
             className="p-0"

@@ -23,7 +23,8 @@ export async function getNoteById(id: string) {
   if (user) {
     query = query
       .eq("likes.profile_id", user!.id)
-      .eq("bookmarks.profile_id", user!.id);
+      .eq("bookmarks.profile_id", user!.id)
+      .is("deleted_at", null);
   }
   const { data, error } = await query.single();
 
@@ -85,7 +86,7 @@ export async function getAllNotesByProfileId(filter?: NoteFilter) {
     return { data, error };
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query.is("deleted_at", null);
 
   return { data, error };
 }
@@ -150,7 +151,9 @@ export async function getNoteExplore(user: User | null, filter?: NoteFilter) {
     return { data, error };
   }
 
-  const { data, error } = await query.limit(CURSOR_LIMIT);
+  const { data, error } = await query
+    .is("deleted_at", null)
+    .limit(CURSOR_LIMIT);
 
   return { data, error };
 }
@@ -195,7 +198,7 @@ export async function getBookmarkNote(filter?: NoteFilter) {
     return { data, error };
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query.is("deleted_at", null);
 
   return { data, error };
 }
@@ -312,7 +315,7 @@ export async function getPublishedNotesByProfileId(
     }
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query.is("deleted_at", null);
   return { data, error };
 }
 
@@ -353,7 +356,7 @@ export async function getUserPublishedNotes(
     }
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query.is("deleted_at", null);
   return { data, error };
 }
 
@@ -390,6 +393,7 @@ export async function getNoteContent(id: string) {
     )
     .eq("id", id)
     .eq("profile_id", user.id)
+    .is("deleted_at", null)
     .single();
 
   return { data, error };
@@ -400,6 +404,7 @@ export async function getHighlightNote() {
   const { data, error } = await supabase
     .from("notes")
     .select("*, profile:profiles!notes_profile_id_fkey!inner(*)")
+    .is("deleted_at", null)
     .not("published_at", "is", null)
     .neq("cover_url", "")
     .limit(9)

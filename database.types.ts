@@ -147,7 +147,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "note_metric_note_id_fkey"
+            foreignKeyName: "note_metrics_note_id_fkey"
             columns: ["note_id"]
             isOneToOne: false
             referencedRelation: "notes"

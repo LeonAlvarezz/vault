@@ -6,6 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../dialog";
 import { Button } from "../button";
 import { Input } from "../input";
@@ -19,18 +20,14 @@ import { FaSpinner } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useFormContext } from "react-hook-form";
 type Props = {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
   note?: Note | null;
-  refresh?: () => Promise<void>;
   category: string;
+  children: React.ReactNode;
 };
 export default function ConfirmPublishDialog({
-  open,
-  setOpen,
   note,
   category,
-  refresh,
+  children,
 }: Props) {
   const [notePath, setNotePath] = useState("");
   const { toast } = useToast();
@@ -124,9 +121,12 @@ export default function ConfirmPublishDialog({
     }
   };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
-        <DialogTitle>Confirm Publish Note</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>Confirm Publish Note</DialogTitle>
+        </DialogHeader>
         <p className="text-sm text-neutral-200">
           Upon confirm publish, your note will be visible to everyone and you
           will be able to share your note through the link
@@ -141,13 +141,13 @@ export default function ConfirmPublishDialog({
           <CopyButton text={notePath} disabled={note?.published_at === null} />
         </div>
         <DialogFooter className="mt-4">
-          <Button
+          {/* <Button
             variant={"outline"}
             type="button"
-            onClick={() => setOpen(false)}
+            // onClick={() => setOpen(false)}
           >
             Cancel
-          </Button>
+          </Button> */}
           {!note?.published_at ? (
             <Button variant={"main"} type="button" onClick={handlePublishNote}>
               {loading && (

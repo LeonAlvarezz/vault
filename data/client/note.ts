@@ -130,6 +130,7 @@ export async function getAllAvailableNoteForParams() {
   let query = supabase
     .from("notes")
     .select("id")
+    .is("deleted_at", null)
     .not("published_at", "is", null);
 
   const { data } = await query;
@@ -200,6 +201,6 @@ export async function getCursorNote(filter: NoteFilter, from = 0, to = 20) {
   //   return { data, error };
   // }
 
-  const { data, error } = await query.range(from, to);
+  const { data, error } = await query.is("deleted_at", null).range(from, to);
   return { data, error };
 }

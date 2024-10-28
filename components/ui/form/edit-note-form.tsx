@@ -49,7 +49,6 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
   const inputRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [formattedCategories, setFormattedCategories] = useState<
@@ -325,7 +324,8 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           <BackButton />
           <CreateNoteDropdownMenu
             handleSave={handleSubmit(handleSaveNote)}
-            setOpenConfirmDialog={setOpenConfirmDialog}
+            note={note}
+            category={selectedCategory}
           />
         </div>
         {imagePreviewUrl && (
@@ -390,13 +390,13 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           />
         )}
 
-        <ConfirmPublishDialog
+        {/* <ConfirmPublishDialog
           open={openConfirmDialog}
           setOpen={setOpenConfirmDialog}
           note={note}
           category={selectedCategory}
           //   refresh={handleGetNoteContent}
-        />
+        /> */}
       </form>
       <div
         className={cn(

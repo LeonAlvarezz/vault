@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import LinkButton from "@/components/ui/button/link-button";
 import { Separator } from "@/components/ui/separator";
 import { FREE_TIER, PREMIUM_TIER } from "@/constant/pricing";
+import { env } from "@/utils/env";
 import Link from "next/link";
 import React from "react";
 import { FaCheck } from "react-icons/fa6";
@@ -64,7 +65,7 @@ export default function PricingPage() {
             </ul>
           </div>
           {/* TODO Change to use real payment link */}
-          <LinkButton href="/dashboard" label="Upgrade Now" />
+          <LinkButton href={env.STRIPE_PAYMENT_LINK} label="Upgrade Now" />
         </div>
       </div>
     </section>

@@ -603,3 +603,7 @@ export async function likeNote(noteId: string) {
   }
   return { error: null };
 }
+
+export async function updateSubscription() {
+  console.log("++++++SUBSCRIBE+++++++");
+}

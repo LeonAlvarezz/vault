@@ -314,7 +314,7 @@ async function POST(request: Request) {
   }
 }
 
-async function GET(request: Request, response: Response) {
+async function GET() {
   // Bad Request or how ever you want to respond.
   return new Response(JSON.stringify({ error: "Bad Request" }), {
     status: 400, // Changed to 500, indicating a server error

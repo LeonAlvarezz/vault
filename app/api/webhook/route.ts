@@ -17,6 +17,7 @@ import { updateSubscription } from "../action";
 import { redirect } from "next/dist/server/api-utils";
 import { SUBCRIPTION_TIER } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 type EventName =
   // Checkout: https://stripe.com/docs/payments/checkout
@@ -313,9 +314,11 @@ async function POST(request: Request) {
   }
 }
 
-async function GET(request: NextApiRequest, response: NextApiResponse) {
+async function GET(request: Request, response: Response) {
   // Bad Request or how ever you want to respond.
-  return response.status(400).json({ error: "Bad Request" });
+  return new Response(JSON.stringify({ error: "Bad Request" }), {
+    status: 400, // Changed to 500, indicating a server error
+  });
 }
 
 export { POST, GET };

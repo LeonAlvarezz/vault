@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cache } from "react";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
+import { CACHE_TAG, dbCache, getUserTag } from "@/lib/cache";
 
 const insertUser = async (id: string, payload: InsertUserPayload) => {
   const supabase = await createClient();
@@ -54,13 +55,17 @@ const getUserInternal = async (supabase: SupabaseClient) => {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  console.log("user:", user?.email);
-
   return user;
 };
+export const getCacheUser = cache(async (supabase: SupabaseClient) => {
+  const user = await getUserInternal(supabase);
+  return user;
+});
 
-export const getCacheUser = cache(
-  unstable_cache(getUserInternal, undefined, {
-    tags: ["users"],
-  })
-);
+// export const getCacheUser = async (supabase: SupabaseClient) =>  {
+//   const cacheFn = dbCache(getUserInternal, {
+//     tag: [getUserTag(userId, CACHE_TAG.users)]
+//   })
+
+//   return cacheFn(supabase);
+// };

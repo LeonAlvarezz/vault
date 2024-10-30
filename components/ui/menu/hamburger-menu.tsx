@@ -33,7 +33,7 @@ export default function HamburgerMenu() {
             Pricing
           </Link>
           <LinkButton
-            href="/pricing"
+            href="/dashboard"
             label="Go to Dashboard"
             className="text-xl hover:text-second font-bold"
           />

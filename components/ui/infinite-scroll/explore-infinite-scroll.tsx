@@ -12,6 +12,7 @@ import NoteList from "@/components/ui/list/note-list";
 
 export const breakpointColumnsObj = {
   default: 4,
+  1980: 3,
   1400: 2,
   500: 1,
 };

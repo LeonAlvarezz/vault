@@ -5,6 +5,8 @@ const envSchema = zod.object({
   NEXT_PUBLIC_SITE_URL: zod.string().min(1),
   STRIPE_PREMIUM_TIER_PAYMENT_LINK: zod.string().min(1),
   STRIPE_WEBHOOK_SECRET: zod.string().min(1),
+  STRIPE_SECRET_KEY: zod.string().min(1),
+  SUPABASE_SERVER_ROLE_KEY: zod.string().min(1),
   // OPENAI_API_KEY: zod.string().min(1),
 });
 

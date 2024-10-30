@@ -13,6 +13,7 @@ import { ProgressBar, ProgressBarProvider } from "react-transition-progress";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { createClient } from "@/lib/supabase/server";
 import { getCacheUser } from "@/data/server/profiles";
+import ConfigWindow from "@/components/ui/god-mode/config-window";
 
 // const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
@@ -53,6 +54,7 @@ export default async function RootLayout({
           </ProgressBarProvider>
         </ThemeProviders>
         <Toaster />
+        {/* <ConfigWindow /> */}
         <SpeedInsights />
         <GoogleAnalytics gaId="G-3MYVYZ3JNY" />
       </body>

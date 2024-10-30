@@ -5,15 +5,17 @@ import { login } from "@/app/api/action";
 import SubmitButton from "../button/submit-button";
 import { toast, useToast } from "../use-toast";
 import { z } from "zod";
-
-export default function LoginForm() {
+type Props = {
+  returnUrl?: string | string[] | undefined;
+};
+export default function LoginForm({ returnUrl }: Props) {
   const { toast } = useToast();
   async function userLogin(formData: FormData) {
     const data = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    const response = await login(data);
+    const response = await login(data, returnUrl);
     if (response?.error) {
       toast({
         title: "Login Error!",

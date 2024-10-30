@@ -3,6 +3,7 @@ import SettingGeneral from "./_feature/setting-general";
 import SettingNotification from "./_feature/setting-notification";
 import SettingLanguage from "./_feature/setting-language";
 import { Metadata } from "next";
+import SettingSubscription from "./_feature/setting-subscription";
 
 export const metadata: Metadata = {
   title: "Vault - Settings",
@@ -15,6 +16,7 @@ export default function SettingPage() {
     <div className="flex flex-col gap-20">
       <SettingGeneral />
       <SettingNotification />
+      <SettingSubscription />
       {/* <SettingLanguage /> */}
     </div>
   );

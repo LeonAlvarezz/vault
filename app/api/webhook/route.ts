@@ -15,6 +15,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { env } from "@/utils/env";
 import { updateSubscription } from "../action";
 import { redirect } from "next/dist/server/api-utils";
+import { SUBCRIPTION_TIER } from "@/types/profiles.type";
+import { createClient } from "@/lib/supabase/server";
 
 type EventName =
   // Checkout: https://stripe.com/docs/payments/checkout
@@ -44,26 +46,31 @@ type EventName =
   | "customer.subscription.resumed";
 
 async function handleStripeWebhook(body: any) {
-  const id = body.data?.object?.id;
-  const obj = body.data?.object?.object;
-  const stat = body.data?.object?.status;
-  const payment_intent = body.data?.object?.payment_intent;
-  const user = body.data?.object?.metadata?.userId;
+  //   const id = body.data?.object?.id;
+  //   const obj = body.data?.object?.object;
+  //   const stat = body.data?.object?.status;
+  //   const payment_intent = body.data?.object?.payment_intent;
+  //   const user = body.data?.object?.metadata?.userId;
+  const cid = body.data?.object?.client_reference_id as string;
   const type = body.type;
+  //   console.log("user:", user);
+  //   console.log("webhook type --->", type);
+  //   console.log("id --->", id);
+  //   console.log("obj --->", obj);
+  //   console.log("stat --->", stat);
+  //   console.log("payment_intent --->", payment_intent);
 
+  //   console.table(body.data?.object);
   // console.log everything above REMOVE BEFORE PRODUCTION.
   //   console.log("mode --->", mode);
-  console.log("webhook type --->", type);
-  console.log("id --->", id);
-  console.log("obj --->", obj);
-  console.log("stat --->", stat);
   //   console.log("status --->", status);
-  console.log("payment_intent --->", payment_intent);
   //   console.log("subId --->", subId);
   //   console.log("stripeInvoiceId --->", stripeInvoiceId);
   //   console.log("user --->", user);
   //   console.log("meta --->", meta);
   //   console.log("stripe_invoice --->", stripe_invoice);
+
+  const supabase = await createClient(env.SUPABASE_SERVER_ROLE_KEY);
 
   // Switch on the event type.
   switch (type) {
@@ -90,12 +97,9 @@ async function handleStripeWebhook(body: any) {
      */
     case "charge.succeeded":
       // logic to handle successful charges.
-      updateSubscription();
-      const fullUrl = `http://localhost:3000/success`;
-      return Response.redirect(fullUrl, 302); // ensure a 302 HTTP redirect
-    //   return new Response(JSON.stringify({ message: "Payment completed!" }), {
-    //     status: 200,
-    //   });
+      return new Response(JSON.stringify({ message: "Payment completed!" }), {
+        status: 200,
+      });
     /*
      * =~~~~~~~~~~~~~~~~~~~~~~~=
      * Charge: Refunded.
@@ -132,66 +136,15 @@ async function handleStripeWebhook(body: any) {
       return new Response(JSON.stringify({ message: "Payment Updated!" }), {
         status: 200,
       });
-    /*
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * Charge Dispute: Created.
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * This is the webhook that is fired when a dispute is created.
-     */
-    case "charge.dispute.created":
-      // logic here...
 
-      return new Response(
-        JSON.stringify({ message: "Dispute details added!" }),
-        {
-          status: 200,
-        }
-      );
-    /*
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * Charge Dispute: Updated.
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * This is the webhook that is fired when a dispute is created.
-     */
-    case "charge.dispute.updated":
-      // logic here...
-
-      return new Response(
-        JSON.stringify({ message: "Dispute details updated!" }),
-        {
-          status: 200,
-        }
-      );
-    /*
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * Charge Dispute: Funds re-instated.
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * This is the webhook that is fired when a dispute\'s funds are re-instated.
-     */
-    case "charge.dispute.funds_reinstated":
-      // logic here..
-
-      return new Response(
-        JSON.stringify({ message: "Dispute details updated!" }),
-        {
-          status: 200,
-        }
-      );
-    /*
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * Charge Dispute: Funds withdrawn.
-     * =~~~~~~~~~~~~~~~~~~~~~~~=
-     * This is the webhook that is fired when a dispute\'s funds are withdrawn.
-     */
-    case "charge.dispute.funds_withdrawn":
-      // logic here...
-
-      return new Response(
-        JSON.stringify({ message: "Dispute details updated!" }),
-        {
-          status: 200,
-        }
-      );
+    case "checkout.session.completed":
+      // logic to handle successful charges.
+      console.log("Changing");
+      await updateSubscription(supabase, cid, SUBCRIPTION_TIER.PREMIUM);
+      console.log("Completed");
+      return new Response(JSON.stringify({ message: "Payment completed!" }), {
+        status: 200,
+      });
     /*
      * =~~~~~~~~~~~~~~~~~~~~~~~~=
      * Customer: Created

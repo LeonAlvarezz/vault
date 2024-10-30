@@ -4,7 +4,10 @@ import { InputWithLabel } from "@/components/ui/input-label";
 import { signup } from "@/app/api/action";
 import SubmitButton from "../button/submit-button";
 import { useToast } from "../use-toast";
-export default function SignupForm() {
+type Props = {
+  returnUrl?: string | string[] | undefined;
+};
+export default function SignupForm({ returnUrl }: Props) {
   const { toast } = useToast();
   async function userSignup(formData: FormData) {
     const data = {
@@ -12,7 +15,7 @@ export default function SignupForm() {
       username: formData.get("username"),
       password: formData.get("password"),
     };
-    const response = await signup(data);
+    const response = await signup(data, returnUrl);
     if (response?.error) {
       toast({
         title: "Signup Error!",

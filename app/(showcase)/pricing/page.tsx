@@ -1,4 +1,7 @@
+import { updateSubscription } from "@/app/api/action";
+import Sparkle from "@/components/ui/animation/sparkle";
 import { Button } from "@/components/ui/button";
+import BuyButton from "@/components/ui/button/buy-button";
 import LinkButton from "@/components/ui/button/link-button";
 import { Separator } from "@/components/ui/separator";
 import { FREE_TIER, PREMIUM_TIER } from "@/constant/pricing";
@@ -41,7 +44,7 @@ export default function PricingPage() {
           </div>
           <LinkButton href="/dashboard" label="Start for Free" />
         </div>
-        <div className="w-full xl:min-w-[300px] h-full lg:h-fit lg:min-h-[400px] border border-neutral-700 rounded-sm p-4 flex flex-col justify-between">
+        <div className="w-full xl:min-w-[300px] h-full lg:h-fit lg:min-h-[400px] border-rainbow rounded-sm p-4 flex flex-col justify-between scale-[1.05]">
           <div className="h-full">
             <h2 className="text-xl font-bold">Premium</h2>
             <p className="text-xs text-neutral-500 mt-2">
@@ -64,11 +67,9 @@ export default function PricingPage() {
               ))}
             </ul>
           </div>
-          {/* TODO Change to use real payment link */}
-          <LinkButton
-            href={env.STRIPE_PREMIUM_TIER_PAYMENT_LINK}
-            label="Upgrade Now"
-          />
+          <BuyButton />
+
+          <Sparkle />
         </div>
       </div>
     </section>

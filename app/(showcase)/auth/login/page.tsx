@@ -6,8 +6,11 @@ import { InputWithLabel } from "@/components/ui/input-label";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-transition-progress/next";
 import React from "react";
-
-export default function LoginPage() {
+type Props = {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+export default async function LoginPage({ searchParams }: Props) {
+  const params = await searchParams;
   return (
     <div className="section-center !min-h-[calc(100vh-56px)]">
       <div className="w-full mx-auto lg:w-[70%] xl:w-[50%] flex flex-col justify-center !min-h-[calc(100vh-56px)] items-center">
@@ -18,7 +21,11 @@ export default function LoginPage() {
           <p className="text-sm mt-2 text-neutral-400">
             New to Vault?{" "}
             <Link
-              href={"/auth/signup"}
+              href={
+                params?.returnUrl
+                  ? `/auth/signup?returnUrl=${params.returnUrl}`
+                  : `/auth/signup`
+              }
               className="text-second underline hover:text-second/80 font-bold"
             >
               Sign Up
@@ -30,7 +37,7 @@ export default function LoginPage() {
           {/* <GithubButton /> */}
         </div>
         <Separator className="my-6" />
-        <LoginForm />
+        <LoginForm returnUrl={params?.returnUrl} />
         <Link
           className="mt-6 text-sm hover:text-second"
           href={"/forgot-password"}

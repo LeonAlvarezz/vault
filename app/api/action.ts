@@ -19,12 +19,16 @@ import { headers } from "next/headers";
 import { env } from "@/utils/env";
 import { getCacheUser } from "@/data/server/profiles";
 import { SearchResult, SearchResultCol } from "@/types/search.type";
+import { SupabaseClient } from "@supabase/supabase-js";
 // import { openai } from "@/lib/openai";
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
 });
 
-export async function login(formData: unknown) {
+export async function login(
+  formData: unknown,
+  returnUrl: string | string[] | undefined
+) {
   const supabase = await createClient();
   const result = LoginSchema.safeParse(formData);
   if (!result.success) {
@@ -47,14 +51,17 @@ export async function login(formData: unknown) {
   if (!error) {
     revalidatePath("/", "layout");
     revalidateTag("*");
-    redirect("/dashboard");
+    returnUrl ? redirect(`/${returnUrl}`) : redirect("/dashboard");
   } else {
     return {
       error: error.message,
     };
   }
 }
-export async function signup(formData: unknown) {
+export async function signup(
+  formData: unknown,
+  returnUrl: string | string[] | undefined
+) {
   const supabase = await createClient();
   const result = SignupSchema.safeParse(formData);
 
@@ -72,11 +79,8 @@ export async function signup(formData: unknown) {
 
   const {
     data: { user },
-    error: authError,
   } = await supabase.auth.getUser();
-  if (authError) {
-    return { error: authError.message };
-  }
+
   if (user?.is_anonymous) {
     const { data, error } = await supabase.auth.updateUser({ email, password });
     if (error) {
@@ -104,7 +108,9 @@ export async function signup(formData: unknown) {
     if (!error) {
       revalidatePath("/", "layout");
       revalidateTag("*");
-      redirect("/auth/login");
+      returnUrl
+        ? redirect(`/auth/login?returnUrl=${returnUrl}`)
+        : redirect("/auth/login");
     }
   } else {
     const { data, error } = await supabase.auth.signUp({ email, password });
@@ -133,7 +139,10 @@ export async function signup(formData: unknown) {
 
     if (!error) {
       revalidatePath("/", "layout");
-      redirect("/auth/login");
+      revalidateTag("*");
+      returnUrl
+        ? redirect(`/auth/login?returnUrl=${returnUrl}`)
+        : redirect("/auth/login");
     }
   }
 }
@@ -605,13 +614,17 @@ export async function likeNote(noteId: string) {
   return { error: null };
 }
 
-export async function updateSubscription() {
-  const supabase = await createClient();
-  const user = await getCacheUser(supabase);
+export async function updateSubscription(
+  // userId: string,
+  supabase: SupabaseClient,
+  cid: string,
+  tier: SUBCRIPTION_TIER
+) {
   const { error } = await supabase
     .from("profiles")
-    .update({ subscription_tier: SUBCRIPTION_TIER.PREMIUM })
-    .match({ id: user!.id });
+    .update({ subscription_tier: tier })
+    .match({ id: cid });
+  console.log("error:", error);
   if (error) {
     return { error };
   }

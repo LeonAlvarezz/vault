@@ -44,7 +44,7 @@ export default function PricingPage() {
           </div>
           <LinkButton href="/dashboard" label="Start for Free" />
         </div>
-        <div className="w-full xl:min-w-[300px] h-full lg:h-fit lg:min-h-[400px] border-rainbow rounded-sm p-4 flex flex-col justify-between scale-[1.05]">
+        <div className="w-full xl:min-w-[300px] h-full lg:h-fit lg:min-h-[400px] border-rainbow rounded-sm p-4 flex flex-col justify-between scale-[1.05] relative">
           <div className="h-full">
             <h2 className="text-xl font-bold">Premium</h2>
             <p className="text-xs text-neutral-500 mt-2">

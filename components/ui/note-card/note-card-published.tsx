@@ -27,7 +27,7 @@ export default function NoteCardPublished({
     <Link
       href={`/note/${note?.id}`}
       className={cn(
-        "max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col justify-between cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform mb-2",
+        "max-w-full h-auto bg-neutral-800/70 p-4 text-white flex flex-col justify-between cursor-pointer rounded-sm break-inside-avoid border-neutral-700  hover:scale-[1.02] duration-500 transition-transform mb-2",
         className
       )}
     >

@@ -37,7 +37,7 @@ export default function HeroSection() {
               Vector Search"
             className="col-span-2"
           />
-          <SampleEditor className="col-span-2 row-span-2 w-full order-first lg:order-none" />
+          <SampleEditor className="col-span-2 row-span-2 w-full order-first lg:order-none  relative overflow-hidden" />
           <FeatureItem
             heading="Write Note with Ease"
             description="Search through your note faster and easier with Full Text Search and
@@ -57,7 +57,7 @@ export default function HeroSection() {
             className="col-span-2"
           />
         </div>
-        <div className="lg:flex hidden justify-end mt-4">
+        <div className="lg:flex hidden justify-end mt-4 -z-10">
           <div className="flex gap-2 w-fit relative left-52">
             <ImageContainer
               src={SquigglyArrow}

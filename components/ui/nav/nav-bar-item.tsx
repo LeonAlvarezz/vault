@@ -13,7 +13,7 @@ export default function NavbarItem() {
         href="/"
         className={cn(
           "text-sm hover:text-second",
-          pathname === "/" && "text-main  hover:text-main"
+          pathname === "/" && "text-second  hover:text-second"
         )}
       >
         Home
@@ -22,7 +22,7 @@ export default function NavbarItem() {
         href="/pricing"
         className={cn(
           "text-sm hover:text-second",
-          pathname === "/pricing" && "text-main hover:text-main"
+          pathname === "/pricing" && "text-second hover:text-second"
         )}
       >
         Pricing

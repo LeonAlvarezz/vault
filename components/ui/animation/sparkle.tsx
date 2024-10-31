@@ -47,7 +47,7 @@ export default function Sparkle({
   }, [animationDuration, sparkleInterval, createSparkle]);
 
   return (
-    <div className=" w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center -z-20">
+    <div className=" w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center -z-30">
       {sparkles.map((sparkle, index) => (
         <div
           key={sparkle.id}

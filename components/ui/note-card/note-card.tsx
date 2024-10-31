@@ -14,7 +14,7 @@ export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
     return (
       <Link
         href={"/note/1"}
-        className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] duration-500 border-neutral-700  transition-all mb-2"
+        className="max-w-full h-auto bg-neutral-800/70 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] duration-500 border-neutral-700  transition-all mb-2"
       >
         <div className="flex justify-between items-center mb-4">
           <Tag color="orange" className="h-6">
@@ -45,7 +45,7 @@ export default function NoteCard({ bookmark = false, note }: NoteCardProps) {
   return (
     <Link
       href={`/create/${note?.id}`}
-      className="max-w-full h-auto bg-neutral-800 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] border-neutral-700 duration-500  transition-all mb-2"
+      className="max-w-full h-auto bg-neutral-800/70 p-4 text-white flex flex-col cursor-pointer rounded-sm break-inside-avoid hover:scale-[1.02] border-neutral-700 duration-500  transition-all mb-2"
     >
       {note?.cover_url && (
         <ImageContainerBlurClient

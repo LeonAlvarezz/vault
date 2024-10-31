@@ -27,9 +27,15 @@ export default function SampleEditor({ className }: Props) {
   return (
     <div
       className={cn(
-        " min-h-[300px] border bg-neutral-900 border-neutral-700/50 p-4 rounded-sm",
+        "min-h-[300px] border bg-neutral-900 p-4 !rounded-sm animated-border-box",
         className
       )}
+      style={
+        {
+          "--animated-border-box-duration": `7s`,
+          "--animated-border-box-border-radius": `calc(0.5rem - 4px)`,
+        } as React.CSSProperties
+      }
     >
       <div
         className={cn(

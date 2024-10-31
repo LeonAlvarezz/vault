@@ -10,7 +10,7 @@ export default function LayoutPage({
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className="overflow-hidden">{children}</main>
       <Footer />
     </>
   );

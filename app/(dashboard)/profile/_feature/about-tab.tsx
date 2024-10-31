@@ -14,7 +14,7 @@ export default function AccountTab({ profile }: Props) {
         <Render content={profile.content || { undefined }} />
       ) : (
         <div
-          style={{ minHeight: "calc(100svh - 480px)" }}
+          style={{ minHeight: "calc(100svh - 400px)" }}
           className="flex justify-center items-center"
         >
           <NotAvailable message="No About Me" />

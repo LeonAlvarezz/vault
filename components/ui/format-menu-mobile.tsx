@@ -28,6 +28,7 @@ import { uploadImage } from "@/data/client/image";
 import { useToast } from "./use-toast";
 import { blobToBase64 } from "@/lib/dropImagePlugin";
 import { compressImage } from "@/lib/image";
+import { useSubscription } from "@/stores/subscription";
 type Props = {
   editor: Editor | null;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -81,6 +82,8 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
     {}
   );
   const { toast } = useToast();
+  const { isPremium } = useSubscription();
+  const compressedSize = isPremium ? 0.8 : 0.1;
 
   useEffect(() => {
     if (!image) return;
@@ -101,7 +104,9 @@ export default function FormatMenuMobile({ editor, setOpen }: Props) {
         })
         .run();
 
-      const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
+      const compressedImage = await compressImage(image, {
+        maxSizeMB: compressedSize,
+      });
       const { publicUrl, error } = await uploadImage(compressedImage);
       if (error) {
         editor!

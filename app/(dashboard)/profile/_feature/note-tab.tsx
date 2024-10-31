@@ -49,7 +49,7 @@ export default function NoteTab({ notes, searchParams }: Props) {
       ) : (
         <div
           className="w-full flex justify-center items-center"
-          style={{ minHeight: "calc(100svh - 280px)" }}
+          style={{ minHeight: "calc(100svh - 450px)" }}
         >
           <NoNote />
         </div>

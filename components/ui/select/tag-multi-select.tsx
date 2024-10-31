@@ -40,7 +40,10 @@ import { createTags, revalidatePathClient } from "@/app/api/action";
 import Spinner from "../spinner";
 import { Skeleton } from "../skeleton";
 import TagSkeleton from "../skeleton/tag-skeleton";
-
+import { ToastAction } from "../toast";
+import Link from "next/link";
+import { useSubscription } from "@/stores/subscription";
+const TAG_FREE_LIMIT = 5;
 /**
  * Variants for the multi-select component to handle different styles.
  * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
@@ -165,6 +168,7 @@ export const TagMultiSelect = React.forwardRef<
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [tagLoading, setTagLoading] = React.useState(false);
     const [isLoading, startLoadingTransition] = React.useTransition();
+    const { isPremium } = useSubscription();
 
     React.useEffect(() => {
       if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
@@ -179,6 +183,24 @@ export const TagMultiSelect = React.forwardRef<
         event.preventDefault();
         setIsPopoverOpen(true);
         setTagLoading(true);
+        console.log("options.length:", options.length);
+        if (!isPremium && options.length >= TAG_FREE_LIMIT) {
+          toast({
+            title: "Tag Limit Reached",
+            description: (
+              <p className="text-xs text-neutral-400">
+                Free tier user can only create ${TAG_FREE_LIMIT} tags, Consider
+                Upgrade to Premium Tier to create more tag
+              </p>
+            ),
+            action: (
+              <ToastAction altText="Upgrade Now">
+                <Link href="/pricing">Upgrade Now</Link>
+              </ToastAction>
+            ),
+          });
+          return;
+        }
 
         if (empty || options.length == 0) {
           startLoadingTransition(async () => {

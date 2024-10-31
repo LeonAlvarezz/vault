@@ -6,6 +6,7 @@ import FloatingButton from "@/components/ui/floating-button";
 import Tutorial from "@/components/ui/tutorial/tutorial";
 import { isUserAuthenticated } from "../api/action";
 import LoginSignUpFloatingButton from "@/components/ui/button/login-signup-button";
+import CommandSearch from "@/components/ui/search/command-search";
 
 export default async function DashboardLayout({
   children,
@@ -24,6 +25,8 @@ export default async function DashboardLayout({
         <LoginSignUpFloatingButton
           isAuthenticatedAsAnon={isAuthenticatedAsAnon}
         />
+
+        <CommandSearch />
       </main>
     </div>
   );

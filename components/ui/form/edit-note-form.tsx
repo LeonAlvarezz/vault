@@ -32,6 +32,7 @@ import { Category } from "@/types/category.type";
 import { Note } from "@/types/note.type";
 import { isEqual } from "lodash"; // Import
 import { Json } from "@/database.types";
+import { useSubscription } from "@/stores/subscription";
 type Props = {
   tags: NoteTag[] | null;
   categories: Category[] | null;
@@ -64,6 +65,8 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     tags: [],
     cover: "",
   });
+  const { isPremium } = useSubscription();
+  const compressedSize = isPremium ? 0.8 : 0.1;
 
   const { register, handleSubmit, setValue, watch } =
     useForm<CreateNoteFormValues>({
@@ -160,7 +163,9 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
 
-    const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
+    const compressedImage = await compressImage(image, {
+      maxSizeMB: compressedSize,
+    });
 
     const { publicUrl, error } = await uploadImage(compressedImage);
 

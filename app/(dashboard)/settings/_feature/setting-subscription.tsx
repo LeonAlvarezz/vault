@@ -1,12 +1,17 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import BuyButton from "@/components/ui/button/buy-button";
 import PricingDrawer from "@/components/ui/drawer/pricing-drawer";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSubscription } from "@/stores/subscription";
 import { LinkIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 export default function SettingSubscription() {
+  const { isPremium, isLoading } = useSubscription();
+  console.log("isLoading:", isLoading);
   return (
     <div>
       <h1 className="text-2xl font-bold">Subscription</h1>
@@ -21,9 +26,14 @@ export default function SettingSubscription() {
           </div>
           <div className="basis-1/2">
             <p className="text-sm">{`Plan that you're currently under:`}</p>
-            <p className="capitalize text-2xl font-semibold text-second mb-4">
-              free
-            </p>
+            {isLoading ? (
+              <Skeleton className="h-8 w-16 mt-2 mb-4" />
+            ) : (
+              <p className="capitalize text-2xl font-semibold text-second mt-2 mb-4">
+                {isPremium ? `premium` : `free`}
+              </p>
+            )}
+
             <PricingDrawer>
               <Button variant="main">Upgrade Now</Button>
             </PricingDrawer>

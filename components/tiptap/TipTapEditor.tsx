@@ -25,6 +25,7 @@ import { uploadImage } from "@/data/client/image";
 import { CodeBlockExtension } from "./CustomCodeBlock";
 import CodeBlock from "@tiptap/extension-code-block";
 import { Json } from "@/database.types";
+import { useSubscription } from "@/stores/subscription";
 
 export interface TiptapEditorRef {
   editor: ReturnType<typeof useEditor> | null;
@@ -41,7 +42,8 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
   (props, ref) => {
     const { onUpdate, onFocus, onBlur, onChange } = props;
     const editorRef = useRef<HTMLDivElement>(null);
-    const [hasScrolledUp, setHasScrolledUp] = useState(false);
+    const { isPremium } = useSubscription();
+    const compressedSize = isPremium ? 0.8 : 0.1;
 
     const codeBlockLowLight = CodeBlockExtension.configure({
       lowlight: createLowlight(all),
@@ -65,7 +67,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         // Image.configure({
         //   inline: true,
         // }),
-        CustomImageExtension(uploadImage),
+        CustomImageExtension(uploadImage, compressedSize),
         Highlight.configure({ multicolor: true }),
         Heading.configure({ levels: [1, 2] }).extend({
           levels: [1, 2],

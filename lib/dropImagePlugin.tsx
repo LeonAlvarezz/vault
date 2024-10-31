@@ -1,5 +1,6 @@
 import { Plugin, PluginKey } from "prosemirror-state";
 import { compressImage } from "./image";
+import { toast } from "@/components/ui/use-toast";
 
 export type UploadFn = (image: File) => Promise<
   | {
@@ -28,12 +29,19 @@ export const blobToBase64 = (blob: Blob): Promise<string> => {
   });
 };
 
-export const dropImagePlugin = (upload: UploadFn) => {
+export const dropImagePlugin = (upload: UploadFn, compressedSize: number) => {
   return new Plugin({
     props: {
       handlePaste(view, event, slice) {
         const items = Array.from(event.clipboardData?.items || []);
         let imageHandled = false;
+        if (!compressedSize) {
+          toast({
+            title: "Unexpected Error!",
+            variant: "destructive",
+          });
+          return;
+        }
 
         // Check if there's an image in the pasted content
         items.forEach(async (item) => {
@@ -53,7 +61,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
 
             // Proceed with image compression and upload
             const compressedImage = await compressImage(image, {
-              maxSizeMB: 0.1,
+              maxSizeMB: compressedSize,
             });
             const { publicUrl, error } = await upload(compressedImage);
 
@@ -103,6 +111,13 @@ export const dropImagePlugin = (upload: UploadFn) => {
             top: event.clientY,
           });
           if (!coordinates) return false;
+          if (!compressedSize) {
+            toast({
+              title: "Unexpected Error!",
+              variant: "destructive",
+            });
+            return;
+          }
 
           images.forEach(async (image) => {
             const reader = new FileReader();
@@ -117,7 +132,7 @@ export const dropImagePlugin = (upload: UploadFn) => {
 
               if (upload) {
                 const compressedImage = await compressImage(image, {
-                  maxSizeMB: 0.1,
+                  maxSizeMB: compressedSize,
                 });
                 const { publicUrl, error } = await upload(compressedImage);
 

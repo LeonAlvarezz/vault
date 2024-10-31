@@ -5,6 +5,7 @@ import ImageContainerBlurClient from "@/components/ui/image/image-container-blur
 import { toast } from "@/components/ui/use-toast";
 import { uploadImage } from "@/data/client/image";
 import { compressImage, toBase64 } from "@/lib/image";
+import { useSubscription } from "@/stores/subscription";
 import { Profile } from "@/types/profiles.type";
 import React, { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
@@ -16,6 +17,8 @@ export default function CoverImage({ profile }: Props) {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(
     profile?.cover_url || null
   );
+  const { isPremium } = useSubscription();
+  const compressedSize = isPremium ? 0.8 : 0.1;
   useEffect(() => {
     if (!image) return;
 
@@ -26,7 +29,9 @@ export default function CoverImage({ profile }: Props) {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
 
-    const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
+    const compressedImage = await compressImage(image, {
+      maxSizeMB: compressedSize,
+    });
 
     const { publicUrl, error } = await uploadImage(compressedImage);
 

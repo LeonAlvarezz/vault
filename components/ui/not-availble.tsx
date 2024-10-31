@@ -8,7 +8,7 @@ export default function NotAvailable({ message = "Not Available" }: Props) {
       <ImageContainerBlurClient
         src="/image/not-available.svg"
         alt="empty"
-        className="size-[200px] opacity-80"
+        className="size-[120px] opacity-80"
         preview={false}
       />
       <h1 className="text-neutral-500 text-center">{message}</h1>

@@ -35,6 +35,8 @@ import { useProgress } from "react-transition-progress";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { useSubscription } from "@/stores/subscription";
+import { FaCrown } from "react-icons/fa6";
 
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {
@@ -73,6 +75,7 @@ export default function CommandSearch() {
   const startProgress = useProgress();
   const { disable_command_search, keyboard_shortcuts, isKeyRecording } =
     useSettings();
+  const { isPremium } = useSubscription();
 
   //TODO: Rate Limit Vector Search
   //TODO: Navigate
@@ -308,17 +311,25 @@ export default function CommandSearch() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger className="size-[24px]" asChild>
-                <Toggle
-                  aria-label="Toggle AI"
-                  pressed={isVectorSearch}
-                  onPressedChange={handleVectorToggle}
-                  className={cn(
-                    "w-6 h-6 p-1 group hover:bg-neutral-600",
-                    isVectorSearch && "bg-neutral-700/50"
+                <div className="relative">
+                  <Toggle
+                    aria-label="Toggle AI"
+                    pressed={isVectorSearch}
+                    disabled={!isPremium}
+                    onPressedChange={handleVectorToggle}
+                    className={cn(
+                      "w-6 h-6 p-1 group hover:bg-neutral-600",
+                      isVectorSearch && "bg-neutral-700/50"
+                    )}
+                  >
+                    <IoSparklesSharp className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block bg-clip-text" />
+                  </Toggle>
+                  {!isPremium && (
+                    <div className="absolute -top-1 left-3 w-4 h-4 p-[3px] bg-neutral-950/70 flex justify-center items-center rounded-sm">
+                      <FaCrown className="text-yellow-400" />
+                    </div>
                   )}
-                >
-                  <IoSparklesSharp className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block bg-clip-text" />
-                </Toggle>
+                </div>
               </TooltipTrigger>
               <TooltipContent side={"bottom"}>
                 <p className="capitalize">AI Search</p>

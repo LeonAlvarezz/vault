@@ -15,8 +15,8 @@ export default function SettingPage() {
   return (
     <div className="flex flex-col gap-20">
       <SettingGeneral />
-      <SettingNotification />
       <SettingSubscription />
+      <SettingNotification />
       {/* <SettingLanguage /> */}
     </div>
   );

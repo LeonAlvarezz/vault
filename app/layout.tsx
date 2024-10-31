@@ -49,7 +49,6 @@ export default async function RootLayout({
           <ProgressBarProvider>
             <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 bg-main top-0 z-[999]" />
             {children}
-            <CommandSearch />
           </ProgressBarProvider>
         </ThemeProviders>
         <Toaster />

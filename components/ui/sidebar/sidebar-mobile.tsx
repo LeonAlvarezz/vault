@@ -5,6 +5,7 @@ import SidebarOptionalItemDropdownMenu from "../dropdown/sidebar-optional-item-d
 import SidebarItemMobile from "./sidebar-item-mobile";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
 import { useSettings } from "@/stores/setting";
+import { useSubscription } from "@/stores/subscription";
 type Props = {
   isAuthenticatedAsAnon: boolean;
 };
@@ -13,10 +14,11 @@ export default function SidebarMobile({ isAuthenticatedAsAnon }: Props) {
   const remainingItems = SIDEBAR_ITEM.slice(6);
   const isKeyboardOpen = useDetectKeyboardOpen();
   const { fetchSettings } = useSettings();
+  const { fetchSubscriptionStatus } = useSubscription();
 
   useEffect(() => {
-    fetchSettings();
-  }, [fetchSettings]);
+    Promise.all([fetchSettings(), fetchSubscriptionStatus()]);
+  }, [fetchSettings, fetchSubscriptionStatus]);
 
   if (!isAuthenticatedAsAnon || isKeyboardOpen) {
     return null;

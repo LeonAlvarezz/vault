@@ -14,6 +14,7 @@ import { toast } from "../use-toast";
 import { editProfile } from "@/app/api/action";
 import { ZodFormattedError } from "zod";
 import { TiptapEditorRef } from "@/components/tiptap/TipTapEditor";
+import { useSubscription } from "@/stores/subscription";
 type Props = {
   profile: Profile;
 };
@@ -27,6 +28,8 @@ export default function EditProfileForm({ profile }: Props) {
   const [imagePreview, setImagePreviewUrl] = useState(
     profile.avatar_url || null
   );
+  const { isPremium } = useSubscription();
+  const compressedSize = isPremium ? 0.8 : 0.1;
   const handleSubmit = async (formData: FormData) => {
     const serializableContent = JSON.stringify(
       editorRef.current?.editor?.getJSON()
@@ -57,7 +60,9 @@ export default function EditProfileForm({ profile }: Props) {
     const base64 = await toBase64(image);
     setImagePreviewUrl(base64);
 
-    const compressedImage = await compressImage(image, { maxSizeMB: 0.1 });
+    const compressedImage = await compressImage(image, {
+      maxSizeMB: compressedSize,
+    });
 
     const { publicUrl, error } = await uploadImage(compressedImage);
 

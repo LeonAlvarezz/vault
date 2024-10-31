@@ -39,7 +39,10 @@ declare module "@tiptap/core" {
 }
 
 // Extend the Tiptap Image extension to use the custom component
-export const CustomImageExtension = (uploadFn: UploadFn) => {
+export const CustomImageExtension = (
+  uploadFn: UploadFn,
+  compressedSize: number
+) => {
   return Node.create({
     name: "image",
     group: "inline",
@@ -99,7 +102,7 @@ export const CustomImageExtension = (uploadFn: UploadFn) => {
       return ReactNodeViewRenderer(CustomImage);
     },
     addProseMirrorPlugins() {
-      return [dropImagePlugin(uploadFn)];
+      return [dropImagePlugin(uploadFn, compressedSize)];
     },
   });
 };

@@ -16,7 +16,13 @@ export default function Navbar() {
       </Image> */}
       <div className="hidden sm:flex items-center justify-between w-full">
         <div className="flex gap-10 items-center">
-          <ImageContainerBlur src={Logo} alt="logo" className="h-8" />
+          <div className="relative">
+            <ImageContainerBlur src={Logo} alt="logo" className="h-8" />
+            <div className="font-mono text-[8px] bg-main/50 absolute -bottom-2 -right-6 text-nowrap px-1 rounded-sm">
+              alpha
+            </div>
+          </div>
+
           <NavbarItem />
         </div>
         <Link
@@ -28,7 +34,12 @@ export default function Navbar() {
       </div>
 
       <div className="sm:hidden flex justify-between items-center w-full">
-        <ImageContainerBlur src={Logo} alt="logo" className="h-7" />
+        <div className="relative">
+          <ImageContainerBlur src={Logo} alt="logo" className="h-8" />
+          <div className="font-mono text-[8px] bg-main/50 absolute -bottom-2 -right-6 text-nowrap px-1 rounded-sm">
+            alpha
+          </div>
+        </div>
         <HamburgerMenu />
       </div>
 

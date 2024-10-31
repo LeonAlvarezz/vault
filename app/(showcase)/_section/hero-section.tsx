@@ -16,10 +16,16 @@ export default function HeroSection() {
       <div className="bg-main size-72 rounded-full blur-3xl opacity-10 absolute -left-16 top-10 -z-10"></div>
       <div className="section-center flex justify-center items-center flex-col">
         <div className="text-center mx-auto flex items-center flex-col gap-4 w-[80%]">
-          <h1 className="text-4xl font-bold">
-            Your All-in-One Developer Knowledge{" "}
-            <span className="underline text-second">Vault</span>
-          </h1>
+          <div className="relative">
+            <h1 className="text-4xl font-bold">
+              Your All-in-One Developer Knowledge{" "}
+              <span className="underline text-second">Vault</span>
+            </h1>
+            <div className="font-mono text-xs bg-main/90 absolute -bottom-0 -right-0 text-nowrap px-2 rounded-sm">
+              alpha-v1
+            </div>
+          </div>
+
           <p className="text-sm text-neutral-400">
             Effortlessly capture, organize, and share your knowledge with the
             community of developer.

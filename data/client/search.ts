@@ -32,7 +32,8 @@ export async function commandSearch(searchQuery: string, isGlobal: boolean) {
     .from("notes")
     .select(
       "id, title, published_at, content_text, profiles!notes_profile_id_fkey!inner(*)"
-    );
+    )
+    .is("deleted_at", null);
 
   if (!isGlobal) {
     query = query.eq("profile_id", user!.id);

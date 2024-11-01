@@ -52,6 +52,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     const editor = useEditor({
       immediatelyRender: false,
+      shouldRerenderOnTransaction: false,
       extensions: [
         StarterKit.configure({
           bulletList: false,
@@ -111,25 +112,6 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
       editor,
     }));
 
-    // useEffect(() => {
-    //   if (editor && isMobile) {
-    //     const handleBeforeInput = (event: InputEvent) => {
-    //       if (event.inputType === "deleteContentBackward") {
-    //         const { from, to } = editor.state.selection;
-    //         if (from === to && from > 0) {
-    //           editor.commands.setTextSelection(from - 1);
-    //         }
-    //       }
-    //     };
-
-    //     editor.view.dom.addEventListener("beforeinput", handleBeforeInput);
-
-    //     return () => {
-    //       editor.view.dom.removeEventListener("beforeinput", handleBeforeInput);
-    //     };
-    //   }
-    // }, [editor]);
-
     if (!editor) {
       return (
         <div className="flex justify-center w-full items-center h-full">
@@ -140,16 +122,7 @@ const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
 
     return (
       <div ref={editorRef}>
-        <EditorContent
-          // onClick={scrollDown}
-          editor={editor}
-          className="text-sm"
-          spellCheck={false}
-          // defaultValue={
-          //   content as string | number | readonly string[] | undefined
-          // }
-          // readOnly
-        />
+        <EditorContent editor={editor} className="text-sm" spellCheck={false} />
       </div>
     );
   }

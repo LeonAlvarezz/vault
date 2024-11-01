@@ -108,6 +108,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
             cover_url: coverUrl,
             content_text: editorRef.current.editor
               .getText()
+              // + `Updated at: ${new Date().toISOString()}`
               .trim()
               .replace(/(\r\n|\n|\r){2,}/g, "\n"),
           };
@@ -244,6 +245,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
 
     // Wait for the editor to be fully ready
     const interval = setInterval(() => {
+      console.log("Hello");
       if (editorRef.current?.editor) {
         clearInterval(interval);
         setEditorContent();
@@ -262,30 +264,9 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
       tags: note?.tags?.map((tag) => String(tag.tags?.id)) || [],
       cover: note?.cover_url || "",
     };
+    console.log("Hello");
     setPreviousValues(initialValues);
   }, [note]);
-
-  //   if (isLoading) {
-  //     return (
-  //       <div>
-  //         <div className="flex justify-between items-center">
-  //           <BackButton />
-  //           <CreateNoteDropdownMenu
-  //             handleSave={handleSubmit(handleSaveNote)}
-  //             setOpenConfirmDialog={setOpenConfirmDialog}
-  //           />
-  //         </div>
-  //         <div className="flex gap-2 flex-col">
-  //           <Skeleton className="w-32 h-10 mb-4" />
-  //           <Skeleton className="w-full h-10 rounded-md" />
-  //           <Skeleton className="w-full h-10 rounded-md" />
-
-  //           <Separator className="my-6" />
-  //           <Skeleton className="w-full h-[300px] rounded-md" />
-  //         </div>
-  //       </div>
-  //     );
-  //   }
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined")
@@ -394,14 +375,6 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
             setOpen={setOpen}
           />
         )}
-
-        {/* <ConfirmPublishDialog
-          open={openConfirmDialog}
-          setOpen={setOpenConfirmDialog}
-          note={note}
-          category={selectedCategory}
-          //   refresh={handleGetNoteContent}
-        /> */}
       </form>
       <div
         className={cn(

@@ -17,8 +17,8 @@ import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "../use-toast";
 import { SearchResult } from "@/types/search.type";
 import { commandSearch } from "@/data/client/search";
-import GlobalCommandSearchResult from "./global-command-search-result";
-import LocalCommandSearchResult from "./local-command-search-result";
+import GlobalCommandSearchResult from "./command-search-result/global-command-search-result";
+import LocalCommandSearchResult from "./command-search-result/local-command-search-result";
 import {
   Tooltip,
   TooltipContent,
@@ -37,6 +37,7 @@ import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { useSubscription } from "@/stores/subscription";
 import { FaCrown } from "react-icons/fa6";
+import CommandSearchResult from "./command-search-result/command-search-result";
 
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {
@@ -257,37 +258,11 @@ export default function CommandSearch() {
     } else {
       fullTextSearch(query);
     }
-    // const searchQuery = constructSearchQuery(query, "|");
-    // setSearchLoading(true);
-    // try {
-    //   const { data, error } = await commandSearch(searchQuery, isGlobal);
-    //   if (error) {
-    //     toast({
-    //       title: "Error Fetching Search Col!",
-    //       description: error.message,
-    //       variant: "destructive",
-    //     });
-    //   } else {
-    //     if (data) {
-    //       setSearchResult(data);
-    //       setEmpty(false);
-    //     } else {
-    //       setEmpty(true);
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast({
-    //     title: "Unexpected Error!",
-    //     description: error instanceof Error ? error.message : String(error),
-    //     variant: "destructive",
-    //   });
-    // } finally {
-    //   setSearchLoading(false);
-    // }
   }, 1000);
 
   const getSearchResult = React.useCallback(
     (query: string) => {
+      console.log("query:", query);
       debouncedGetSearch(query);
     },
     [debouncedGetSearch]
@@ -295,7 +270,7 @@ export default function CommandSearch() {
 
   const handleInputChange = (search: string) => {
     setQuery(search);
-    getSearchResult(query);
+    getSearchResult(search);
   };
 
   return (
@@ -322,7 +297,7 @@ export default function CommandSearch() {
                       isVectorSearch && "bg-neutral-700/50"
                     )}
                   >
-                    <IoSparklesSharp className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block bg-clip-text" />
+                    <IoSparklesSharp />
                   </Toggle>
                   {!isPremium && (
                     <div className="absolute -top-1 left-3 w-4 h-4 p-[3px] bg-neutral-950/70 flex justify-center items-center rounded-sm">
@@ -352,19 +327,31 @@ export default function CommandSearch() {
                 </Toggle>
               </TooltipTrigger>
               <TooltipContent side={"bottom"}>
-                <p className="capitalize">Global</p>
+                <p className="capitalize">Global Search</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </CommandInput>
       <CommandList>
+        {empty ||
+          (searchResult.length == 0 && !searchLoading && (
+            <div className="h-full w-full flex justify-center items-center min-h-[143px]">
+              <CommandEmpty>No results found.</CommandEmpty>
+            </div>
+          ))}
         {searchLoading && (
           <div className="w-full min-h-[350px] flex justify-center items-center">
             <Spinner size={20} />
           </div>
         )}
-        {isGlobal || isVectorSearch ? (
+        <CommandSearchResult
+          isGlobal={isGlobal}
+          isVector={isVectorSearch}
+          searchResult={searchResult}
+          setOpen={setOpen}
+        />
+        {/* {isGlobal || isVectorSearch ? (
           <>
             {searchResult.length > 0 && (
               <CommandGroup heading="Global">
@@ -410,14 +397,21 @@ export default function CommandSearch() {
               </CommandGroup>
             )}
           </>
-        )}
+        )} */}
+        <div className="py-2 flex">
+          <p className="text-xs text-neutral-400 pr-4 pl-2 flex justify-center items-center w-full">
+            Toggle on{" "}
+            <span className="mx-1 bg-neutral-700/50 p-0.5 rounded-sm">
+              <RiGlobalLine size={14} />
+            </span>
+            or{" "}
+            <span className="mx-1 bg-neutral-700/50 p-0.5 rounded-sm">
+              <IoSparklesSharp size={14} />
+            </span>{" "}
+            to search through note from the community
+          </p>
+        </div>
       </CommandList>
-      {empty ||
-        (searchResult.length == 0 && !searchLoading && (
-          <div className="h-full w-full flex justify-center items-center">
-            <CommandEmpty>No results found.</CommandEmpty>
-          </div>
-        ))}
     </CommandDialog>
   );
 }

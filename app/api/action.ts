@@ -168,9 +168,19 @@ export async function revalidatePathClient(path: string) {
 
 export async function saveNote(payload: SaveNotePayload) {
   const supabase = await createClient();
+  const embeddingText = [
+    `Title: ${payload.title}`, // Explicitly mark title
+    `Content: ${payload.content_text}`,
+    `Created/Updated: ${new Date().toISOString()}`,
+    // Add some semantic markers
+    `This note is about: ${payload.title}`,
+  ]
+    .filter(Boolean)
+    .join("\n"); // Use newlines for better text separation
+  console.log("embeddingText:", embeddingText);
 
   const result = await openai.embeddings.create({
-    input: payload.title + payload.content_text,
+    input: embeddingText,
     model: "text-embedding-3-small",
   });
 
@@ -226,25 +236,32 @@ export async function saveNote(payload: SaveNotePayload) {
 
 export async function vectorSearch(searchQuery: string) {
   const supabase = await createClient();
+  const enhancedQuery = `Find notes about: ${searchQuery}`;
 
   const result = await openai.embeddings.create({
-    input: searchQuery,
+    input: enhancedQuery,
     model: "text-embedding-3-small",
   });
 
   const [{ embedding }] = result.data;
-
   const user = await getCacheUser(supabase);
-  const { data: notes, error } = await supabase
-    .rpc("match_notes_global", {
-      query_embedding: JSON.stringify(embedding),
-      match_threshold: 0.4,
-      match_count: 10,
-      user_id: user!.id,
-    })
-    .select("*, profiles!notes_profile_id_fkey!inner(*)")
-    .returns<SearchResult[]>();
 
+  const { data: notes, error } = await supabase
+    .rpc("vector_search_v2", {
+      query_embedding: JSON.stringify(embedding),
+      match_threshold: 0.1,
+      user_id: user!.id,
+      match_count: 5,
+    })
+    .select("*")
+    .returns<SearchResult[]>();
+  notes?.map((note) =>
+    console.log(`
+        title: ${note.title}
+        score: ${note.similarity}
+        `)
+  );
+  // console.log("notes:", notes);
   return { notes, error };
 }
 

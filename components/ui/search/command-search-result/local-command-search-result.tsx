@@ -1,6 +1,6 @@
 import React from "react";
-import { CommandItem } from "../command";
-import { Separator } from "../separator";
+import { CommandItem } from "../../command";
+import { Separator } from "../../separator";
 import { SearchResult } from "@/types/search.type";
 type Props = {
   searchResult: SearchResult;

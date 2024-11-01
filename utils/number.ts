@@ -5,7 +5,7 @@ export const round = (value: number, precision: number) => {
 
 export const calculateDiffRate = (current: number, prev: number) => {
   if (prev === 0 || prev == null) {
-    return current === 0 ? 0 : 100;
+    return 0;
   }
   const prevValue = current - prev;
   const value = ((current - prevValue) / prevValue) * 100;

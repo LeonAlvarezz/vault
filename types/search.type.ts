@@ -38,7 +38,11 @@ export type SearchResult = {
   // content: Json | null;
   content_text: string | null;
   profiles?: Profile | null;
-  published_at: string | null;
+  profile_id?: string;
+  username?: string | null;
+  avatar_url?: string | null;
+  published_at?: string | null;
+  similarity?: number;
 };
 
 export type CreateSearch = {

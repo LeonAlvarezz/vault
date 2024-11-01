@@ -1,7 +1,7 @@
 import React from "react";
-import { CommandItem } from "../command";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
-import { Separator } from "../separator";
+import { CommandItem } from "../../command";
+import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
+import { Separator } from "../../separator";
 import { SearchResult } from "@/types/search.type";
 import { BlockNode } from "@/types/note.type";
 import { renderNoteDescription } from "@/lib/renderNote";
@@ -36,7 +36,7 @@ export default function GlobalCommandSearchResult({
           >
             <Avatar className="w-6 h-6">
               {searchResult.profiles?.avatar_url && (
-                <AvatarImage src={searchResult.profiles.avatar_url} />
+                <AvatarImage src={searchResult.profiles?.avatar_url} />
               )}
               <AvatarFallback>
                 {searchResult.profiles?.username.slice(0, 1).toUpperCase()}

@@ -5,11 +5,14 @@ import PricingDrawer from "@/components/ui/drawer/pricing-drawer";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSubscription } from "@/stores/subscription";
+import { User } from "@supabase/supabase-js";
 import { LinkIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-
-export default function SettingSubscription() {
+type Props = {
+  user: User | null;
+};
+export default function SettingSubscription({ user }: Props) {
   const { isPremium, isLoading } = useSubscription();
   console.log("isLoading:", isLoading);
   return (
@@ -34,7 +37,7 @@ export default function SettingSubscription() {
               </p>
             )}
 
-            <PricingDrawer>
+            <PricingDrawer user={user}>
               <Button variant="main">Upgrade Now</Button>
             </PricingDrawer>
           </div>

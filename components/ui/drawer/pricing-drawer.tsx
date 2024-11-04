@@ -15,10 +15,14 @@ import { FaCheck } from "react-icons/fa6";
 import { Separator } from "../separator";
 import { FREE_TIER, PREMIUM_TIER } from "@/constant/pricing";
 import Sparkle from "../animation/sparkle";
+import LinkButton from "../button/link-button";
+import { env } from "@/utils/env";
+import { User } from "@supabase/supabase-js";
 type Props = {
   children: ReactNode;
+  user: User | null;
 };
-export default function PricingDrawer({ children }: Props) {
+export default function PricingDrawer({ children, user }: Props) {
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -88,9 +92,11 @@ export default function PricingDrawer({ children }: Props) {
                 ))}
               </ul>
             </div>
-            <Button variant="main" className="w-full">
-              Upgrade
-            </Button>
+            <LinkButton
+              label="Upgrade"
+              href={`${process.env.NEXT_PUBLIC_STRIPE_PREMIUM_TIER_PAYMENT_LINK}?client_reference_id=${user?.id}`}
+            />
+
             <Sparkle />
           </div>
         </div>

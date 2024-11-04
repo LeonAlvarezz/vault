@@ -283,13 +283,14 @@ export async function getPublishedNotesByProfileId(
   filter?: NoteFilter
 ) {
   const supabase = await createClient();
+  const user = await getCacheUser(supabase);
   let query = supabase
     .from("notes")
     .select(
       "*, content: content->content, categories!inner(*), profile:profiles!notes_profile_id_fkey!inner(*), tags:rel_notes_tags(tags!inner(id, name, color, profile_id, created_at)), likes(*), bookmarks(*)"
     )
     .eq("profile_id", id)
-    .eq("likes.profile_id", id)
+    .eq("likes.profile_id", user!.id)
     .not("published_at", "is", null);
 
   if (filter?.sortBy) {

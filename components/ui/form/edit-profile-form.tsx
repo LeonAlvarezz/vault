@@ -61,7 +61,7 @@ export default function EditProfileForm({ profile }: Props) {
     setImagePreviewUrl(base64);
 
     const compressedImage = await compressImage(image, {
-      maxSizeMB: compressedSize,
+      maxSizeMB: 0.8,
     });
 
     const { publicUrl, error } = await uploadImage(compressedImage);

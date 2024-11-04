@@ -11,7 +11,7 @@ export default function PreviewExplore() {
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
-      className="flex gap-2 scale-110 relative right-422" // Ensure there's a gap between columns
+      className="flex gap-8 md:gap-4 scale-110 relative -right-[200px] -top-[80px] sm:-right-10 sm:top-0" // Ensure there's a gap between columns
     >
       <div className="bg-gradient-to-br from-neutral-900/20 to-neutral-900 absolute top-0 left-0 w-full h-[500px] z-20"></div>
 

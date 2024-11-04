@@ -12,6 +12,8 @@ export async function getNoteSummary() {
   if (error) {
     return { data: null, error };
   }
+  data;
+  console.log("data:", data);
 
   return { data, error };
 }

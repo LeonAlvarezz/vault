@@ -116,7 +116,7 @@ export default function SearchInput({
         value={query}
         onChange={handleChange}
       />
-      <div className="absolute top-1/2 right-14 -translate-y-1/2 pointer-events-none hidden sm:inline-flex select-none items-center gap-1 rounded ">
+      <div className="absolute top-1/2 right-20 -translate-y-1/2 pointer-events-none hidden sm:inline-flex select-none items-center gap-1 rounded ">
         <KeyboardKey />
       </div>
 

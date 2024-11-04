@@ -248,12 +248,15 @@ export async function vectorSearch(searchQuery: string) {
   const { data: notes, error } = await supabase
     .rpc("vector_search_v2", {
       query_embedding: JSON.stringify(embedding),
-      match_threshold: 0.1,
+      match_threshold: 0.3,
       user_id: user!.id,
       match_count: 5,
     })
     .select("*")
     .returns<SearchResult[]>();
+  notes!.map((note) => {
+    console.log(note.title + ": " + note.similarity);
+  });
   return { notes, error };
 }
 

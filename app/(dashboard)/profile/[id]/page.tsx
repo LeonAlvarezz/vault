@@ -8,6 +8,7 @@ import { getProfilesById } from "@/data/server/profiles";
 import { getPublishedNotesByProfileId } from "@/data/server/note";
 import { NoteFilter } from "@/types/note.type";
 import { getOccupationLabel } from "@/constant/occupation";
+import CoverImage from "../edit/feature/cover_image";
 type Props = {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
   params: Promise<{ id: string }>;
@@ -25,10 +26,11 @@ export default async function AccountPage(props: Props) {
   return (
     <>
       <section>
-        <ImageContainerBlur
+        {/* <ImageContainerBlur
           src="/image/default-cover1.png"
           className="h-[150px] w-full overflow-hidden"
-        />
+        /> */}
+        <CoverImage profile={profile} />
         <div className="flex flex-col sm:flex-row items-center gap-6 relative bottom-10 sm:bottom-6 px-2 sm:mb-6 mb-3 ">
           <Avatar className="size-28">
             {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}

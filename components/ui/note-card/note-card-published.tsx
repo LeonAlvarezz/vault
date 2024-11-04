@@ -49,7 +49,7 @@ export default function NoteCardPublished({
       </div>
       <div className="flex mt-1 flex-col">
         <div className="flex justify-between">
-          <h2 className="text-md font-semibold mb-1">
+          <h2 className="text-md font-semibold mb-1 line-clamp-1">
             {note?.title || "Untitled"}
           </h2>
           {optionButton && (

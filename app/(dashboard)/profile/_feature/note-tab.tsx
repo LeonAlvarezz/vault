@@ -17,6 +17,16 @@ type Props = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 export default function NoteTab({ notes, searchParams }: Props) {
+  console.log(
+    "notes:",
+    notes?.map((note) => {
+      if (note && note.likes) {
+        note.likes.map((like) => {
+          console.log(like);
+        });
+      }
+    })
+  );
   const ORDER = [
     {
       value: "recent",

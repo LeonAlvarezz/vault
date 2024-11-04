@@ -4,6 +4,9 @@ export const round = (value: number, precision: number) => {
 };
 
 export const calculateDiffRate = (current: number, prev: number) => {
+  if (current > 0 && prev > 0 && current === prev) {
+    return 100;
+  }
   if (prev === 0 || prev == null) {
     return 0;
   }

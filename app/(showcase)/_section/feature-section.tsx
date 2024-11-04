@@ -19,7 +19,9 @@ export default function FeatureSection() {
             // className
           )}
         >
-          <h1 className="text-lg font-bold">Developer-Friendly Editor</h1>
+          <h1 className="text-lg font-bold leading-5 mb-2">
+            Developer-Friendly Editor
+          </h1>
           <p className="text-xs text-neutral-400">
             Quickly take notes, document solutions, and capture code snippets
             with ease.
@@ -32,7 +34,9 @@ export default function FeatureSection() {
             // className
           )}
         >
-          <h1 className="text-lg font-bold">Smart Organization</h1>
+          <h1 className="text-lg font-bold leading-5 mb-2">
+            Smart Organization
+          </h1>
           <p className="text-xs text-neutral-400">
             Effortlessly organize notes with tagging, categorization
           </p>
@@ -43,7 +47,9 @@ export default function FeatureSection() {
             "bg-neutral-900 border border-neutral-700/50 p-6 rounded-sm overflow-hidden h-[350px] relative"
           )}
         >
-          <h1 className="text-lg font-bold">Search Like Never Before</h1>
+          <h1 className="text-lg font-bold leading-5 mb-2">
+            Search Like Never Before
+          </h1>
           <p className="text-xs text-neutral-400 mb-6">
             Search and find note via Full Text Search and Vector Search
           </p>
@@ -55,7 +61,7 @@ export default function FeatureSection() {
           )}
         >
           <div className="flex gap-2 flex-col justify-center">
-            <h1 className="text-lg font-bold">
+            <h1 className="text-lg font-bold leading-5 mb-2">
               Share & Browse Notes from The Community
             </h1>
             <p className="text-xs text-neutral-400">

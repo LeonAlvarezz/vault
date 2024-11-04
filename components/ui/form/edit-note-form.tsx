@@ -108,7 +108,6 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
             cover_url: coverUrl,
             content_text: editorRef.current.editor
               .getText()
-              // + `Updated at: ${new Date().toISOString()}`
               .trim()
               .replace(/(\r\n|\n|\r){2,}/g, "\n"),
           };
@@ -133,7 +132,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
         setSaveLoading(false);
       }
     },
-    [params.id, toast]
+    [params.id]
   );
 
   const handleAutoSave = useCallback(() => {

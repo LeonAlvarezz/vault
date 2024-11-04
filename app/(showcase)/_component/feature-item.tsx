@@ -21,8 +21,8 @@ export default function FeatureItem({
         className
       )}
     >
-      <h1 className="text-lg font-bold">{heading}</h1>
-      <p className="text-xs text-neutral-400">{description}</p>
+      <h1 className="text-lg font-bold leading-5">{heading}</h1>
+      <p className="text-xs text-neutral-400 mt-2">{description}</p>
       {/* {children} */}
 
       {imageSrc && <ImageContainer src={imageSrc} />}

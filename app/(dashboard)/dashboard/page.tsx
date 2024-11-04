@@ -29,7 +29,6 @@ export default async function page() {
       getNoteMetricLast3Months(),
       getRecentNote(3),
     ]);
-  console.log("noteSummary:", noteSummary);
 
   return (
     <div>

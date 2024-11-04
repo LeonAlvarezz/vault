@@ -38,7 +38,7 @@ export async function commandSearch(searchQuery: string, isGlobal: boolean) {
   if (!isGlobal) {
     query = query.eq("profile_id", user!.id);
   } else {
-    query = query.not("published_at", "is", null).neq("profile_id", user!.id);
+    query = query.not("published_at", "is", null);
   }
 
   const { data, error } = await query.textSearch("fts", searchQuery).limit(4);

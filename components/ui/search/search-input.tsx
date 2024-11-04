@@ -55,7 +55,7 @@ export default function SearchInput({
     if (sanitizedQuery) {
       const encodedQuery = encodeURIComponent(sanitizedQuery);
       const payload: CreateSearch = {
-        query: sanitizedQuery, // Ensure consistency here
+        query: query, // Ensure consistency here
         search_source: SEARCH_SOURCE.SEARCH_BAR,
         search_type: SEARCH_TYPE.NOTE,
       };

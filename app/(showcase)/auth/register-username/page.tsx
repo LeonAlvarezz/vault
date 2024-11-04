@@ -3,7 +3,7 @@ import React from "react";
 
 export default function page() {
   return (
-    <section className="flex w-full min-h-svh items-center justify-center">
+    <section className="section-center flex items-center !min-h-[calc(100vh-56px)] justify-center">
       <RegisterUsernameForm />
     </section>
   );

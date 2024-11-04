@@ -248,7 +248,7 @@ export async function vectorSearch(searchQuery: string) {
   const { data: notes, error } = await supabase
     .rpc("vector_search_v2", {
       query_embedding: JSON.stringify(embedding),
-      match_threshold: 0.3,
+      match_threshold: 0.25,
       user_id: user!.id,
       match_count: 5,
     })

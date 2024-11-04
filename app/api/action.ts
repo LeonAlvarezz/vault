@@ -229,7 +229,7 @@ export async function saveNote(payload: SaveNotePayload) {
     return { data: null, error: insertError };
   }
 
-  // revalidatePathClient("/note");
+  revalidatePathClient("/note");
 
   return { data: noteData, error: null };
 }

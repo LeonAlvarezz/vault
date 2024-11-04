@@ -27,10 +27,6 @@ export const useSubscription = create<SubscriptionStore>((set) => ({
         set({
           isPremium: false,
         });
-        toast({
-          title: "Failed to Fetch Subscription",
-          description: error instanceof Error ? error.message : String(error),
-        });
       } else {
         set({
           isPremium: status === SUBCRIPTION_TIER.PREMIUM ? true : false,

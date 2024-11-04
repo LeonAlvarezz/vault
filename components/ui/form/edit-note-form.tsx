@@ -307,7 +307,7 @@ export default function EditNoteForm({ tags, categories, note }: Props) {
           </div>
         )}
         <div className="flex justify-between items-center">
-          <BackButton />
+          <BackButton shouldRevalidate />
           <CreateNoteDropdownMenu
             handleSave={handleSubmit(handleSaveNote)}
             note={note}

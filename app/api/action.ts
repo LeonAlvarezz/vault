@@ -177,7 +177,6 @@ export async function saveNote(payload: SaveNotePayload) {
   ]
     .filter(Boolean)
     .join("\n"); // Use newlines for better text separation
-  console.log("embeddingText:", embeddingText);
 
   const result = await openai.embeddings.create({
     input: embeddingText,
@@ -229,7 +228,7 @@ export async function saveNote(payload: SaveNotePayload) {
     return { data: null, error: insertError };
   }
 
-  revalidatePathClient("/note");
+  // revalidatePathClient("/note");
 
   return { data: noteData, error: null };
 }
@@ -255,13 +254,6 @@ export async function vectorSearch(searchQuery: string) {
     })
     .select("*")
     .returns<SearchResult[]>();
-  notes?.map((note) =>
-    console.log(`
-        title: ${note.title}
-        score: ${note.similarity}
-        `)
-  );
-  // console.log("notes:", notes);
   return { notes, error };
 }
 
@@ -431,7 +423,7 @@ export const signInWithGoogle = async () => {
       return { data: null, error: error.message };
     }
     if (data.url) {
-      redirect(data.url); // use the redirect API for your server framework
+      redirect(data.url);
     }
   } else {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -449,7 +441,7 @@ export const signInWithGoogle = async () => {
       return { data: null, error: error.message };
     }
     if (data.url) {
-      redirect(data.url); // use the redirect API for your server framework
+      redirect(data.url);
     }
   }
 };
@@ -641,7 +633,6 @@ export async function updateSubscription(
     .from("profiles")
     .update({ subscription_tier: tier })
     .match({ id: cid });
-  console.log("error:", error);
   if (error) {
     return { error };
   }

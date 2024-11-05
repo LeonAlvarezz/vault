@@ -21,9 +21,9 @@ export default function HeroSection() {
               Your All-in-One Developer Knowledge{" "}
               <span className="underline text-second">Vault</span>
             </h1>
-            <div className="font-mono text-xs bg-main/90 absolute -bottom-0 -right-0 text-nowrap px-2 rounded-sm">
+            {/* <div className="font-mono text-xs bg-main/90 absolute -bottom-0 -right-0 text-nowrap px-2 rounded-sm">
               alpha-v1
-            </div>
+            </div> */}
           </div>
 
           <p className="text-sm text-neutral-400">

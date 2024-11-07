@@ -41,7 +41,7 @@ export default function PricingDrawer({ children, user }: Props) {
             to premium version to enjoy more media support, unlimited tag and
             faster support
           </p> */}
-        <div className="grid grid-cols-2 gap-4 px-14 py-2 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-14 py-2 mb-6 max-h-[500px] sm:overflow-visible overflow-y-scroll">
           <div className="w-full flex flex-col justify-between min-h-[400px] border border-neutral-700/50 p-10 rounded-sm">
             <div>
               <h2 className="text-xl font-bold">Free</h2>
@@ -69,7 +69,7 @@ export default function PricingDrawer({ children, user }: Props) {
               Current Plan
             </Button>
           </div>
-          <div className="w-full flex flex-col justify-between min-h-[400px] border-rainbow p-10 rounded-sm relative">
+          <div className="w-full flex flex-col justify-between min-h-[400px] border-rainbow p-10 rounded-sm relative sm:overflow-visible overflow-hidden">
             <div>
               <h2 className="text-xl font-bold">Premium</h2>
               <p className="text-xs text-neutral-500 mt-2">

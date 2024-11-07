@@ -39,6 +39,7 @@ export default function FloatingButton({
   const { toast } = useToast();
   const handleCreateNote = async () => {
     startTransition(async () => {
+      setIsActive(false);
       startProgress();
       try {
         const { data, error } = await createNote();

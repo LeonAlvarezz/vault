@@ -78,6 +78,44 @@ export type Database = {
         }
         Relationships: []
       }
+      feedbacks: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          image: string[] | null
+          profile_id: string | null
+          resolved_at: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          image?: string[] | null
+          profile_id?: string | null
+          resolved_at?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          image?: string[] | null
+          profile_id?: string | null
+          resolved_at?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedbacks_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       likes: {
         Row: {
           created_at: string
@@ -328,6 +366,47 @@ export type Database = {
             columns: ["tag_id"]
             isOneToOne: false
             referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          description: string | null
+          id: number
+          images: string[] | null
+          profile_id: string | null
+          resolved_at: string | null
+          subject: string | null
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          images?: string[] | null
+          profile_id?: string | null
+          resolved_at?: string | null
+          subject?: string | null
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          images?: string[] | null
+          profile_id?: string | null
+          resolved_at?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

@@ -14,6 +14,7 @@ import { IconType } from "react-icons/lib";
 import { Button } from "./button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Toggle } from "./toggle";
+import { UseFormRegisterReturn } from "react-hook-form";
 type Props = {
   label: string;
   placeholder?: string;
@@ -23,6 +24,9 @@ type Props = {
   showCount?: boolean;
   maxLength?: number;
   defaultValue?: string;
+  required?: boolean;
+  minHeight?: number;
+  register?: UseFormRegisterReturn;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errors?: ZodErrorFormatted | null;
 };
@@ -35,6 +39,7 @@ type SelectWithLabelProps = {
 };
 export function InputWithLabel({
   label,
+  required = false,
   name,
   type = "text",
   placeholder,
@@ -42,16 +47,19 @@ export function InputWithLabel({
   value,
   defaultValue,
   errors,
+  register,
 }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <Label htmlFor={name}>{label}</Label>
       <Input
+        {...register}
         type={type}
         name={name}
         variant={"outline"}
         placeholder={placeholder}
         value={value}
+        required={required}
         defaultValue={defaultValue}
         onChange={onChange}
       />
@@ -69,33 +77,6 @@ export function InputWithLabel({
   );
 }
 
-// export function InputPasswordWithLabel({ label, name, placeholder }: Props) {
-//   const [type, setType] = useState("password");
-
-//   const togglePasswordVisibility = () => {
-//     setType((prevType) => (prevType === "password" ? "text" : "password"));
-//   };
-
-//   return (
-//     <div className="flex flex-col gap-3 relative">
-//       <Label htmlFor={name}>{label}</Label>
-//       <Input
-//         type={type}
-//         name={name}
-//         variant={"outline"}
-//         placeholder={placeholder}
-//       />
-//       <Button
-//         onClick={togglePasswordVisibility}
-//         variant={"icon"}
-//         size={"icon"}
-//         className="absolute bottom-0 right-0 hover:bg-neutral-700/50"
-//       >
-//         {type === "password" ? <FaEye /> : <FaEyeSlash />}
-//       </Button>
-//     </div>
-//   );
-// }
 type ZodErrorFormatted = {
   _errors: string[];
 };
@@ -149,7 +130,10 @@ export function TextAreaWithLabel({
   showCount = false,
   maxLength = 100,
   name,
+  required,
+  minHeight = 80,
   defaultValue,
+  register,
 }: Props) {
   const [text, setText] = useState(defaultValue);
 
@@ -163,17 +147,21 @@ export function TextAreaWithLabel({
     <div className="flex flex-col gap-3 h-full relative">
       <Label>{label}</Label>
       <Textarea
+        {...register}
         name={name}
         value={text}
         onChange={handleChange}
         placeholder={placeholder}
         variant={"outline"}
-        // defaultValue={defaultValue}
+        required={required}
+        style={{
+          minHeight: `${minHeight}px`,
+        }}
         className="h-full"
       />
       {showCount && (
         <p className="absolute bottom-1 right-5 text-[12px] text-neutral-500">
-          {text?.length}/{maxLength}
+          {text?.length || 0}/{maxLength}
         </p>
       )}
     </div>

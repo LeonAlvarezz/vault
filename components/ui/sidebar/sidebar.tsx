@@ -12,6 +12,8 @@ import { Button } from "../button";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent } from "../tooltip";
 import LogoutButton from "../button/logout-button";
+import { Link } from "react-transition-progress/next";
+import { IoIosHelpCircle } from "react-icons/io";
 
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
@@ -50,15 +52,20 @@ export const SIDEBAR_ITEM = [
   {
     separator: true,
   },
-  {
-    id: "profile",
-    icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
-    link: "/profile?view=note",
-  },
+  // {
+  //   id: "profile",
+  //   icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
+  //   link: "/profile?view=note",
+  // },
   {
     id: "settings",
     icon: <IoSettingsSharp color={ICON_COLOR} size={ICON_SIZE} />,
     link: "/settings",
+  },
+  {
+    id: "help",
+    icon: <IoIosHelpCircle color={ICON_COLOR} size={ICON_SIZE} />,
+    link: "/help",
   },
 ];
 type Props = {
@@ -76,12 +83,16 @@ export default async function Sidebar({ isAuthenticatedAsAnon }: Props) {
       <div className="flex justify-between flex-col min-h-svh sm:min-h-screen">
         <div>
           <div className="flex items-center flex-col w-full my-6">
-            <Avatar>
-              {profile?.avatar_url && <AvatarImage src={profile.avatar_url} />}
-              <AvatarFallback>
-                {profile?.username.slice(0, 1).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <Link href={"/profile"}>
+              <Avatar>
+                {profile?.avatar_url && (
+                  <AvatarImage src={profile.avatar_url} />
+                )}
+                <AvatarFallback>
+                  {profile?.username.slice(0, 1).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
           </div>
           <div>
             {SIDEBAR_ITEM.map((item, index) => (

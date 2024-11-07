@@ -18,7 +18,6 @@ import { Note } from "@/types/note.type";
 import CopyButton from "../button/copy-button";
 import { FaSpinner } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useFormContext } from "react-hook-form";
 type Props = {
   note?: Note | null;
   category: string;

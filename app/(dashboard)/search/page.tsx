@@ -93,7 +93,7 @@ export default async function SearchPage(props: Props) {
 }
 
 //Trending Search
-// {/* <div className="mt-10">
+//  <div className="mt-10">
 //             <div className="flex mb-4 items-center gap-2">
 //               <MdOutlineTrendingUp size={20} />
 //               <h2 className="text-xl font-bold">Trending</h2>
@@ -115,4 +115,4 @@ export default async function SearchPage(props: Props) {
 //                 </div>
 //               ))}
 //             </div>
-//           </div> */}
+//           </div>

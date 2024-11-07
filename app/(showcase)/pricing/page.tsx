@@ -1,4 +1,3 @@
-import { updateSubscription } from "@/app/api/action";
 import Sparkle from "@/components/ui/animation/sparkle";
 import { Button } from "@/components/ui/button";
 import BuyButton from "@/components/ui/button/buy-button";

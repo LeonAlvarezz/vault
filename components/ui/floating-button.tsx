@@ -1,6 +1,4 @@
 "use client";
-import { Link } from "react-transition-progress/next";
-import Image from "next/image";
 import React, { startTransition, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { ICON_COLOR, ICON_SIZE } from "./sidebar/sidebar";
@@ -16,7 +14,6 @@ import { User } from "@supabase/supabase-js";
 import { shouldShowFloatingButton } from "@/utils/route";
 import { useProgress } from "react-transition-progress";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
-import { isUserAuthenticated } from "@/app/api/action";
 type Props = {
   className?: string;
   user?: User | null;

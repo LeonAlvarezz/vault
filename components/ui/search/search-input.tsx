@@ -4,12 +4,7 @@ import { IoClose, IoSearch } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { Button } from "../button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  CreateSearch,
-  SEARCH_SOURCE,
-  SEARCH_TYPE,
-  SearchResultCol,
-} from "@/types/search.type";
+import { CreateSearch, SEARCH_SOURCE, SEARCH_TYPE } from "@/types/search.type";
 import { useToast } from "../use-toast";
 import { logSearch } from "@/data/client/search";
 import { sanitizeSearchInput } from "@/utils/string";
@@ -18,17 +13,10 @@ import { useDebouncedCallback } from "use-debounce";
 import { useProgress } from "react-transition-progress";
 import KeyboardKey from "../keyboard-key/keyboard-key";
 type Props = {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  searchKey?: string;
   user: User | null;
   debounce?: boolean;
 };
-export default function SearchInput({
-  onChange,
-  searchKey = "public",
-  debounce = false,
-  user,
-}: Props) {
+export default function SearchInput({ debounce = false, user }: Props) {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();

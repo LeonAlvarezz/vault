@@ -11,10 +11,10 @@ import { InputWithLabel } from "../input-label";
 import { compressImage, toBase64 } from "@/lib/image";
 import { uploadImage } from "@/data/client/image";
 import { toast } from "../use-toast";
-import { editProfile } from "@/app/api/action";
 import { ZodFormattedError } from "zod";
 import { TiptapEditorRef } from "@/components/tiptap/TipTapEditor";
 import { useSubscription } from "@/stores/subscription";
+import { editProfile } from "@/action/profile";
 type Props = {
   profile: Profile;
 };

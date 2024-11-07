@@ -3,7 +3,7 @@ import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { cn } from "@/lib/utils";
 import NextImage from "next/image";
-import { dropImagePlugin, UploadFn } from "@/lib/dropImagePlugin";
+import { dropImagePlugin, UploadFn } from "@/components/tiptap/dropImagePlugin";
 import ImageContainerBlurClient from "../ui/image/image-container-blur-client";
 import { useEffect, useState } from "react";
 

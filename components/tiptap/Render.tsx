@@ -1,5 +1,5 @@
 import { BlockNode, Note, NOTE_CONTENT_TYPE } from "@/types/note.type";
-import { renderNote } from "@/lib/renderNote";
+import { renderNote } from "@/components/tiptap/renderNote";
 import React from "react";
 import { Json } from "@/database.types";
 import NotAvailable from "../ui/not-availble";

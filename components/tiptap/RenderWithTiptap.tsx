@@ -1,6 +1,6 @@
 "use client";
 import { BlockNode, Note, NOTE_CONTENT_TYPE } from "@/types/note.type";
-import { renderNote } from "@/lib/renderNote";
+import { renderNote } from "@/components/tiptap/renderNote";
 import {
   Content,
   EditorContent,

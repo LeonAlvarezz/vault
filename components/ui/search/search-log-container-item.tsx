@@ -3,10 +3,10 @@ import { Search } from "@/types/search.type";
 import React from "react";
 import { Button } from "../button";
 import { IoClose } from "react-icons/io5";
-import { deleteSearch } from "@/app/api/action";
 import { toast } from "../use-toast";
 import { Link } from "react-transition-progress/next";
 import { sanitizeSearchInput } from "@/utils/string";
+import { deleteSearch } from "@/action/search";
 type Props = {
   search: Search;
   setTransition: React.TransitionStartFunction;

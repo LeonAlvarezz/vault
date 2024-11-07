@@ -15,8 +15,8 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { IoLogOut } from "react-icons/io5";
 import { ICON_COLOR, ICON_SIZE } from "../sidebar/sidebar";
-import { signout } from "@/app/api/action";
 import { useProgress } from "react-transition-progress";
+import { signout } from "@/action/auth";
 type Props = {
   items: SidebarMobileProps[];
 };

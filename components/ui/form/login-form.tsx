@@ -1,10 +1,10 @@
 "use client";
 import React, { useActionState } from "react";
 import { InputWithLabel } from "../input-label";
-import { login } from "@/app/api/action";
 import SubmitButton from "../button/submit-button";
 import { toast, useToast } from "../use-toast";
 import { z } from "zod";
+import { login } from "@/action/auth";
 type Props = {
   returnUrl?: string | string[] | undefined;
 };

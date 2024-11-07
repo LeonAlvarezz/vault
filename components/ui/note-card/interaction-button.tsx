@@ -16,7 +16,7 @@ import { toast } from "../use-toast";
 import { cn } from "@/lib/utils";
 import ShareModal from "../modal/share-modal";
 import { bookmarkNote } from "@/data/server/bookmark";
-import { likeNote } from "@/app/api/action";
+import { likeNote } from "@/action/note";
 type Props = {
   note: Note;
   bookmark?: boolean;

@@ -4,9 +4,9 @@ import React, { Suspense, useContext } from "react";
 import FloatingButton from "@/components/ui/floating-button";
 
 import Tutorial from "@/components/ui/tutorial/tutorial";
-import { isUserAuthenticated } from "../api/action";
 import LoginSignUpFloatingButton from "@/components/ui/button/login-signup-button";
 import CommandSearch from "@/components/ui/search/command-search";
+import { isUserAuthenticated } from "@/action/auth";
 
 export default async function DashboardLayout({
   children,

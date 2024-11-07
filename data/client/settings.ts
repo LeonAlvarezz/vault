@@ -1,4 +1,4 @@
-import { revalidatePathClient } from "@/app/api/action";
+import { revalidatePathClient } from "@/action";
 import { createClient } from "@/lib/supabase/client";
 import { Setting } from "@/types/setting.type";
 

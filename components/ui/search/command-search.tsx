@@ -1,24 +1,20 @@
 "use client";
-import React, { startTransition, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
 } from "../command";
 import { RiGlobalLine } from "react-icons/ri";
 import { Toggle } from "../toggle";
-import { useGesture, usePinch } from "@use-gesture/react";
+import { usePinch } from "@use-gesture/react";
 import { constructSearchQuery } from "@/utils/string";
 import { useDebouncedCallback } from "use-debounce";
 import { useToast } from "../use-toast";
 import { SearchResult } from "@/types/search.type";
 import { commandSearch } from "@/data/client/search";
-import GlobalCommandSearchResult from "./command-search-result/global-command-search-result";
-import LocalCommandSearchResult from "./command-search-result/local-command-search-result";
+
 import {
   Tooltip,
   TooltipContent,
@@ -27,17 +23,16 @@ import {
 } from "../tooltip";
 import Spinner from "../spinner";
 import { IoSparklesSharp } from "react-icons/io5";
-import { vectorSearch } from "@/app/api/action";
 import { useSettings } from "@/stores/setting";
 import { getKeyboardValue } from "@/utils/json";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
-import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { useSubscription } from "@/stores/subscription";
 import { FaCrown } from "react-icons/fa6";
 import CommandSearchResult from "./command-search-result/command-search-result";
+import { vectorSearch } from "@/action/search";
 
 const constructShortcutCond = (keys: string) => {
   if (!keys || typeof keys !== "string") {
@@ -105,39 +100,6 @@ export default function CommandSearch() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [disable_command_search, keyboard_shortcuts, isKeyRecording]);
-
-  // useGesture(
-  //   {
-  //     onDrag: ({ touches, direction: [, dy], event }) => {
-  //       if (touches === 2 && dy > 0) {
-  //         event.preventDefault();
-  //         setOpen(true);
-  //       }
-  //     },
-  //   },
-  //   {
-  //     target: gestureRef,
-  //     eventOptions: { passive: false },
-  //   }
-  // );
-  // useGesture(
-  //   {
-  //     onPinch: ({ da: [d], origin: [ox, oy], event, first, active }) => {
-  //       console.log("Pinch detected", { d, first, active });
-  //       if (first && active) {
-  //         const threshold = 200;
-  //         if (d > threshold) {
-  //           event.preventDefault();
-  //           setOpen(true);
-  //         }
-  //       }
-  //     },
-  //   },
-  //   {
-  //     target: gestureRef,
-  //     eventOptions: { passive: false },
-  //   }
-  // );
 
   usePinch(
     ({ direction: [d], event, cancel }) => {

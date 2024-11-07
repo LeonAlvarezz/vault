@@ -1,9 +1,9 @@
 import React from "react";
 import ImageContainerBlurClient from "../image/image-container-blur-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import { SearchResultCol } from "@/types/search.type";
-import { renderNoteDescription } from "@/lib/renderNote";
+import { renderNoteDescription } from "@/components/tiptap/renderNote";
 import { BlockNode } from "@/types/note.type";
 import { isContentArray } from "@/utils/string";
 import { Link } from "react-transition-progress/next";

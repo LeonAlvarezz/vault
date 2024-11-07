@@ -31,7 +31,6 @@ export default function Tag({ className, color = "blue", children }: Props) {
       )}
     >
       {children}
-      {/* <p>{label}</p> */}
     </div>
   );
 }

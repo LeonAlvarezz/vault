@@ -1,15 +1,7 @@
 // src/components/multi-select.tsx
-
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import {
-  CheckIcon,
-  XCircle,
-  ChevronDown,
-  XIcon,
-  WandSparkles,
-  Check,
-} from "lucide-react";
+import { WandSparkles, Check } from "lucide-react";
 import { IoClose } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
@@ -28,21 +20,17 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
 import Tag from "../tag";
-// import { createTags } from "@/data/client/tag";
 import { useToast } from "../use-toast";
-import { IoIosOptions } from "react-icons/io";
-import { SlOptionsVertical } from "react-icons/sl";
 import TagEditDropdown from "../dropdown/tag-edit-dropdown";
-import { createTags, revalidatePathClient } from "@/app/api/action";
 import Spinner from "../spinner";
-import { Skeleton } from "../skeleton";
 import TagSkeleton from "../skeleton/tag-skeleton";
 import { ToastAction } from "../toast";
 import Link from "next/link";
 import { useSubscription } from "@/stores/subscription";
+import { revalidatePathClient } from "@/action";
+import { createTags } from "@/action/tag";
 const TAG_FREE_LIMIT = 5;
 /**
  * Variants for the multi-select component to handle different styles.

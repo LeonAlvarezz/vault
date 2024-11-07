@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { InputWithLabel } from "@/components/ui/input-label";
-import { signup } from "@/app/api/action";
 import SubmitButton from "../button/submit-button";
 import { useToast } from "../use-toast";
+import { signup } from "@/action/auth";
 type Props = {
   returnUrl?: string | string[] | undefined;
 };

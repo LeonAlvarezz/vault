@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "../button";
 import ImageContainerBlur from "../image/image-container-blur";
-import { signInWithGoogle } from "@/app/api/action";
 import GoogleIcon from "@/public/image/google.png";
+import { signInWithGoogle } from "@/action/auth";
 
 export default function GoogleButton() {
   return (

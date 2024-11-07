@@ -1,5 +1,5 @@
 "use client";
-import { updateUserCover } from "@/app/api/action";
+import { updateUserCover } from "@/action/profile";
 import UploadButton from "@/components/ui/button/upload-button";
 import ImageContainerBlurClient from "@/components/ui/image/image-container-blur-client";
 import { toast } from "@/components/ui/use-toast";

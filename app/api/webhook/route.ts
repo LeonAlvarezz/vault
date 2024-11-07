@@ -13,11 +13,9 @@
 import Stripe from "stripe";
 import { NextApiRequest, NextApiResponse } from "next";
 import { env } from "@/utils/env";
-import { updateSubscription } from "../action";
-import { redirect } from "next/dist/server/api-utils";
 import { SUBCRIPTION_TIER } from "@/types/profiles.type";
 import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { updateSubscription } from "@/action/profile";
 
 type EventName =
   // Checkout: https://stripe.com/docs/payments/checkout

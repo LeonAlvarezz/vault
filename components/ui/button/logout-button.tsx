@@ -6,12 +6,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../tooltip";
-import { signout } from "@/app/api/action";
 import { cn } from "@/lib/utils";
 import { IoLogOut } from "react-icons/io5";
 import { Button } from "../button";
 import { ICON_COLOR, ICON_SIZE } from "../sidebar/sidebar";
 import { useProgress } from "react-transition-progress";
+import { signout } from "@/action/auth";
 
 export default function LogoutButton() {
   const startProgress = useProgress();

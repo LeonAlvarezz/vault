@@ -2,7 +2,7 @@ import React from "react";
 import { CommandItem } from "../../command";
 import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
 import { Separator } from "../../separator";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import { SearchResult } from "@/types/search.type";
 type Props = {
   searchResult: SearchResult;

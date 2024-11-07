@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 import SubmitButton from "@/components/ui/button/submit-button";
 import { Input } from "@/components/ui/input";
-import { registerUsername } from "@/app/api/action";
 import { toast } from "../use-toast";
 import { AuthError } from "@supabase/supabase-js";
 import { ZodFormattedError } from "zod";
 import { RegisterUsername } from "@/types/profiles.type";
 import { InputWithLabel } from "../input-label";
+import { registerUsername } from "@/action/profile";
 
 export default function RegisterUsernameForm() {
   const [errors, setErrors] =

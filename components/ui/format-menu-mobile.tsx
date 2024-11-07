@@ -26,7 +26,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import UploadButton from "./button/upload-button";
 import { uploadImage } from "@/data/client/image";
 import { useToast } from "./use-toast";
-import { blobToBase64 } from "@/lib/dropImagePlugin";
+import { blobToBase64 } from "@/components/tiptap/dropImagePlugin";
 import { compressImage } from "@/lib/image";
 import { useSubscription } from "@/stores/subscription";
 type Props = {

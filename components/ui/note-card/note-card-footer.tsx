@@ -4,14 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { Note } from "@/types/note.type";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { Toggle } from "../toggle";
 import { AuthError, PostgrestError } from "@supabase/supabase-js";
 import { useToast } from "../use-toast";
 import { useProgress } from "react-transition-progress";
 import { bookmarkNote } from "@/data/server/bookmark";
-import { likeNote } from "@/app/api/action";
+import { likeNote } from "@/action/note";
 type Props = {
   note: Note;
   bookmark?: boolean;

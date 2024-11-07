@@ -3,7 +3,7 @@ import { Link } from "react-transition-progress/next";
 import Tag from "../tag";
 import EditNoteDropdownMenu from "../dropdown/edit-note-dropdown";
 import { Note } from "@/types/note.type";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import ImageContainerBlurClient from "../image/image-container-blur-client";
 type NoteCardProps = {
   note?: Note;

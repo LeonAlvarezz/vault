@@ -1,5 +1,5 @@
 import { Plugin, PluginKey } from "prosemirror-state";
-import { compressImage } from "./image";
+import { compressImage } from "../../lib/image";
 import { toast } from "@/components/ui/use-toast";
 
 export type UploadFn = (image: File) => Promise<

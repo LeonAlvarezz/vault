@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Tag from "../tag";
-import { Color } from "@/lib/color";
+import { Color } from "@/utils/color";
 import { MdClose } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 type Options = {

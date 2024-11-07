@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
 import { Separator } from "../../separator";
 import { SearchResult } from "@/types/search.type";
 import { BlockNode } from "@/types/note.type";
-import { renderNoteDescription } from "@/lib/renderNote";
+import { renderNoteDescription } from "@/components/tiptap/renderNote";
 import { isContentArray } from "@/utils/string";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import { Link } from "react-transition-progress/next";
 type Props = {
   searchResult: SearchResult;

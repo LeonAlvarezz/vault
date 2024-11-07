@@ -12,7 +12,7 @@ import { MdDelete } from "react-icons/md";
 import { useToast } from "../use-toast";
 import { cn } from "@/lib/utils";
 import { Note } from "@/types/note.type";
-import { deleteNote } from "@/app/api/action";
+import { deleteNote } from "@/action/note";
 type Props = {
   className?: string;
   note?: Note;

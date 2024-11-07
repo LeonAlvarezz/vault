@@ -1,7 +1,6 @@
 "use client";
 import { Link } from "react-transition-progress/next";
 import React, { ReactNode } from "react";
-import { Separator } from "../separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 

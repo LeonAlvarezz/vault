@@ -6,15 +6,11 @@ import "react-photo-view/dist/react-photo-view.css";
 import ThemeProviders from "@/context/theme-context";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
-import CommandSearch from "@/components/ui/search/command-search";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {} from "@/context/categorization-context";
 import { ProgressBar, ProgressBarProvider } from "react-transition-progress";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { createClient } from "@/lib/supabase/server";
-import { getCacheUser } from "@/data/server/profiles";
 
-// const inter = Inter({ subsets: ["latin"] });
 const font = _font({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

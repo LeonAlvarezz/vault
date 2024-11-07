@@ -4,7 +4,7 @@ import { Button } from "../button";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useProgress } from "react-transition-progress";
-import { revalidatePathClient } from "@/app/api/action";
+import { revalidatePathClient } from "@/action";
 type Props = {
   shouldRevalidate?: boolean;
 };

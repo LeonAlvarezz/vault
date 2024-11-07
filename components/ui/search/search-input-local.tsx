@@ -4,15 +4,12 @@ import { IoSearch } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { Button } from "../button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { constructSearchQuery, sanitizeSearchInput } from "@/utils/string";
+import { sanitizeSearchInput } from "@/utils/string";
 import { useDebouncedCallback } from "use-debounce";
-import { SearchResultCol } from "@/types/search.type";
-import { useToast } from "../use-toast";
 import { useProgress } from "react-transition-progress";
 import { useSettings } from "@/stores/setting";
 import { getKeyboardValue } from "@/utils/json";
 import { convertKeyNotation } from "@/utils/keyboard-shortcut";
-import ShortcutButton from "../button/shortcut-button";
 import KeyboardKey from "../keyboard-key/keyboard-key";
 type Props = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;

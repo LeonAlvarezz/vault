@@ -17,7 +17,6 @@ import ConfirmPublishDialog from "../dialog/confirm-publish-dialog";
 import { CreateNoteFormValues } from "@/app/(dashboard)/create/[id]/page";
 import { useForm } from "react-hook-form";
 import { toast } from "../use-toast";
-import { revalidatePathClient, saveNote } from "@/app/api/action";
 import { useParams } from "next/navigation";
 import { compressImage, toBase64 } from "@/lib/image";
 import { uploadImage } from "@/data/client/image";
@@ -33,6 +32,8 @@ import { Note } from "@/types/note.type";
 import { isEqual } from "lodash"; // Import
 import { Json } from "@/database.types";
 import { useSubscription } from "@/stores/subscription";
+import { saveNote } from "@/action/note";
+import { revalidatePathClient } from "@/action";
 type Props = {
   tags: NoteTag[] | null;
   categories: Category[] | null;

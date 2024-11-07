@@ -16,7 +16,7 @@ import InteractionButton from "@/components/ui/note-card/interaction-button";
 import { likeNote } from "@/data/server/like";
 import { bookmarkNote } from "@/data/server/bookmark";
 import { revalidatePath } from "next/cache";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@/utils/date";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getAllAvailableNoteForParams } from "@/data/client/note";

@@ -15,8 +15,9 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { updateTag } from "@/data/client/tag";
 import { useToast } from "../use-toast";
-import { deleteTag, revalidatePathClient } from "@/app/api/action";
 import { useRouter } from "next/navigation";
+import { revalidatePathClient } from "@/action";
+import { deleteTag } from "@/action/tag";
 type Props = {
   tag: {
     label: string;

@@ -2,18 +2,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { GoHomeFill } from "react-icons/go";
 import { MdExplore } from "react-icons/md";
 import { IoBookmark, IoSearch, IoSettingsSharp } from "react-icons/io5";
-import { FaStickyNote, FaUser } from "react-icons/fa";
-import { IoLogOut } from "react-icons/io5";
-
+import { FaStickyNote } from "react-icons/fa";
 import SidebarItem from "./sidebar-item";
-import { cn } from "@/lib/utils";
-import { getProfile, isUserAuthenticated, signout } from "@/app/api/action";
-import { Button } from "../button";
-import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { Tooltip, TooltipContent } from "../tooltip";
 import LogoutButton from "../button/logout-button";
 import { Link } from "react-transition-progress/next";
 import { IoIosHelpCircle } from "react-icons/io";
+import { getProfile } from "@/action/profile";
 
 export const ICON_SIZE = 20;
 export const ICON_COLOR = "#DDD";
@@ -52,11 +46,6 @@ export const SIDEBAR_ITEM = [
   {
     separator: true,
   },
-  // {
-  //   id: "profile",
-  //   icon: <FaUser color={ICON_COLOR} size={ICON_SIZE} />,
-  //   link: "/profile?view=note",
-  // },
   {
     id: "settings",
     icon: <IoSettingsSharp color={ICON_COLOR} size={ICON_SIZE} />,

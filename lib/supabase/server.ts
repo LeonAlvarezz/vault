@@ -1,9 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
 import { Database } from "@/database.types";
 import { env } from "@/utils/env";
 
-export async function createClient(roleKey?: string) {
+export async function createClient(
+  roleKey?: string,
+): Promise<SupabaseClient<Database>> {
   const cookieStore = await cookies();
 
   // Create a server's supabase client with newly configured cookie,
@@ -42,5 +45,5 @@ export async function createClient(roleKey?: string) {
         },
       },
     },
-  );
+  ) as unknown as SupabaseClient<Database>;
 }

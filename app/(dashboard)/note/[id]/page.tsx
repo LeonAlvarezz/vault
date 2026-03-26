@@ -8,7 +8,11 @@ import React, { cache, Suspense } from "react";
 import { FaHeart, FaPen, FaRegHeart } from "react-icons/fa";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-import { getNoteById, increaseView, isNoteOwner } from "@/data/server/note";
+import {
+  getNoteById,
+  increaseView,
+  isNoteOwner,
+} from "@/data/server/note";
 import BackButton from "@/components/ui/button/back-button";
 import RelatedNoteCarousel from "@/components/ui/carousel/related-note-carousel";
 import Render from "@/components/tiptap/Render";
@@ -19,10 +23,9 @@ import { revalidatePath } from "next/cache";
 import { formatDate } from "@/utils/date";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { getAllAvailableNoteForParams } from "@/data/client/note";
 import NoteDetailSkeleton from "@/components/ui/skeleton/note-detail-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
-export const revalidate = 30;
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -32,15 +35,6 @@ const getNote = cache(async (noteId: string) => {
   const { data, error } = await getNoteById(noteId);
   return { data, error };
 });
-
-export async function generateStaticParams() {
-  const { data: notes } = await getAllAvailableNoteForParams();
-  return notes!
-    .map(({ id }) => ({
-      id,
-    }))
-    .slice(0, 100);
-}
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;

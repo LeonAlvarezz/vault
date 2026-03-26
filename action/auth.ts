@@ -76,13 +76,13 @@ export async function signup(
     if (userId) {
       const { error: profileError } = await supabase
         .from("profiles")
-        .insert([{ auth_id: userId, username, email }] as any);
+        .insert([{ auth_id: userId, username, email }]);
       if (profileError) {
         return { error: profileError.message };
       }
       const { error: settingError } = await supabase
         .from("settings")
-        .insert([{ profile_id: userId }] as any);
+        .insert([{ profile_id: userId }]);
       if (settingError) {
         return { error: settingError.message };
       }
@@ -108,13 +108,13 @@ export async function signup(
     if (userId) {
       const { error: profileError } = await supabase
         .from("profiles")
-        .insert([{ auth_id: userId, username, email }] as any);
+        .insert([{ auth_id: userId, username, email }]);
       if (profileError) {
         return { error: profileError.message };
       }
       const { error: settingError } = await supabase
         .from("settings")
-        .insert([{ profile_id: userId }] as any);
+        .insert([{ profile_id: userId }]);
       if (settingError) {
         return { error: settingError.message };
       }

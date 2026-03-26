@@ -31,6 +31,18 @@ export async function getNoteById(id: string) {
   return { data, error };
 }
 
+export async function getAllAvailableNoteForParams() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("notes")
+    .select("id")
+    .is("deleted_at", null)
+    .not("published_at", "is", null);
+
+  return { data, error };
+}
+
 export async function getAllNotesByProfileId(filter?: NoteFilter) {
   const supabase = await createClient();
   const user = await getCacheUser(supabase);

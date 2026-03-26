@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getCorrectOrigin } from "@/utils/string";
+import { env } from "@/utils/env";
+import { resolveAppOrigin } from "@/utils/string";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -18,11 +19,7 @@ export async function GET(request: Request) {
         .eq("id", data.user.id)
         .single();
 
-      const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
-      const isLocalEnv = process.env.NODE_ENV === "development";
-
       let redirectUrl: string;
-      const protocol = isLocalEnv ? "http" : "https";
 
       if (!userProfile) {
         redirectUrl = "/auth/register-username";
@@ -30,16 +27,14 @@ export async function GET(request: Request) {
         redirectUrl = "/dashboard";
       }
 
-      if (isLocalEnv) {
-        const correctOrigin = getCorrectOrigin(origin);
-        return NextResponse.redirect(`${correctOrigin}${redirectUrl}`);
-      } else if (forwardedHost) {
-        return NextResponse.redirect(
-          `${protocol}://${forwardedHost}${redirectUrl}`
-        );
-      } else {
-        return NextResponse.redirect(`${origin}${redirectUrl}`);
-      }
+      const appOrigin = resolveAppOrigin({
+        origin,
+        forwardedHost: request.headers.get("x-forwarded-host"),
+        forwardedProto: request.headers.get("x-forwarded-proto"),
+        siteUrl: env.NEXT_PUBLIC_SITE_URL,
+      });
+
+      return NextResponse.redirect(`${appOrigin}${redirectUrl}`);
     }
   }
 

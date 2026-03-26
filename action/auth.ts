@@ -5,6 +5,8 @@ import { LoginSchema, SignupSchema } from "@/types/profiles.type";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { env } from "@/utils/env";
+import { resolveAppOrigin } from "@/utils/string";
 
 export async function login(
   formData: unknown,
@@ -161,7 +163,13 @@ export const isUserAuthenticated = async (checkAnon: boolean) => {
 };
 
 export const signInWithGoogle = async () => {
-  const origin = (await headers()).get("origin");
+  const headerStore = await headers();
+  const origin = resolveAppOrigin({
+    origin: headerStore.get("origin"),
+    forwardedHost: headerStore.get("x-forwarded-host"),
+    forwardedProto: headerStore.get("x-forwarded-proto"),
+    siteUrl: env.NEXT_PUBLIC_SITE_URL,
+  });
   const supabase = await createClient();
 
   const {

@@ -10,7 +10,7 @@ import { resolveAppOrigin } from "@/utils/string";
 
 export async function login(
   formData: unknown,
-  returnUrl: string | string[] | undefined
+  returnUrl: string | string[] | undefined,
 ) {
   const supabase = await createClient();
   const result = LoginSchema.safeParse(formData);
@@ -43,7 +43,7 @@ export async function login(
 }
 export async function signup(
   formData: unknown,
-  returnUrl: string | string[] | undefined
+  returnUrl: string | string[] | undefined,
 ) {
   const supabase = await createClient();
   const result = SignupSchema.safeParse(formData);
@@ -76,13 +76,13 @@ export async function signup(
     if (userId) {
       const { error: profileError } = await supabase
         .from("profiles")
-        .insert([{ auth_id: userId, username, email }]);
+        .insert([{ auth_id: userId, username, email }] as any);
       if (profileError) {
         return { error: profileError.message };
       }
       const { error: settingError } = await supabase
         .from("settings")
-        .insert([{ profile_id: userId }]);
+        .insert([{ profile_id: userId }] as any);
       if (settingError) {
         return { error: settingError.message };
       }
@@ -108,13 +108,13 @@ export async function signup(
     if (userId) {
       const { error: profileError } = await supabase
         .from("profiles")
-        .insert([{ auth_id: userId, username, email }]);
+        .insert([{ auth_id: userId, username, email }] as any);
       if (profileError) {
         return { error: profileError.message };
       }
       const { error: settingError } = await supabase
         .from("settings")
-        .insert([{ profile_id: userId }]);
+        .insert([{ profile_id: userId }] as any);
       if (settingError) {
         return { error: settingError.message };
       }
